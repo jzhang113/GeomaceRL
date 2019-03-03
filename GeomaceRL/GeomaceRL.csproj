@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Actor\" />
     <Folder Include="Input\" />
     <Folder Include="Map\" />
     <Folder Include="UI\" />

@@ -32,16 +32,18 @@ namespace GeomaceRL
         public static Color PlayerThreat =      Swatch.Primary;
         public static Color EnemyThreat =       Swatch.Compliment;
 
-        // Terrain
-        public static Color Grass =             Swatch.DbGrass;
-        public static Color Stone =             Swatch.DbStone;
+        // Elements
+        public static Color Wood =              Swatch.DbGrass;
+        public static Color Fire =              Color.FromArgb(255, 185, 0);
+        public static Color Earth =             Swatch.DbStone;
+        public static Color Metal =             Swatch.DbMetal;
         public static Color Water =             Swatch.DbWater;
+        public static Color Neutral =           Swatch.DbLight;
 
         // Map features
         public static Color Door =              Swatch.DbBrightWood;
         public static Color Exit =              Swatch.Alternate;
         public static Color Hook =              Swatch.DbLight;
-        public static Color Fire =              Color.FromArgb(255, 185, 0);
         public static Color FireAccent =        Swatch.DbBlood;
     }
 }

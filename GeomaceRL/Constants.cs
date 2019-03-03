@@ -2,6 +2,7 @@
 {
     internal static class Constants
     {
+        // FOV and lighting stuff
         public const float MIN_VISIBLE_LIGHT_LEVEL = 0.25f;
         public const double LIGHT_DECAY = 0.1;
 
@@ -22,5 +23,9 @@
 
         // Misc constants
         public const int MESSAGE_HISTORY_COUNT = 100;
+
+        // Base hp constants
+        public const int SPRITE_HP = 10;
+        public const int PLAYER_HP = 100;
     }
 }

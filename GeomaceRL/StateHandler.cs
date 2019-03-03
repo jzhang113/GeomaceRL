@@ -36,11 +36,11 @@ namespace GeomaceRL
             IState currentState = _states.Peek();
 
             int key = Terminal.Read();
-            //if (key == Terminal.TK_CLOSE)
-            //{
-            //    Game.Exit();
-            //    return Option.None<ICommand>();
-            //}
+            if (key == Terminal.TK_CLOSE)
+            {
+                Game.Exit();
+                return Option.None<ICommand>();
+            }
 
             if (key == Terminal.TK_ESCAPE)
             {

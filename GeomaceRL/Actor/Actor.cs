@@ -19,7 +19,7 @@ namespace GeomaceRL.Actor
         public int MaxHealth { get; }
         public int Health { get; set; }
 
-        public int Speed { get; } = 1;
+        public int Speed { get; protected set; } = 1;
 
         public bool IsDead => Health <= 0;
 

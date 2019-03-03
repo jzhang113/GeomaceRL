@@ -51,7 +51,6 @@ namespace GeomaceRL
             StateHandler = new StateHandler(new Dictionary<Type, LayerInfo>
             {
                 //[typeof(ApplyState)] = _rightLayer,
-                //[typeof(AutoexploreState)] = _mapLayer,
                 //[typeof(DropState)] = _rightLayer,
                 //[typeof(EquipState)] = _rightLayer,
                 //[typeof(InventoryState)] = _rightLayer,
@@ -63,9 +62,10 @@ namespace GeomaceRL
                 //[typeof(UnequipState)] = _rightLayer
             });
 
-            var dumdum = new Actor.Actor(Player.Pos - (1, 1), 10, Colors.Water, 'D');
-            MapHandler.AddActor(dumdum);
+            var sprite = new Sprite(Player.Pos - (5, 1), Element.Metal);
+            MapHandler.AddActor(sprite);
 
+            Terminal.Refresh();
             Run();
         }
 
