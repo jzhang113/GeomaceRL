@@ -1,7 +1,5 @@
 ﻿using GeomaceRL.Actor;
-using GeomaceRL.Command;
 using GeomaceRL.Interface;
-using Optional;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +7,7 @@ namespace GeomaceRL
 {
     public class EventScheduler
     {
-        public IDictionary<ISchedulable, int> schedule;
+        private IDictionary<ISchedulable, int> _schedule;
         private bool _clearing;
 
         public static int Turn { get; private set; }
@@ -18,7 +16,7 @@ namespace GeomaceRL
         {
             Turn = 0;
             _clearing = false;
-            schedule = new Dictionary<ISchedulable, int>();
+            _schedule = new Dictionary<ISchedulable, int>();
         }
 
         public void Clear()
@@ -26,49 +24,55 @@ namespace GeomaceRL
             _clearing = true;
         }
 
-        internal void RemoveActor(Actor.Actor unit)
-        {
-            schedule.Add(unit, unit.Speed);
-        }
-
         internal void AddActor(Actor.Actor unit)
         {
-            schedule.Remove(unit);
+            _schedule.Add(unit, unit.Speed);
+        }
+
+        internal void RemoveActor(Actor.Actor unit)
+        {
+            _schedule.Remove(unit);
         }
 
         public void Update()
         {
-            foreach ((ISchedulable entity, int value) in schedule.ToList())
+            bool done = false;
+            while (!done)
             {
-                int timeTilAct = value - 1;
-                if (timeTilAct < 0)
+                foreach ((ISchedulable entity, int value) in _schedule.ToList())
                 {
-                    schedule[entity] = entity.Speed;
-                    entity.Act().MatchSome(command =>
+                    int timeTilAct = value - 1;
+                    if (timeTilAct <= 0)
                     {
-                        Option<ICommand> retry;
-
-                        do
-                        {
-                            retry = command.Execute();
-                        } while (retry.HasValue);
-
+                        _schedule[entity] = entity.Speed;
                         if (entity is Player)
                         {
                             Turn++;
+                            done = true;
                         }
-                    });
+                        else
+                        {
+                            entity.Act().MatchSome(command =>
+                            {
+                                var retry = command.Execute();
+                                while (retry.HasValue)
+                                {
+                                    retry.MatchSome(c => retry = c.Execute());
+                                }
+                            });
+                        }
+                    }
+                    else
+                    {
+                        _schedule[entity] = timeTilAct;
+                    }
                 }
-                else
-                {
-                    schedule[entity] = timeTilAct;
-                }
-            }
 
-            if (_clearing)
-            {
-                schedule.Clear();
-                _clearing = false;
+                if (_clearing)
+                {
+                    _schedule.Clear();
+                    _clearing = false;
+                }
             }
         }
     }
