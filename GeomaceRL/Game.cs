@@ -3,7 +3,6 @@ using GeomaceRL.Actor;
 using GeomaceRL.Map;
 using GeomaceRL.State;
 using GeomaceRL.UI;
-using RogueSharp.Random;
 using System;
 using System.Collections.Generic;
 
@@ -14,12 +13,14 @@ namespace GeomaceRL
         public static MapHandler MapHandler { get; private set; }
         public static StateHandler StateHandler { get; private set; }
         public static EventScheduler EventScheduler { get; private set; }
+        public static MessagePanel MessagePanel { get; private set; }
         public static Player Player { get; private set; }
 
         private static bool _exiting;
 
         private static LayerInfo _mapLayer;
         private static LayerInfo _infoLayer;
+        private static LayerInfo _messageLayer;
         private static LayerInfo _mainLayer;
 
         private static void Main(string[] args)
@@ -31,6 +32,10 @@ namespace GeomaceRL
             _infoLayer = new LayerInfo("Info", 1,
                 1, 1, Constants.SIDEBAR_WIDTH, Constants.SCREEN_HEIGHT + 2);
 
+            _messageLayer = new LayerInfo("Message", 1,
+                Constants.SIDEBAR_WIDTH + 1, Constants.MAPVIEW_HEIGHT + 2,
+                Constants.MAPVIEW_WIDTH, Constants.MESSAGE_HEIGHT);
+
             _mainLayer = new LayerInfo("Main", 11, 0, 0,
                 Constants.SCREEN_WIDTH + 2, Constants.SCREEN_HEIGHT + 2);
 
@@ -38,7 +43,8 @@ namespace GeomaceRL
             Terminal.Set(
                 $"window: size={Constants.SCREEN_WIDTH + 1}x{Constants.SCREEN_HEIGHT + 2}," +
                 $"cellsize=auto, title='GeomanceRL';");
-            Terminal.Set("font: square.ttf, size = 12x12;");
+            Terminal.Set("font: square.ttf, size = 24x24;");
+            Terminal.Set("text font: square.ttf, size = 14x14;");
 
             _exiting = false;
 
@@ -62,8 +68,7 @@ namespace GeomaceRL
                 //[typeof(UnequipState)] = _rightLayer
             });
 
-            var sprite = new Sprite(Player.Pos - (5, 1), Element.Metal);
-            MapHandler.AddActor(sprite);
+            MessagePanel = new MessagePanel(Constants.MESSAGE_HISTORY_COUNT);
 
             Terminal.Refresh();
             Run();
@@ -103,6 +108,7 @@ namespace GeomaceRL
         private static void Render()
         {
             Terminal.Clear();
+            MessagePanel.Draw(_messageLayer);
             StateHandler.Draw();
             Terminal.Refresh();
         }

@@ -13,11 +13,11 @@ namespace GeomaceRL.Map
 
         internal Field Field { get; }
         internal int[,] Clearance { get; }
+        internal (Element, int)[,] Mana { get; }
 
         // internal transient helper structures
         internal int[,] PlayerMap { get; }
         internal int[,] AutoexploreMap { get; }
-        internal ICollection<Loc> Discovered { get; }
 
         private IDictionary<int, Actor.Actor> Units { get; }
         //private IDictionary<int, InventoryHandler> Items { get; set; }
@@ -35,6 +35,7 @@ namespace GeomaceRL.Map
 
             Field = new Field(width, height);
             Clearance = new int[width, height];
+            Mana = new (Element, int)[width, height];
             PlayerMap = new int[width, height];
             AutoexploreMap = new int[width, height];
 
@@ -645,20 +646,21 @@ namespace GeomaceRL.Map
                     if (!tile.IsExplored)
                         continue;
 
-                    //if (tile.IsVisible)
-                    //{
-                    tile.Draw(layer);
-                    //}
-                    //else if (tile.IsWall)
-                    //{
-                    //    Terminal.Color(Colors.WallBackground);
-                    //    layer.Put(dx, dy, '#');
-                    //}
-                    //else
-                    //{
-                    //    Terminal.Color(Colors.FloorBackground);
-                    //    layer.Put(dx, dy, '.');
-                    //}
+                    if (tile.IsVisible)
+                    {
+                        tile.Draw(layer);
+                    }
+                    else if (tile.IsWall)
+                    {
+                        Terminal.Color(Colors.WallBackground);
+                        layer.Put(dx, dy, '#');
+                    }
+                    else
+                    {
+                        Terminal.Color(Colors.FloorBackground);
+                        layer.Put(dx, dy, '.');
+                    }
+
                 }
             }
 
@@ -685,7 +687,8 @@ namespace GeomaceRL.Map
 
             foreach (Actor.Actor unit in Units.Values)
             {
-                unit.Draw(layer);
+                if (Field[unit.Pos].IsVisible)
+                    unit.Draw(layer);
             }
         }
         #endregion

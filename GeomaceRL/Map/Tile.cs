@@ -1,5 +1,7 @@
-﻿using GeomaceRL.UI;
+﻿using BearLib;
+using GeomaceRL.UI;
 using System;
+using System.Drawing;
 
 namespace GeomaceRL.Map
 {
@@ -49,11 +51,20 @@ namespace GeomaceRL.Map
 
             if (IsWall)
             {
+                Terminal.Color(Colors.Wall);
                 layer.Put(dispX, dispY, '#');
             }
             else
             {
+                Terminal.Color(Colors.Floor);
                 layer.Put(dispX, dispY, '.');
+
+                (Element element, int amount) = Game.MapHandler.Mana[X, Y];
+                var color = element.Color();
+                Terminal.Color(Color.FromArgb((int)(color.R * 0.6), (int)(color.G * 0.6), (int)(color.B * 0.8)));
+                // Terminal.Layer(layer.Z + 1);
+                layer.PrintMana(dispX, dispY, $"{amount}");
+                // Terminal.Layer(layer.Z);
             }
         }
     }

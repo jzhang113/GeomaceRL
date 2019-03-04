@@ -1,4 +1,5 @@
-﻿using Pcg;
+﻿using GeomaceRL.Actor;
+using Pcg;
 using System;
 using System.Collections.Generic;
 
@@ -26,6 +27,7 @@ namespace GeomaceRL.Map
         {
             CreateMap();
             ComputeClearance();
+            AddElements();
 
             PlaceActors();
             PlaceItems();
@@ -35,6 +37,22 @@ namespace GeomaceRL.Map
         }
 
         protected abstract void CreateMap();
+
+        private void AddElements()
+        {
+            for (int y = 0; y < Map.Height; y++)
+            {
+                for (int x = 0; x < Map.Width; x++)
+                {
+                    Element element = (Element)Rand.Next(5);
+                    int amount = (int)Rand.NextNormal(4, 2);
+                    if (amount < 0)
+                        amount = 0;
+
+                    Map.Mana[x, y] = (element, amount);
+                }
+            }
+        }
 
         // Calculate and save how much space is around each square
         private void ComputeClearance()
@@ -189,6 +207,19 @@ namespace GeomaceRL.Map
             }
             while (!Map.Field[Game.Player.Pos].IsWalkable);
             Map.AddActor(Game.Player);
+
+            for (int i = 0; i < 10; i++)
+            {
+                int xPos = 0, yPos = 0;
+                do
+                {
+                    xPos = Rand.Next(1, Width - 1);
+                    yPos = Rand.Next(1, Height - 1);
+                } while (!Map.Field[xPos, yPos].IsWalkable);
+                var sprite = new Sprite(new Loc(xPos, yPos), Element.Fire);
+                Map.AddActor(sprite);
+            }
+
             Map.Refresh();
         }
 
