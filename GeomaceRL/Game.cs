@@ -63,7 +63,7 @@ namespace GeomaceRL
                 //[typeof(SubinvState)] = _rightLayer,
                 //[typeof(ItemMenuState)] = _rightLayer,
                 [typeof(NormalState)] = _mapLayer,
-                //[typeof(TargettingState)] = _mapLayer,
+                [typeof(TargettingState)] = _mapLayer,
                 //[typeof(TextInputState)] = _mapLayer,
                 //[typeof(UnequipState)] = _rightLayer
             });

@@ -4,6 +4,7 @@ using GeomaceRL.Input;
 using GeomaceRL.UI;
 using Optional;
 using System;
+using System.Linq;
 
 namespace GeomaceRL.State
 {
@@ -58,19 +59,14 @@ namespace GeomaceRL.State
                     }
                     else
                     {
-                        // take mana from the current square if possible
-                        int remaining = Game.MapHandler.UpdateMana(player.Pos, costElem, costAmount);
-
-                        // take mana from surrounding squares
-                        foreach (Loc nearby in Game.MapHandler.GetPointsInRadius(player.Pos, 1))
-                        {
-                            if (remaining <= 0)
-                                break;
-
-                            remaining = Game.MapHandler.UpdateMana(nearby, costElem, remaining);
-                        }
-
-                        return Option.Some(spell.Evoke(player, player.Pos - (1, 1)));
+                        Game.StateHandler.PushState(
+                            new TargettingState(player, 10, targets =>
+                            {
+                                Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost);
+                                Game.StateHandler.PopState();
+                                return spell.Evoke(player, targets.First());
+                            }));
+                        return Option.None<ICommand>();
                     }
 
                 //case NormalInput.ChangeLevel:

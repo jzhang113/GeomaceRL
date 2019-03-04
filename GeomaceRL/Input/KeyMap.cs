@@ -5,6 +5,7 @@ namespace GeomaceRL.Input
     internal struct KeyMap
     {
         public StateMap<NormalInput> NormalMap { get; set; }
+        public StateMap<TargettingInput> TargettingMap { get; set; }
 
         internal struct StateMap<T>
         {

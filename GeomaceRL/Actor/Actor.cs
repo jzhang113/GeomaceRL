@@ -22,7 +22,7 @@ namespace GeomaceRL.Actor
 
         public bool IsDead => Health <= 0;
 
-        public Actor(in Loc pos, int hp, in Color color, char symbol)
+        protected Actor(in Loc pos, int hp, in Color color, char symbol)
         {
             Pos = pos;
             MaxHealth = hp;

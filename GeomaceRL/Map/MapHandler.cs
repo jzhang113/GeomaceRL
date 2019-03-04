@@ -71,7 +71,22 @@ namespace GeomaceRL.Map
             }
         }
 
-        internal int UpdateMana(Loc pos, Element costElem, int costAmount)
+        internal void UpdateAllMana(in Loc pos, (Element elem, int amount) cost)
+        {
+            // take mana from the current square if possible
+            int remaining = UpdateMana(pos, cost.elem, cost.amount);
+
+            // take mana from surrounding squares
+            foreach (Loc nearby in GetPointsInRadius(pos, 1))
+            {
+                if (remaining <= 0)
+                    break;
+
+                remaining = UpdateMana(nearby, cost.elem, remaining);
+            }
+        }
+
+        private int UpdateMana(Loc pos, Element costElem, int costAmount)
         {
             (Element currElem, int currAmount) = Mana[pos.X, pos.Y];
             if (currElem == costElem)
@@ -699,7 +714,6 @@ namespace GeomaceRL.Map
                         Terminal.Color(Colors.FloorBackground);
                         layer.Put(dx, dy, '.');
                     }
-
                 }
             }
 
