@@ -8,6 +8,7 @@ namespace GeomaceRL.Actor
         public Sprite(in Loc pos, Element element)
             :base(pos, Constants.SPRITE_HP, element.Color(), 'S')
         {
+            Name = "Sprite";
         }
 
         public override Option<ICommand> GetAction()

@@ -3,15 +3,14 @@ using GeomaceRL.Command;
 using GeomaceRL.Interface;
 using GeomaceRL.UI;
 using Optional;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 
 namespace GeomaceRL.Actor
 {
-    public class Actor : ISchedulable, IDrawable
+    public abstract class Actor : ISchedulable, IDrawable
     {
-        public string Name { get; }
+        public string Name { get; protected set; } = "Monster";
         public Color Color { get; }
         public char Symbol { get; }
         public Loc Pos { get; set; }
@@ -35,13 +34,12 @@ namespace GeomaceRL.Actor
 
         public virtual void TriggerDeath()
         {
-            //Game.MapHelper.RemoveActor(this);
-            //Game.EventScheduler.RemoveActor(this);
+            Game.MapHandler.RemoveActor(this);
 
             if (Game.MapHandler.Field[Pos].IsVisible)
             {
-                //Game.MessageHandler.AddMessage($"{Name} dies");
-                //Game.MapHelper.Refresh();
+                Game.MessagePanel.AddMessage($"{Name} dies");
+                Game.MapHandler.Refresh();
             }
         }
 

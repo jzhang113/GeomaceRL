@@ -27,7 +27,10 @@ namespace GeomaceRL.Command
         {
             foreach (Loc point in _targets)
             {
-                Game.MapHandler.GetActor(point).MatchSome(actor => actor.TakeDamage(_power));
+                Game.MapHandler.GetActor(point).MatchSome(target => {
+                    target.TakeDamage(_power);
+                    Game.MessagePanel.AddMessage($"{Source.Name} attacks {target.Name} for {_power} damage");
+                });
             }
 
             return Option.None<ICommand>();

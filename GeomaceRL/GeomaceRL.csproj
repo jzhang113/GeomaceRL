@@ -15,7 +15,6 @@
   <ItemGroup>
     <PackageReference Include="Optional" Version="4.0.0" />
     <PackageReference Include="PcgRandom" Version="1.1.0" />
-    <PackageReference Include="RogueSharp" Version="4.2.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
   </ItemGroup>
 
@@ -31,7 +30,6 @@
   <ItemGroup>
     <Folder Include="Input\" />
     <Folder Include="Map\" />
-    <Folder Include="UI\" />
     <Folder Include="State\" />
   </ItemGroup>
 

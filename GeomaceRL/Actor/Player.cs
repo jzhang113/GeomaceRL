@@ -10,6 +10,7 @@ namespace GeomaceRL.Actor
         public Player(in Loc pos) : base(pos, Constants.PLAYER_HP, Colors.Player, '@')
         {
             //Equipment = new EquipmentHandler();
+            Name = "Player";
             Speed = 2;
         }
 

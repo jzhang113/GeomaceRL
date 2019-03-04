@@ -46,10 +46,10 @@ namespace GeomaceRL.UI
                 System.Diagnostics.Debug.WriteLine($"Warning: line {y} out of bounds on layer {Name}");
         }
 
-        public void Print(int x, int y, string text)
+        public void PrintMana(int x, int y, string text)
         {
             if (y < Height)
-                Terminal.Print(X + x, Y + y, $"[font=text]{text}");
+                Terminal.Print(X + x, Y + y, ContentAlignment.BottomRight, $"[font=text]{text}");
             else
                 System.Diagnostics.Debug.WriteLine($"Warning: line {y} out of bounds on layer {Name}");
         }

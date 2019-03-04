@@ -7,7 +7,7 @@ namespace GeomaceRL
 {
     public class EventScheduler
     {
-        private IDictionary<ISchedulable, int> _schedule;
+        private readonly IDictionary<ISchedulable, int> _schedule;
         private bool _clearing;
 
         public static int Turn { get; private set; }
