@@ -30,7 +30,7 @@ namespace GeomaceRL
                 Constants.MAPVIEW_WIDTH, Constants.MAPVIEW_HEIGHT);
 
             _infoLayer = new LayerInfo("Info", 1,
-                1, 1, Constants.SIDEBAR_WIDTH, Constants.SCREEN_HEIGHT + 2);
+                1, 1, Constants.SIDEBAR_WIDTH, Constants.SCREEN_HEIGHT);
 
             _messageLayer = new LayerInfo("Message", 1,
                 Constants.SIDEBAR_WIDTH + 1, Constants.MAPVIEW_HEIGHT + 2,
@@ -108,6 +108,7 @@ namespace GeomaceRL
         private static void Render()
         {
             Terminal.Clear();
+            InfoPanel.Draw(_infoLayer);
             MessagePanel.Draw(_messageLayer);
             StateHandler.Draw();
             Terminal.Refresh();
