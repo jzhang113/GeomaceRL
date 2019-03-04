@@ -47,6 +47,32 @@ namespace GeomaceRL.State
                     return Option.Some<ICommand>(new WaitCommand(player));
                 #endregion
 
+                case NormalInput.Cast:
+                    var spell = player.SpellList[0];
+                    (Element costElem, int costAmount) = spell.Cost;
+
+                    if (player.Mana[costElem] < costAmount)
+                    {
+                        Game.MessagePanel.AddMessage("Insufficient mana!");
+                        return Option.None<ICommand>();
+                    }
+                    else
+                    {
+                        // take mana from the current square if possible
+                        int remaining = Game.MapHandler.UpdateMana(player.Pos, costElem, costAmount);
+
+                        // take mana from surrounding squares
+                        foreach (Loc nearby in Game.MapHandler.GetPointsInRadius(player.Pos, 1))
+                        {
+                            if (remaining <= 0)
+                                break;
+
+                            remaining = Game.MapHandler.UpdateMana(nearby, costElem, remaining);
+                        }
+
+                        return Option.Some(spell.Evoke(player, player.Pos - (1, 1)));
+                    }
+
                 //case NormalInput.ChangeLevel:
                 //    return Option.Some<ICommand>(new ChangeLevelCommand(Game.MapHelper.TryChangeLocation(player)));
                 //case NormalInput.OpenApply:

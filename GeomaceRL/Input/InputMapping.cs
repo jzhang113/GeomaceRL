@@ -46,30 +46,8 @@ namespace GeomaceRL.Input
                         [Terminal.TK_R] =           NormalInput.OpenUnequip,
                         [Terminal.TK_T] =           NormalInput.Throw,
                         [Terminal.TK_O] =           NormalInput.AutoExplore,
-                        [Terminal.TK_ESCAPE] =      NormalInput.OpenMenu
-                    },
-                    Shift = new Dictionary<int, NormalInput>()
-                    {
-                        [Terminal.TK_LEFT] =        NormalInput.AttackW,
-                        [Terminal.TK_KP_4] =        NormalInput.AttackW,
-                        [Terminal.TK_H] =           NormalInput.AttackW,
-                        [Terminal.TK_DOWN] =        NormalInput.AttackS,
-                        [Terminal.TK_KP_2] =        NormalInput.AttackS,
-                        [Terminal.TK_J] =           NormalInput.AttackS,
-                        [Terminal.TK_UP] =          NormalInput.AttackN,
-                        [Terminal.TK_KP_8] =        NormalInput.AttackN,
-                        [Terminal.TK_K] =           NormalInput.AttackN,
-                        [Terminal.TK_RIGHT] =       NormalInput.AttackE,
-                        [Terminal.TK_KP_6] =        NormalInput.AttackE,
-                        [Terminal.TK_L] =           NormalInput.AttackE,
-                        [Terminal.TK_KP_7] =        NormalInput.AttackNW,
-                        [Terminal.TK_Y] =           NormalInput.AttackNW,
-                        [Terminal.TK_KP_9] =        NormalInput.AttackNE,
-                        [Terminal.TK_U] =           NormalInput.AttackNE,
-                        [Terminal.TK_KP_1] =        NormalInput.AttackSW,
-                        [Terminal.TK_B] =           NormalInput.AttackSW,
-                        [Terminal.TK_KP_3] =        NormalInput.AttackSE,
-                        [Terminal.TK_N] =           NormalInput.AttackSE
+                        [Terminal.TK_ESCAPE] =      NormalInput.OpenMenu,
+                        [Terminal.TK_C] =           NormalInput.Cast
                     }
                 }
             };

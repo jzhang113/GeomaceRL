@@ -31,7 +31,8 @@ namespace GeomaceRL.Input
         ChangeLevel,
         Get,
         Throw,
-        Wait
+        Wait,
+        Cast
     }
 
     internal static partial class InputMapping

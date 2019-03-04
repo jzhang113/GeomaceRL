@@ -53,7 +53,46 @@ namespace GeomaceRL.Map
             Camera.UpdateCamera();
             UpdatePlayerFov();
             UpdatePlayerMaps();
+            CalcManaTotals();
         }
+
+        #region Mana Calculations
+        private void CalcManaTotals()
+        {
+            Game.Player.ClearMana();
+            foreach ((int x, int y) in GetPointsInRadius(Game.Player.Pos, 1))
+            {
+                (Element elem, int amount) = Mana[x, y];
+
+                if (!Field[x, y].IsWall)
+                {
+                    Game.Player.Mana[elem] += amount;
+                }
+            }
+        }
+
+        internal int UpdateMana(Loc pos, Element costElem, int costAmount)
+        {
+            (Element currElem, int currAmount) = Mana[pos.X, pos.Y];
+            if (currElem == costElem)
+            {
+                if (currAmount >= costAmount)
+                {
+                    currAmount -= costAmount;
+                    costAmount = 0;
+                }
+                else
+                {
+                    currAmount = 0;
+                    costAmount -= currAmount;
+                }
+
+                Mana[pos.X, pos.Y] = (currElem, currAmount);
+            }
+
+            return costAmount;
+        }
+        #endregion
 
         #region Actor Methods
         public bool AddActor(Actor.Actor unit)
@@ -85,8 +124,8 @@ namespace GeomaceRL.Map
 
         public bool SetActorPosition(Actor.Actor actor, in Loc pos)
         {
-            //if (!Field[x, y].IsWalkable)
-            //    return false;
+            if (!Field[pos].IsWalkable)
+                return false;
 
             Tile tile = Field[actor.Pos];
             Tile newTile = Field[pos];

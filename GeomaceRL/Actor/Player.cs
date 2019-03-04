@@ -1,5 +1,7 @@
 ﻿using GeomaceRL.Command;
+using GeomaceRL.Spell;
 using Optional;
+using System.Collections.Generic;
 
 namespace GeomaceRL.Actor
 {
@@ -7,9 +9,26 @@ namespace GeomaceRL.Actor
     {
         //public EquipmentHandler Equipment { get; }
 
+        public IDictionary<Element, int> Mana { get; }
+        public IList<ISpell> SpellList { get; }
+
         public Player(in Loc pos) : base(pos, Constants.PLAYER_HP, Colors.Player, '@')
         {
             //Equipment = new EquipmentHandler();
+            Mana = new Dictionary<Element, int>()
+            {
+                [Element.Fire] = 0,
+                [Element.Earth] = 0,
+                [Element.Metal] = 0,
+                [Element.Water] = 0,
+                [Element.Wood] = 0
+            };
+
+            SpellList = new List<ISpell>()
+            {
+                new Firebolt()
+            };
+
             Name = "Player";
             Speed = 2;
         }
@@ -22,5 +41,14 @@ namespace GeomaceRL.Actor
         }
 
         public override void TriggerDeath() => Game.GameOver();
+
+        internal void ClearMana()
+        {
+            Mana[Element.Fire] = 0;
+            Mana[Element.Earth] = 0;
+            Mana[Element.Metal] = 0;
+            Mana[Element.Water] = 0;
+            Mana[Element.Wood] = 0;
+        }
     }
 }

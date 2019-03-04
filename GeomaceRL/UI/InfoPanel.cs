@@ -1,5 +1,4 @@
 ﻿using BearLib;
-using System.Collections.Generic;
 
 namespace GeomaceRL.UI
 {
@@ -11,11 +10,11 @@ namespace GeomaceRL.UI
             Terminal.Color(Colors.BorderColor);
             layer.DrawBorders(new BorderInfo
             {
-                TopLeftChar = '╔', // 201
-                BottomLeftChar = '╚', // 200
-                TopChar = '═', // 205
-                BottomChar = '═',
-                LeftChar = '║' // 186
+                TopLeftChar = '┌',
+                BottomLeftChar = '└',
+                TopChar = '─', // 196
+                BottomChar = '─',
+                LeftChar = '│' // 179
             });
             //layer.Print(-1, $"{Constants.HEADER_LEFT}SCAN" +
             //    $"[color=white]{Constants.HEADER_SEP}DATA{Constants.HEADER_RIGHT}",
@@ -23,30 +22,20 @@ namespace GeomaceRL.UI
 
             // draw info
             Terminal.Color(Colors.Text);
+
             int drawX = 0, drawY = 0;
-            var manaAmount = new Dictionary<Element, int>()
-            {
-                [Element.Fire] = 0,
-                [Element.Earth] = 0,
-                [Element.Metal] = 0,
-                [Element.Water] = 0,
-                [Element.Wood] = 0
-            };
-            
             foreach ((int x, int y) in Game.MapHandler.GetPointsInRadius(Game.Player.Pos, 1))
             {
                 (Element elem, int amount) = Game.MapHandler.Mana[x, y];
 
                 if (!Game.MapHandler.Field[x, y].IsWall)
                 {
-                    manaAmount[elem] += amount;
-
                     Terminal.Color(elem.Color());
                     layer.PrintMana(drawX, drawY++, $"{amount}");
                 }
                 else
                 {
-                    layer.PrintMana(drawX, drawY++, $" ");
+                    layer.PrintMana(drawX, drawY++, " ");
                 }
 
                 if (drawY >= 3)
@@ -56,9 +45,8 @@ namespace GeomaceRL.UI
                 }
             }
 
-            drawY += 5;
-
-            foreach ((Element elem, int amount) in manaAmount)
+            drawY = 5;
+            foreach ((Element elem, int amount) in Game.Player.Mana)
             {
                 Terminal.Color(elem.Color());
                 layer.PrintMana(0, drawY++, $"{amount}");
