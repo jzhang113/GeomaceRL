@@ -25,5 +25,18 @@ namespace GeomaceRL
                 default: return Colors.Neutral;
             }
         }
+
+        public static string Abbrev(this Element element)
+        {
+            switch (element)
+            {
+                case Element.Fire: return "fire ";
+                case Element.Earth: return "earth";
+                case Element.Metal: return "metal";
+                case Element.Water: return "water";
+                case Element.Wood: return "wood ";
+                default: return " ";
+            }
+        }
     }
 }

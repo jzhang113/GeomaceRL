@@ -16,14 +16,23 @@ namespace GeomaceRL.UI
                 BottomChar = '─',
                 LeftChar = '│' // 179
             });
-            //layer.Print(-1, $"{Constants.HEADER_LEFT}SCAN" +
-            //    $"[color=white]{Constants.HEADER_SEP}DATA{Constants.HEADER_RIGHT}",
-            //    System.Drawing.ContentAlignment.TopRight);
 
-            // draw info
             Terminal.Color(Colors.Text);
+            int drawY = 0;
+            foreach (Actor.Actor actor in Game.MapHandler.Units.Values)
+            {
+                if (Game.MapHandler.Field[actor.Pos].IsVisible)
+                {
+                    layer.Print(drawY++, $"{actor.Symbol}:{actor.Health}/{actor.MaxHealth}");
+                }
+            }
 
-            int drawX = 0, drawY = 0;
+
+            int drawX = 1;
+            int sectionTop = layer.Height - 9;
+            drawY = sectionTop;
+            layer.Print(sectionTop - 1, "Mana");
+
             foreach ((int x, int y) in Game.MapHandler.GetPointsInRadius(Game.Player.Pos, 1))
             {
                 (Element elem, int amount) = Game.MapHandler.Mana[x, y];
@@ -38,18 +47,18 @@ namespace GeomaceRL.UI
                     layer.PrintMana(drawX, drawY++, " ");
                 }
 
-                if (drawY >= 3)
+                if (drawY >= sectionTop + 3)
                 {
                     drawX++;
-                    drawY = 0;
+                    drawY = sectionTop;
                 }
             }
 
-            drawY = 5;
+            drawY += 4;
             foreach ((Element elem, int amount) in Game.Player.Mana)
             {
                 Terminal.Color(elem.Color());
-                layer.PrintMana(0, drawY++, $"{amount}");
+                layer.PrintMana(0, drawY++, $"{elem.Abbrev()}:{amount}");
             }
         }
     }

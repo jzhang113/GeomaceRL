@@ -21,7 +21,7 @@ namespace GeomaceRL.Map
         internal int[,] PlayerMap { get; }
         internal int[,] AutoexploreMap { get; }
 
-        private IDictionary<int, Actor.Actor> Units { get; }
+        internal IDictionary<int, Actor.Actor> Units { get; }
         //private IDictionary<int, InventoryHandler> Items { get; set; }
         //private IDictionary<int, Door> Doors { get; set; }
         //private IDictionary<int, Exit> Exits { get; set; }
