@@ -1,10 +1,17 @@
 ﻿using GeomaceRL.UI;
+using System;
 
 namespace GeomaceRL.Animation
 {
     public interface IAnimation
     {
         int Turn { get; }
+
+        TimeSpan Duration { get; }
+
+        TimeSpan StartTime { get; }
+
+        TimeSpan EndTime { get; }
 
         // Returns true when an animation is done updating
         bool Update();

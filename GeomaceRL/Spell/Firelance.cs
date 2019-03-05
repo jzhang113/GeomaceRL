@@ -13,7 +13,7 @@ namespace GeomaceRL.Spell
         {
             // TODO: self-casted firelance is legal but hits nothing and spends mana
             Game.MessagePanel.AddMessage($"{source.Name} casts Firelance");
-            Game.CurrentAnimations.Add(new LaserAnimation(targets));
+            Game.CurrentAnimations.Add(new LaserAnimation(targets, Element.Fire.Color(), Colors.FireAccent));
             return new AttackCommand(source, Constants.FIRELANCE_DAMAGE, targets);
         }
     }

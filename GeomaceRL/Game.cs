@@ -4,6 +4,7 @@ using GeomaceRL.Animation;
 using GeomaceRL.Map;
 using GeomaceRL.State;
 using GeomaceRL.UI;
+using Pcg;
 using System;
 using System.Collections.Generic;
 
@@ -17,8 +18,14 @@ namespace GeomaceRL
         public static MessagePanel MessagePanel { get; private set; }
         public static Player Player { get; private set; }
 
+        public static PcgRandom Rand { get; private set; }
+        public static PcgRandom VisRand { get; private set; }
+
         internal static ICollection<IAnimation> CurrentAnimations { get; private set; }
         private static ICollection<IAnimation> _finishedAnimations;
+
+        internal static TimeSpan Ticks;
+        internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
 
         private static bool _exiting;
 
@@ -31,6 +38,8 @@ namespace GeomaceRL
         {
             CurrentAnimations = new List<IAnimation>();
             _finishedAnimations = new List<IAnimation>();
+            Rand = new PcgRandom();
+            VisRand = new PcgRandom();
 
             _mapLayer = new LayerInfo("Map", 1,
                 Constants.SIDEBAR_WIDTH + 1, 1,
@@ -56,9 +65,8 @@ namespace GeomaceRL
             _exiting = false;
 
             Player = new Player(new Loc(0, 0));
-            var rand = new Pcg.PcgRandom();
             EventScheduler = new EventScheduler();
-            var mapgen = new BspMapGenerator(60, 60, rand);
+            var mapgen = new BspMapGenerator(60, 60, Rand);
             MapHandler = mapgen.Generate();
 
             StateHandler = new StateHandler(new Dictionary<Type, LayerInfo>
@@ -93,13 +101,35 @@ namespace GeomaceRL
 
         private static void Run()
         {
+            DateTime currentTime = DateTime.UtcNow;
+            TimeSpan accum = new TimeSpan();
+
+            const int updateLimit = 10;
+            TimeSpan maxDt = FrameRate * updateLimit;
+
             while (!_exiting)
             {
-                EventScheduler.ExecuteCommand(StateHandler.HandleInput(), () =>
+                DateTime newTime = DateTime.UtcNow;
+                TimeSpan frameTime = newTime - currentTime;
+                if (frameTime > maxDt)
+                    frameTime = maxDt;
+
+                currentTime = newTime;
+                accum += frameTime;
+
+                while (accum >= FrameRate)
                 {
-                    MapHandler.Refresh();
-                    EventScheduler.Update();
-                });
+                    EventScheduler.ExecuteCommand(StateHandler.HandleInput(), () =>
+                    {
+                        MapHandler.Refresh();
+                        EventScheduler.Update();
+                    });
+
+                    Ticks += FrameRate;
+                    accum -= FrameRate;
+                }
+
+                double remaining = accum / FrameRate;
 
                 foreach (IAnimation animation in CurrentAnimations)
                 {
