@@ -1,4 +1,5 @@
-﻿using GeomaceRL.Command;
+﻿using GeomaceRL.Animation;
+using GeomaceRL.Command;
 using System.Collections.Generic;
 
 namespace GeomaceRL.Spell
@@ -12,6 +13,7 @@ namespace GeomaceRL.Spell
         {
             // TODO: self-casted firelance is legal but hits nothing and spends mana
             Game.MessagePanel.AddMessage($"{source.Name} casts Firelance");
+            Game.CurrentAnimations.Add(new LaserAnimation(targets));
             return new AttackCommand(source, Constants.FIRELANCE_DAMAGE, targets);
         }
     }
