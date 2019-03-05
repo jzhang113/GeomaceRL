@@ -12,28 +12,29 @@ namespace GeomaceRL.State
     internal class TargettingState : IState
     {
         private readonly Actor.Actor _source;
-        //private readonly TargetZone _targetZone;
+        private readonly TargetZone _targetZone;
         private readonly Func<IEnumerable<Loc>, ICommand> _callback;
         private readonly IEnumerable<Loc> _inRange;
         private readonly IList<Actor.Actor> _targettableActors;
 
         // drawing
         private readonly IList<Loc> _targetted;
+        private readonly IList<Loc> _path;
 
         private int _index;
         private Loc _cursor;
 
-        public TargettingState(Actor.Actor source, int range, Func<IEnumerable<Loc>, ICommand> callback)
+        public TargettingState(Actor.Actor source, TargetZone zone, Func<IEnumerable<Loc>, ICommand> callback)
         {
             _source = source;
-            //_targetZone = zone;
+            _targetZone = zone;
             _callback = callback;
             _targettableActors = new List<Actor.Actor>();
             _targetted = new List<Loc>();
+            _path = new List<Loc>();
 
             ICollection<Loc> tempRange = new HashSet<Loc>();
-            //_inRange = Game.Map.GetPointsInRadius(_source.Loc, _targetZone.Range).ToList();
-            _inRange = Game.MapHandler.GetPointsInRadius(_source.Pos, range).ToList();
+            _inRange = Game.MapHandler.GetPointsInRadius(_source.Pos, zone.Range).ToList();
 
             // Filter the targettable range down to only the tiles we have a direct line on.
             foreach (Loc point in _inRange)
@@ -41,7 +42,7 @@ namespace GeomaceRL.State
                 Loc collision = point;
                 foreach (Loc current in Game.MapHandler.GetStraightLinePath(_source.Pos, point))
                 {
-                    if (!Game.MapHandler.Field[current].IsWalkable)
+                    if (Game.MapHandler.Field[current].IsWall)
                     {
                         collision = current;
                         break;
@@ -50,29 +51,32 @@ namespace GeomaceRL.State
 
                 tempRange.Add(collision);
             }
+            _inRange = tempRange;
 
             // Pick out the interesting targets.
             // TODO: select items for item targetting spells
-            foreach (Loc point in tempRange)
+            foreach (Loc point in _inRange)
             {
                 Game.MapHandler.GetActor(point)
-                    .MatchSome(actor => _targettableActors.Add(actor));
+                    .MatchSome(actor =>
+                    _targettableActors.Add(actor));
             }
-
-            // Add the current tile into the targettable range as well.
-            tempRange.Add(source.Pos);
-            _inRange = tempRange;
 
             // Initialize the targetting to an interesting target.
-            Actor.Actor firstActor = _targettableActors.FirstOrDefault();
-            if (firstActor == null)
+            var firstActor = Option.None<Actor.Actor>();
+            foreach (Actor.Actor target in _targettableActors)
             {
-                _cursor = source.Pos;
+                if (!(target is Actor.Player))
+                {
+                    firstActor = Option.Some(target);
+                    break;
+                }
             }
-            else
-            {
-                _cursor = firstActor.Pos;
-            }
+
+            firstActor.Match(
+                some: first => _cursor = first.Pos,
+                none: () => _cursor = source.Pos);
+
             DrawTargettedTiles();
         }
 
@@ -179,15 +183,14 @@ namespace GeomaceRL.State
 
         private IEnumerable<Loc> DrawTargettedTiles()
         {
-            //IEnumerable<Loc> targets = _targetZone.GetTilesInRange(_source, _target).ToList();
-            IEnumerable<Loc> targets = new List<Loc>(){ _cursor};
+            IEnumerable<Loc> targets = _targetZone.GetTilesInRange(_source, _cursor);
             _targetted.Clear();
 
             // Draw the projectile path if any.
-            //foreach (Loc point in _targetZone.Trail)
-            //{
-            //    Game.Overlay.Set(point.X, point.Y, Colors.Path);
-            //}
+            foreach (Loc point in _targetZone.Trail)
+            {
+                _path.Add(point);
+            }
 
             // Draw the targetted tiles.
             foreach (Loc point in targets)
@@ -212,6 +215,12 @@ namespace GeomaceRL.State
             foreach(Loc point in _targetted)
             {
                 Terminal.Color(Colors.Target);
+                layer.Put(point.X - Camera.X, point.Y - Camera.Y, '█');
+            }
+
+            foreach(Loc point in _path)
+            {
+                Terminal.Color(Colors.Path);
                 layer.Put(point.X - Camera.X, point.Y - Camera.Y, '█');
             }
 

@@ -27,5 +27,14 @@
         // Base hp constants
         public const int SPRITE_HP = 10;
         public const int PLAYER_HP = 100;
+
+        // Spell constants
+        public const int FIREBOLT_COST = 1;
+        public const int FIREBOLT_RANGE = 4;
+        public const int FIREBOLT_DAMAGE = 10;
+
+        public const int FIRELANCE_COST = 3;
+        public const int FIRELANCE_RANGE = 8;
+        public const int FIRELANCE_DAMAGE = 10;
     }
 }

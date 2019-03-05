@@ -4,7 +4,6 @@ using GeomaceRL.Input;
 using GeomaceRL.UI;
 using Optional;
 using System;
-using System.Linq;
 
 namespace GeomaceRL.State
 {
@@ -60,11 +59,11 @@ namespace GeomaceRL.State
                     else
                     {
                         Game.StateHandler.PushState(
-                            new TargettingState(player, 10, targets =>
+                            new TargettingState(player, spell.Zone, targets =>
                             {
                                 Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost);
                                 Game.StateHandler.PopState();
-                                return spell.Evoke(player, targets.First());
+                                return spell.Evoke(player, targets);
                             }));
                         return Option.None<ICommand>();
                     }

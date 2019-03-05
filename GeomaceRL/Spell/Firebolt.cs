@@ -1,15 +1,17 @@
 ﻿using GeomaceRL.Command;
+using System.Collections.Generic;
 
 namespace GeomaceRL.Spell
 {
     internal class Firebolt : ISpell
     {
-        public (Element, int) Cost => (Element.Fire, 1);
+        public (Element, int) Cost => (Element.Fire, Constants.FIREBOLT_COST);
+        public TargetZone Zone => new TargetZone(TargetShape.Range, Constants.FIREBOLT_RANGE);
 
-        public ICommand Evoke(Actor.Actor source, in Loc target)
+        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
         {
             Game.MessagePanel.AddMessage($"{source.Name} casts Firebolt");
-            return new AttackCommand(source, 10, target);
+            return new AttackCommand(source, Constants.FIREBOLT_DAMAGE, targets);
         }
     }
 }

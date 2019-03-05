@@ -1,4 +1,5 @@
 ﻿using GeomaceRL.Command;
+using System.Collections.Generic;
 
 namespace GeomaceRL.Spell
 {
@@ -6,6 +7,8 @@ namespace GeomaceRL.Spell
     {
         (Element, int) Cost { get; }
 
-        ICommand Evoke(Actor.Actor source, in Loc target);
+        TargetZone Zone { get; }
+
+        ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets);
     }
 }
