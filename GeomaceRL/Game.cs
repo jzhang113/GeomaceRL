@@ -27,6 +27,7 @@ namespace GeomaceRL
         internal static TimeSpan Ticks;
         internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
 
+        private static int _level;
         private static bool _exiting;
 
         private static LayerInfo _mapLayer;
@@ -57,17 +58,13 @@ namespace GeomaceRL
 
             Terminal.Open();
             Terminal.Set(
-                $"window: size={Constants.SCREEN_WIDTH + 1}x{Constants.SCREEN_HEIGHT + 2}," +
+                $"window: size={Constants.SCREEN_WIDTH + 2}x{Constants.SCREEN_HEIGHT + 2}," +
                 $"cellsize=auto, title='GeomanceRL';");
             Terminal.Set("font: square.ttf, size = 24x24;");
             Terminal.Set("text font: square.ttf, size = 14x14;");
 
+            _level = 1;
             _exiting = false;
-
-            Player = new Player(new Loc(0, 0));
-            EventScheduler = new EventScheduler();
-            var mapgen = new BspMapGenerator(60, 60, Rand);
-            MapHandler = mapgen.Generate();
 
             StateHandler = new StateHandler(new Dictionary<Type, LayerInfo>
             {
@@ -85,8 +82,21 @@ namespace GeomaceRL
 
             MessagePanel = new MessagePanel(Constants.MESSAGE_HISTORY_COUNT);
 
+            Player = new Player(new Loc(0, 0));
+            EventScheduler = new EventScheduler();
+            NextLevel();
+
             Terminal.Refresh();
             Run();
+        }
+
+        internal static void NextLevel()
+        {
+            CurrentAnimations.Clear();
+            EventScheduler.Clear();
+
+            var mapgen = new BspMapGenerator(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, _level++);
+            MapHandler = mapgen.Generate();
         }
 
         internal static void GameOver()

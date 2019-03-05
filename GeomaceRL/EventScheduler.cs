@@ -11,20 +11,18 @@ namespace GeomaceRL
     public class EventScheduler
     {
         private readonly IDictionary<ISchedulable, int> _schedule;
-        private bool _clearing;
 
         public static int Turn { get; private set; }
 
         public EventScheduler()
         {
             Turn = 0;
-            _clearing = false;
             _schedule = new Dictionary<ISchedulable, int>();
         }
 
         public void Clear()
         {
-            _clearing = true;
+            _schedule.Clear();
         }
 
         internal void AddActor(Actor.Actor unit)
@@ -40,7 +38,7 @@ namespace GeomaceRL
         public void Update()
         {
             bool done = false;
-            while (!done)
+            while (!done && _schedule.Count > 0)
             {
                 foreach ((ISchedulable entity, int value) in _schedule.ToList())
                 {
@@ -62,12 +60,6 @@ namespace GeomaceRL
                     {
                         _schedule[entity] = timeTilAct;
                     }
-                }
-
-                if (_clearing)
-                {
-                    _schedule.Clear();
-                    _clearing = false;
                 }
             }
         }

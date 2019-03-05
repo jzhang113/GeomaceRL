@@ -22,5 +22,11 @@ namespace GeomaceRL
             X = xDiff < 0 ? 0 : Math.Min(xDiff, startX);
             Y = yDiff < 0 ? 0 : Math.Min(yDiff, startY);
         }
+
+        internal static bool OnScreen(Loc pos)
+        {
+            (int x, int y) = pos;
+            return x >= X && x < X + Constants.MAPVIEW_WIDTH && y >= Y && y < Y + Constants.MAPVIEW_HEIGHT;
+        }
     }
 }

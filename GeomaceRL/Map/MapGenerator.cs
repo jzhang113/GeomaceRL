@@ -1,4 +1,5 @@
 ﻿using GeomaceRL.Actor;
+using Optional;
 using Pcg;
 using System;
 using System.Collections.Generic;
@@ -9,36 +10,35 @@ namespace GeomaceRL.Map
     {
         protected int Width { get; }
         protected int Height { get; }
-        protected PcgRandom Rand { get; }
+        protected PcgRandom Rand { get; } = Game.Rand;
         protected MapHandler Map { get; }
 
         protected IList<Room> RoomList { get; set; }
         protected ICollection<int>[] Adjacency { get; set; }
 
-        protected MapGenerator(int width, int height, PcgRandom random)
+        protected MapGenerator(int width, int height, int level)
         {
             Width = width;
             Height = height;
-            Rand = random;
-            Map = new MapHandler(width, height);
+            Map = new MapHandler(width, height, level);
         }
 
         public MapHandler Generate()
         {
             CreateMap();
             ComputeClearance();
-            AddElements();
+            AddMana();
 
+            PlaceStairs();
             PlaceActors();
             PlaceItems();
-            PlaceStairs();
 
             return Map;
         }
 
         protected abstract void CreateMap();
 
-        private void AddElements()
+        private void AddMana()
         {
             for (int y = 0; y < Map.Height; y++)
             {
@@ -201,22 +201,12 @@ namespace GeomaceRL.Map
         // HACK: ad-hoc placement code
         private void PlaceActors()
         {
-            do
-            {
-                Game.Player.Pos = new Loc(Rand.Next(1, Width - 1), Rand.Next(1, Height - 1));
-            }
-            while (!Map.Field[Game.Player.Pos].IsWalkable);
+            Game.Player.Pos = Map.GetRandomOpenPoint();
             Map.AddActor(Game.Player);
 
             for (int i = 0; i < 10; i++)
             {
-                int xPos = 0, yPos = 0;
-                do
-                {
-                    xPos = Rand.Next(1, Width - 1);
-                    yPos = Rand.Next(1, Height - 1);
-                } while (!Map.Field[xPos, yPos].IsWalkable);
-                var sprite = new Sprite(new Loc(xPos, yPos), Element.Fire);
+                var sprite = new Sprite(Map.GetRandomOpenPoint(), Element.Fire);
                 Map.AddActor(sprite);
             }
 
@@ -225,24 +215,7 @@ namespace GeomaceRL.Map
 
         private void PlaceStairs()
         {
-            //foreach (LevelId id in Exits)
-            //{
-            //    LevelId current = Game.World.CurrentLevel;
-            //    char symbol = '*';
-            //    if (id.Name == current.Name)
-            //        symbol = id.Depth > current.Depth ? '>' : '<';
-
-            //    Exit exit = new Exit(id, symbol);
-            //    bool done = false;
-            //    while (!Map.Field[exit.Loc].IsWalkable && !done)
-            //    {
-            //        Map.GetExit(exit.Loc).Match(
-            //            some: _ => exit.Loc = new Loc(Rand.Next(1, Width - 1), Rand.Next(1, Height - 1)),
-            //            none: () => done = true);
-            //    }
-
-            //    Map.AddExit(exit);
-            //}
+            Map.Exit = Option.Some(Map.GetRandomOpenPoint());
         }
 
         protected bool PointOnMap(int x, int y)

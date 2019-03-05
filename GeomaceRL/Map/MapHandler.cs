@@ -10,6 +10,8 @@ namespace GeomaceRL.Map
     {
         public int Width { get; }
         public int Height { get; }
+        public int Level { get; }
+        public Option<Loc> Exit { get; internal set; }
 
         internal Field Field { get; }
         internal int[,] Clearance { get; }
@@ -28,10 +30,12 @@ namespace GeomaceRL.Map
         // keep queue to prevent unnecessary allocations
         private readonly Queue<LocCost> _goals = new Queue<LocCost>();
 
-        public MapHandler(int width, int height)
+        public MapHandler(int width, int height, int level)
         {
             Width = width;
             Height = height;
+            Level = level;
+            Exit = Option.None<Loc>();
 
             Field = new Field(width, height);
             Clearance = new int[width, height];
@@ -271,22 +275,6 @@ namespace GeomaceRL.Map
         //}
         #endregion
 
-        //public bool AddExit(Exit exit)
-        //{
-        //    // TODO: also check exit reachability
-        //    if (!Field[exit.Loc].IsWalkable)
-        //        return false;
-
-        //    Exits.Add(ToIndex(exit.Loc), exit);
-        //    return true;
-        //}
-
-        //public Option<Exit> GetExit(Loc pos) =>
-        //    Exits.TryGetValue(ToIndex(pos), out Exit exit) ? Option.Some(exit) : Option.None<Exit>();
-
-        //public IEnumerable<Exit> GetExits(LevelId levelId) =>
-        //    Exits.Values.Where(ex => ex.Destination == levelId);
-
         //public bool SetFire(Loc pos)
         //{
         //    int index = ToIndex(pos);
@@ -321,6 +309,18 @@ namespace GeomaceRL.Map
         //}
 
         #region Tile Selection Methods
+        public Loc GetRandomOpenPoint()
+        {
+            int xPos = 0, yPos = 0;
+            do
+            {
+                xPos = Game.Rand.Next(1, Width - 1);
+                yPos = Game.Rand.Next(1, Height - 1);
+            } while (!Field[xPos, yPos].IsWalkable);
+
+            return new Loc(xPos, yPos);
+        }
+
         public IEnumerable<LocCost> GetPathToPlayer(Loc pos)
         {
             System.Diagnostics.Debug.Assert(Field.IsValid(pos));
@@ -717,6 +717,15 @@ namespace GeomaceRL.Map
                 }
             }
 
+            Exit.MatchSome(exit =>
+            {
+                if (Camera.OnScreen(exit) && Field[exit].IsVisible)
+                {
+                    Terminal.Color(Colors.Exit);
+                    layer.Put(exit.X - Camera.X, exit.Y - Camera.Y, '>');
+                }
+            });
+
             //foreach (Door door in Doors.Values)
             //{
             //    door.DrawingComponent.Draw(layer, Field[door.Loc]);
@@ -728,11 +737,6 @@ namespace GeomaceRL.Map
             //    topItem.DrawingComponent.Draw(layer, Field[topItem.Loc]);
             //}
 
-            //foreach (Exit exit in Exits.Values)
-            //{
-            //    exit.DrawingComponent.Draw(layer, Field[exit.Loc]);
-            //}
-
             //foreach (Fire fire in Fires.Values)
             //{
             //    fire.DrawingComponent.Draw(layer, Field[fire.Loc]);
@@ -740,7 +744,7 @@ namespace GeomaceRL.Map
 
             foreach (Actor.Actor unit in Units.Values)
             {
-                if (Field[unit.Pos].IsVisible)
+                if (Camera.OnScreen(unit.Pos) && Field[unit.Pos].IsVisible)
                     unit.Draw(layer);
             }
         }

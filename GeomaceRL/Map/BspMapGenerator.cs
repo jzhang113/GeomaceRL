@@ -1,5 +1,4 @@
-﻿using Pcg;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace GeomaceRL.Map
@@ -9,8 +8,8 @@ namespace GeomaceRL.Map
         private const int _MIN_ROOM_SIZE = 4;
         private const int _MAX_ROOM_SIZE = 15;
 
-        public BspMapGenerator(int width, int height, PcgRandom random)
-            : base(width, height, random)
+        public BspMapGenerator(int width, int height, int level)
+            : base(width, height, level)
         {
         }
 

@@ -68,8 +68,21 @@ namespace GeomaceRL.State
                         return Option.None<ICommand>();
                     }
 
-                //case NormalInput.ChangeLevel:
-                //    return Option.Some<ICommand>(new ChangeLevelCommand(Game.MapHelper.TryChangeLocation(player)));
+                case NormalInput.ChangeLevel:
+                    bool overExit = false;
+
+                    Game.MapHandler.Exit.MatchSome(exit =>
+                    {
+                        if (player.Pos == exit)
+                            overExit = true;
+                    });
+
+                    if (overExit)
+                        Game.NextLevel();
+                    else
+                        Game.MessagePanel.AddMessage("No stairs here");
+
+                    return Option.None<ICommand>();
                 //case NormalInput.OpenApply:
                 //    Game.StateHandler.PushState(ApplyState.Instance);
                 //    return Option.None<ICommand>();

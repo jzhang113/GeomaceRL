@@ -38,7 +38,6 @@ namespace GeomaceRL.Input
                         [Terminal.TK_KP_5] =        NormalInput.Wait,
                         [Terminal.TK_PERIOD] =      NormalInput.Wait,
                         [Terminal.TK_COMMA] =       NormalInput.Get,
-                        [Terminal.TK_BACKSLASH] =   NormalInput.ChangeLevel,
                         [Terminal.TK_A] =           NormalInput.OpenApply,
                         [Terminal.TK_D] =           NormalInput.OpenDrop,
                         [Terminal.TK_E] =           NormalInput.OpenEquip,
@@ -48,6 +47,10 @@ namespace GeomaceRL.Input
                         [Terminal.TK_O] =           NormalInput.AutoExplore,
                         [Terminal.TK_ESCAPE] =      NormalInput.OpenMenu,
                         [Terminal.TK_C] =           NormalInput.Cast
+                    },
+                    Shift = new Dictionary<int, NormalInput>()
+                    {
+                        [Terminal.TK_PERIOD] =      NormalInput.ChangeLevel
                     }
                 },
                 TargettingMap = new KeyMap.StateMap<TargettingInput>()

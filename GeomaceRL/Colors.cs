@@ -42,8 +42,7 @@ namespace GeomaceRL
 
         // Map features
         public static Color Door =              Swatch.DbBrightWood;
-        public static Color Exit =              Swatch.Alternate;
-        public static Color Hook =              Swatch.DbLight;
+        public static Color Exit =              Swatch.DbLight;
         public static Color FireAccent =        Color.FromArgb(240, 188, 25);
 
         public static Color Blend(this Color c1, Color c2, double alpha)
