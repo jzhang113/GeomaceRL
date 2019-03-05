@@ -24,12 +24,15 @@ namespace GeomaceRL.Animation
             _dx = source.Pos.X - prev.X;
             _dy = source.Pos.Y - prev.Y;
             _frame = 0;
+
+            source.ShouldDraw = false;
         }
 
         public bool Update()
         {
             if (_frame >= _MAX_FRAME)
             {
+                Cleanup();
                 return true;
             }
             else
@@ -37,6 +40,11 @@ namespace GeomaceRL.Animation
                 _frame++;
                 return false;
             }
+        }
+
+        public void Cleanup()
+        {
+            _source.ShouldDraw = true;
         }
 
         public void Draw(LayerInfo layer)

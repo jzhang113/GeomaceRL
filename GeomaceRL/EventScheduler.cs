@@ -1,5 +1,8 @@
 ﻿using GeomaceRL.Actor;
+using GeomaceRL.Command;
 using GeomaceRL.Interface;
+using Optional;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,14 +55,7 @@ namespace GeomaceRL
                         }
                         else
                         {
-                            entity.Act().MatchSome(command =>
-                            {
-                                var retry = command.Execute();
-                                while (retry.HasValue)
-                                {
-                                    retry.MatchSome(c => retry = c.Execute());
-                                }
-                            });
+                            ExecuteCommand(entity.Act(), () => { });
                         }
                     }
                     else
@@ -74,6 +70,27 @@ namespace GeomaceRL
                     _clearing = false;
                 }
             }
+        }
+
+        internal static void ExecuteCommand(Option<ICommand> action, Action after)
+        {
+            action.MatchSome(command =>
+            {
+                var retry = command.Execute();
+                var animation = command.Animation;
+
+                while (retry.HasValue)
+                {
+                    retry.MatchSome(c =>
+                    {
+                        retry = c.Execute();
+                        animation = c.Animation;
+                    });
+                }
+
+                animation.MatchSome(anim => Game.CurrentAnimations.Add(anim));
+                after();
+            });
         }
     }
 }

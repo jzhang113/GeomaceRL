@@ -1,5 +1,6 @@
 ﻿using BearLib;
 using GeomaceRL.Actor;
+using GeomaceRL.Animation;
 using GeomaceRL.Map;
 using GeomaceRL.State;
 using GeomaceRL.UI;
@@ -16,6 +17,9 @@ namespace GeomaceRL
         public static MessagePanel MessagePanel { get; private set; }
         public static Player Player { get; private set; }
 
+        internal static ICollection<IAnimation> CurrentAnimations { get; private set; }
+        private static ICollection<IAnimation> _finishedAnimations;
+
         private static bool _exiting;
 
         private static LayerInfo _mapLayer;
@@ -25,6 +29,9 @@ namespace GeomaceRL
 
         private static void Main(string[] args)
         {
+            CurrentAnimations = new List<IAnimation>();
+            _finishedAnimations = new List<IAnimation>();
+
             _mapLayer = new LayerInfo("Map", 1,
                 Constants.SIDEBAR_WIDTH + 1, 1,
                 Constants.MAPVIEW_WIDTH, Constants.MAPVIEW_HEIGHT);
@@ -88,18 +95,26 @@ namespace GeomaceRL
         {
             while (!_exiting)
             {
-                StateHandler.HandleInput().MatchSome(command =>
+                EventScheduler.ExecuteCommand(StateHandler.HandleInput(), () =>
                 {
-                    var retry = command.Execute();
-                    while (retry.HasValue)
-                    {
-                        retry.MatchSome(c => retry = c.Execute());
-                    }
-
                     MapHandler.Refresh();
                     EventScheduler.Update();
                 });
+
+                foreach (IAnimation animation in CurrentAnimations)
+                {
+                    if (animation.Update() || EventScheduler.Turn > animation.Turn + 1)
+                        _finishedAnimations.Add(animation);
+                }
+
+                foreach (IAnimation animation in _finishedAnimations)
+                {
+                    animation.Cleanup();
+                    CurrentAnimations.Remove(animation);
+                }
+
                 Render();
+                _finishedAnimations.Clear();
             }
 
             Terminal.Close();
@@ -111,6 +126,12 @@ namespace GeomaceRL
             InfoPanel.Draw(_infoLayer);
             MessagePanel.Draw(_messageLayer);
             StateHandler.Draw();
+
+            foreach (IAnimation animation in CurrentAnimations)
+            {
+                animation.Draw(_mapLayer);
+            }
+
             Terminal.Refresh();
         }
     }

@@ -11,5 +11,8 @@ namespace GeomaceRL.Animation
 
         // Draw the animation to Layer
         void Draw(LayerInfo layer);
+
+        // Any cleanup that needs to be done, like unhiding Actors
+        void Cleanup();
     }
 }

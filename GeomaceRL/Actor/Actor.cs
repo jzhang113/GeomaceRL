@@ -13,6 +13,8 @@ namespace GeomaceRL.Actor
         public string Name { get; protected set; } = "Monster";
         public Color Color { get; }
         public char Symbol { get; }
+        public bool ShouldDraw { get; set; }
+
         public Loc Pos { get; set; }
 
         public int MaxHealth { get; }
@@ -30,6 +32,7 @@ namespace GeomaceRL.Actor
 
             Color = color;
             Symbol = symbol;
+            ShouldDraw = true;
         }
 
         public virtual void TriggerDeath()
@@ -67,6 +70,9 @@ namespace GeomaceRL.Actor
 
         public void Draw(LayerInfo layer)
         {
+            if (!ShouldDraw)
+                return;
+
             if (IsDead)
             {
                 Terminal.Color(Swatch.DbOldBlood);

@@ -9,6 +9,8 @@ namespace GeomaceRL.Interface
         Color Color { get; }
         char Symbol { get; }
 
+        bool ShouldDraw { get; set; }
+
         void Draw(LayerInfo layer);
     }
 }
