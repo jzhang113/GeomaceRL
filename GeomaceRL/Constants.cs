@@ -23,6 +23,7 @@
 
         // Misc constants
         public const int MESSAGE_HISTORY_COUNT = 100;
+        public const int GEN_ATTACK = 10;
 
         // Base hp constants
         public const int SPRITE_HP = 10;

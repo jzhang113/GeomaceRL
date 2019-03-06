@@ -64,9 +64,9 @@ namespace GeomaceRL.Actor
         public virtual Option<ICommand> GetAction() =>
             Option.Some<ICommand>(new WaitCommand(this));
 
-        public ICommand GetBasicAttack(in Loc target) => new AttackCommand(this, 10, target);
+        public ICommand GetBasicAttack(in Loc target) => new AttackCommand(this, Constants.GEN_ATTACK, target);
 
-        public ICommand GetBasicAttack(IEnumerable<Loc> targets) => new AttackCommand(this, 10, targets);
+        public ICommand GetBasicAttack(IEnumerable<Loc> targets) => new AttackCommand(this, Constants.GEN_ATTACK, targets);
 
         public void Draw(LayerInfo layer)
         {
