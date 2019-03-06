@@ -60,7 +60,7 @@ namespace GeomaceRL.UI
 
             Terminal.Color(Colors.Text);
             // draw messages
-            int maxCount = Math.Min(_messages.Count, layer.Height - 1);
+            int maxCount = Math.Min(_messages.Count, layer.Height);
             int yPos = layer.Height - 1;
 
             for (int i = 0; i < maxCount; i++)

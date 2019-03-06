@@ -66,7 +66,7 @@ namespace GeomaceRL.State
             var firstActor = Option.None<Actor.Actor>();
             foreach (Actor.Actor target in _targettableActors)
             {
-                if (!(target is Actor.Player))
+                if (!(target is Actor.Player) && Game.MapHandler.Field[target.Pos].IsVisible)
                 {
                     firstActor = Option.Some(target);
                     break;
@@ -142,7 +142,11 @@ namespace GeomaceRL.State
                 case TargettingInput.NextActor:
                     if (_targettableActors.Count > 0)
                     {
-                        Actor.Actor nextActor = _targettableActors[++_index % _targettableActors.Count];
+                        Actor.Actor nextActor;
+                        do
+                        {
+                            nextActor = _targettableActors[++_index % _targettableActors.Count];
+                        } while (!Game.MapHandler.Field[nextActor.Pos].IsVisible);
                         _cursor = nextActor.Pos;
                     }
                     else
