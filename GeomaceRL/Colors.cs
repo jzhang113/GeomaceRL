@@ -45,7 +45,7 @@ namespace GeomaceRL
         public static Color Exit =              Swatch.DbLight;
         public static Color FireAccent =        Color.FromArgb(240, 188, 25);
 
-        public static Color Blend(this Color c1, Color c2, double alpha)
+        public static Color Blend(this in Color c1, in Color c2, double alpha)
         {
             return Color.FromArgb(
                 (int)(c1.R + (c2.R - c1.R) * alpha),

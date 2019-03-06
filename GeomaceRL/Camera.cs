@@ -23,7 +23,7 @@ namespace GeomaceRL
             Y = yDiff < 0 ? 0 : Math.Min(yDiff, startY);
         }
 
-        internal static bool OnScreen(Loc pos)
+        internal static bool OnScreen(in Loc pos)
         {
             (int x, int y) = pos;
             return x >= X && x < X + Constants.MAPVIEW_WIDTH && y >= Y && y < Y + Constants.MAPVIEW_HEIGHT;

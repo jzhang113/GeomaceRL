@@ -21,7 +21,7 @@ namespace GeomaceRL.Animation
         private readonly char _symb2;
         private readonly char _symb3;
 
-        public LaserAnimation(IEnumerable<Loc> targets, Color main, Color alt)
+        public LaserAnimation(IEnumerable<Loc> targets, in Color main, in Color alt)
         {
             _targets = targets.ToList();
             _color = main;

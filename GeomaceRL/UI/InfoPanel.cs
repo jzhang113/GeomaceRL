@@ -27,7 +27,6 @@ namespace GeomaceRL.UI
                 }
             }
 
-
             int drawX = 1;
             int sectionTop = layer.Height - 9;
             drawY = sectionTop;
