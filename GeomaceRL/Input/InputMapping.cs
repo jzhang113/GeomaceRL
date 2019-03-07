@@ -46,7 +46,12 @@ namespace GeomaceRL.Input
                         [Terminal.TK_T] =           NormalInput.Throw,
                         [Terminal.TK_O] =           NormalInput.AutoExplore,
                         [Terminal.TK_ESCAPE] =      NormalInput.OpenMenu,
-                        [Terminal.TK_C] =           NormalInput.Cast
+                        [Terminal.TK_1] =           NormalInput.Cast,
+                        [Terminal.TK_2] =           NormalInput.Cast,
+                        [Terminal.TK_3] =           NormalInput.Cast,
+                        [Terminal.TK_4] =           NormalInput.Cast,
+                        [Terminal.TK_5] =           NormalInput.Cast,
+                        [Terminal.TK_6] =           NormalInput.Cast,
                     },
                     Shift = new Dictionary<int, NormalInput>()
                     {

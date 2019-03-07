@@ -48,7 +48,8 @@ namespace GeomaceRL.State
                 #endregion
 
                 case NormalInput.Cast:
-                    var spell = player.SpellList[0];
+                    int spellnum = key - BearLib.Terminal.TK_1;
+                    var spell = player.SpellList[spellnum];
                     (Element costElem, int costAmount) = spell.Cost;
 
                     if (player.Mana[costElem] < costAmount)
@@ -59,7 +60,7 @@ namespace GeomaceRL.State
                     else
                     {
                         Game.StateHandler.PushState(
-                            new TargettingState(player, spell.Zone, targets =>
+                            new TargettingState(player, spell.Zone, spellnum, targets =>
                             {
                                 Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost);
                                 Game.StateHandler.PopState();

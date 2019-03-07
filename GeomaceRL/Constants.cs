@@ -9,7 +9,7 @@
         // UI constants
         public const int MAP_WIDTH = 60;
         public const int MAP_HEIGHT = 60;
-        public const int MAPVIEW_WIDTH = 25;
+        public const int MAPVIEW_WIDTH = 29;
         public const int MAPVIEW_HEIGHT = 25;
         public const int SIDEBAR_WIDTH = 10;
         public const int MESSAGE_HEIGHT = 5;

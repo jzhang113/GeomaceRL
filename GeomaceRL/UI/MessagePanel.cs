@@ -45,15 +45,11 @@ namespace GeomaceRL.UI
             Terminal.Color(Colors.BorderColor);
             layer.DrawBorders(new BorderInfo
             {
-                TopLeftChar = '┼',
-                TopRightChar = '┤',
-                TopChar = '─',
+                TopLeftChar = '┤',
+                TopRightChar = '│',
                 LeftChar = '│',
                 RightChar = '│'
             });
-
-            layer.Print(-1, $"{Constants.HEADER_LEFT}[color=white]Messages[/color]{Constants.HEADER_RIGHT}",
-                System.Drawing.ContentAlignment.TopCenter);
 
             Terminal.Color(Colors.Text);
             // draw messages

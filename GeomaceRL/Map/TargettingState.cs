@@ -11,6 +11,8 @@ namespace GeomaceRL.State
 {
     internal class TargettingState : IState
     {
+        public int CurrentSpell { get; }
+
         private readonly Actor.Actor _source;
         private readonly TargetZone _targetZone;
         private readonly Func<IEnumerable<Loc>, ICommand> _callback;
@@ -24,10 +26,15 @@ namespace GeomaceRL.State
         private int _index;
         private Loc _cursor;
 
-        public TargettingState(Actor.Actor source, TargetZone zone, Func<IEnumerable<Loc>, ICommand> callback)
+        public TargettingState(
+            Actor.Actor source,
+            TargetZone zone,
+            int spellnum,
+            Func<IEnumerable<Loc>, ICommand> callback)
         {
             _source = source;
             _targetZone = zone;
+            CurrentSpell = spellnum;
             _callback = callback;
             _targettableActors = new List<Actor.Actor>();
             _targetted = new List<Loc>();
@@ -189,6 +196,7 @@ namespace GeomaceRL.State
         {
             IEnumerable<Loc> targets = _targetZone.GetTilesInRange(_source, _cursor);
             _targetted.Clear();
+            _path.Clear();
 
             // Draw the projectile path if any.
             foreach (Loc point in _targetZone.Trail)

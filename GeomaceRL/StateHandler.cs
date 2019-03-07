@@ -54,15 +54,12 @@ namespace GeomaceRL
             return currentState.HandleKeyInput(key);
         }
 
-        public void PopState()
-        {
-            _states.Pop();
-        }
+        public void PopState() => _states.Pop();
 
-        public void PushState(IState state)
-        {
-            _states.Push(state);
-        }
+        public Option<IState> Peek() =>
+            (_states.Count == 0) ? Option.None<IState>() : Option.Some(_states.Peek());
+
+        public void PushState(IState state) => _states.Push(state);
 
         public void Draw()
         {
