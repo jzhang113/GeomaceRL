@@ -18,7 +18,12 @@ namespace GeomaceRL.Map
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
-                    _field[(y * height) + x] = new Tile(x, y);
+                {
+                    _field[(y * height) + x] = new Tile(x, y,
+                       Colors.Wall.Blend(
+                           System.Drawing.Color.White,
+                           System.Math.Clamp(Game.VisRand.NextNormal(0.3, 0.2), 0, 1)));
+                }
             }
         }
 

@@ -33,6 +33,8 @@ namespace GeomaceRL
         private static LayerInfo _mapLayer;
         private static LayerInfo _infoLayer;
         private static LayerInfo _messageLayer;
+        private static LayerInfo _manaLayer;
+        private static LayerInfo _spellbarLayer;
         private static LayerInfo _mainLayer;
 
         private static void Main(string[] args)
@@ -43,18 +45,26 @@ namespace GeomaceRL
             VisRand = new PcgRandom();
 
             _mapLayer = new LayerInfo("Map", 1,
-                Constants.SIDEBAR_WIDTH + 1, 1,
+                Constants.SIDEBAR_WIDTH + 2, 1,
                 Constants.MAPVIEW_WIDTH, Constants.MAPVIEW_HEIGHT);
 
             _infoLayer = new LayerInfo("Info", 1,
-                1, 1, Constants.SIDEBAR_WIDTH, Constants.SCREEN_HEIGHT);
+                1, 1, Constants.SIDEBAR_WIDTH, Constants.MAPVIEW_HEIGHT);
+
+            _manaLayer = new LayerInfo("Mana", 1,
+                1, Constants.MAPVIEW_HEIGHT + 2,
+                Constants.SIDEBAR_WIDTH, Constants.MESSAGE_HEIGHT + Constants.SPELLBAR_HEIGHT + 1);
 
             _messageLayer = new LayerInfo("Message", 1,
-                Constants.SIDEBAR_WIDTH + 1, Constants.MAPVIEW_HEIGHT + 2,
+                Constants.SIDEBAR_WIDTH + 2, Constants.MAPVIEW_HEIGHT + 2,
                 Constants.MAPVIEW_WIDTH, Constants.MESSAGE_HEIGHT);
 
+            _spellbarLayer = new LayerInfo("Spellbar", 1,
+                Constants.SIDEBAR_WIDTH + 2, Constants.MAPVIEW_HEIGHT + Constants.MESSAGE_HEIGHT + 3,
+                Constants.MAPVIEW_WIDTH, Constants.SPELLBAR_HEIGHT);
+
             _mainLayer = new LayerInfo("Main", 11, 0, 0,
-                Constants.SCREEN_WIDTH + 2, Constants.SCREEN_HEIGHT + 2);
+               Constants.SCREEN_WIDTH + 2, Constants.SCREEN_HEIGHT + 2);
 
             Terminal.Open();
             Terminal.Set(
@@ -122,7 +132,9 @@ namespace GeomaceRL
                 DateTime newTime = DateTime.UtcNow;
                 TimeSpan frameTime = newTime - currentTime;
                 if (frameTime > maxDt)
+                {
                     frameTime = maxDt;
+                }
 
                 currentTime = newTime;
                 accum += frameTime;
@@ -144,7 +156,9 @@ namespace GeomaceRL
                 foreach (IAnimation animation in CurrentAnimations)
                 {
                     if (animation.Update() || EventScheduler.Turn > animation.Turn + 1)
+                    {
                         _finishedAnimations.Add(animation);
+                    }
                 }
 
                 foreach (IAnimation animation in _finishedAnimations)
@@ -164,6 +178,8 @@ namespace GeomaceRL
         {
             Terminal.Clear();
             InfoPanel.Draw(_infoLayer);
+            ManaPanel.Draw(_manaLayer);
+            Spellbar.Draw(_spellbarLayer);
             MessagePanel.Draw(_messageLayer);
             StateHandler.Draw();
 

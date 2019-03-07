@@ -1,6 +1,5 @@
 ﻿using BearLib;
 using GeomaceRL.UI;
-using System;
 using System.Drawing;
 
 namespace GeomaceRL.Map
@@ -9,6 +8,7 @@ namespace GeomaceRL.Map
     {
         public int X { get; }
         public int Y { get; }
+        public Color Color { get; }
 
         public float Light
         {
@@ -37,26 +37,27 @@ namespace GeomaceRL.Map
 
         private float _light;
 
-        public Tile(int x, int y)
+        public Tile(int x, int y, in Color color)
         {
             X = x;
             Y = y;
             IsWall = true;
+            Color = color;
         }
 
         public void Draw(LayerInfo layer)
         {
             int dispX = X - Camera.X;
             int dispY = Y - Camera.Y;
+            Terminal.Color(Color);
 
             if (IsWall)
             {
-                Terminal.Color(Colors.Wall);
                 layer.Put(dispX, dispY, '#');
             }
             else
             {
-                Terminal.Color(Colors.Floor);
+                // Terminal.Color(Colors.Floor);
                 layer.Put(dispX, dispY, '.');
 
                 (Element element, int amount) = Game.MapHandler.Mana[X, Y];

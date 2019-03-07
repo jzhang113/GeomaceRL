@@ -6,6 +6,7 @@ namespace GeomaceRL.Spell
 {
     internal class Firelance : ISpell
     {
+        public string Abbrev => "FL";
         public (Element, int) Cost => (Element.Fire, Constants.FIRELANCE_COST);
         public TargetZone Zone => new TargetZone(TargetShape.Directional, Constants.FIRELANCE_RANGE);
 

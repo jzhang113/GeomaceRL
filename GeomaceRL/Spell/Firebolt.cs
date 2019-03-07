@@ -5,6 +5,7 @@ namespace GeomaceRL.Spell
 {
     internal class Firebolt : ISpell
     {
+        public string Abbrev => "FB";
         public (Element, int) Cost => (Element.Fire, Constants.FIREBOLT_COST);
         public TargetZone Zone => new TargetZone(TargetShape.Range, Constants.FIREBOLT_RANGE);
 

@@ -45,13 +45,10 @@ namespace GeomaceRL.UI
             Terminal.Color(Colors.BorderColor);
             layer.DrawBorders(new BorderInfo
             {
-                TopLeftChar = '├', // 195
-                TopRightChar = '┤', // 180
-                BottomLeftChar = '┴', // 193
-                BottomRightChar = '┘', // 217
-                TopChar = '─', // 196
-                BottomChar = '─',
-                LeftChar = '│', // 179
+                TopLeftChar = '┼',
+                TopRightChar = '┤',
+                TopChar = '─',
+                LeftChar = '│',
                 RightChar = '│'
             });
 

@@ -26,7 +26,8 @@ namespace GeomaceRL.Actor
 
             SpellList = new List<ISpell>()
             {
-                new Firelance()
+                new Firelance(),
+                new Firebolt()
             };
 
             Name = "Player";

@@ -53,7 +53,7 @@ namespace GeomaceRL.State
 
                     if (player.Mana[costElem] < costAmount)
                     {
-                        Game.MessagePanel.AddMessage("Insufficient mana!");
+                        Game.MessagePanel.AddMessage("Not enough mana");
                         return Option.None<ICommand>();
                     }
                     else

@@ -5,6 +5,8 @@ namespace GeomaceRL.Spell
 {
     public interface ISpell
     {
+        string Abbrev { get; }
+
         (Element, int) Cost { get; }
 
         TargetZone Zone { get; }
