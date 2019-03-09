@@ -8,13 +8,13 @@ namespace GeomaceRL.Spell
 {
     internal class Jetstream : ISpell
     {
+        public string Name => "Jetstream";
         public string Abbrev => "JS";
         public SpellCost Cost => new SpellCost(Element.Water, (1, Constants.JETSTREAM_COST));
         public TargetZone Zone => new TargetZone(TargetShape.Beam, 2 * Cost.MainManaUsed());
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
         {
-            Game.MessagePanel.AddMessage($"{source.Name} casts Jetstream");
             Game.CurrentAnimations.Add(
                 new LaserAnimation(targets, Element.Water.Color(), Colors.WaterAccent));
 

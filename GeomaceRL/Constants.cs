@@ -42,5 +42,8 @@
 
         public const int JETSTREAM_COST = 5;
         public const int JETSTREAM_DAMAGE = 10;
+
+        public const int PILLARS_COST = 2;
+        public const int PILLARS_RANGE = 2;
     }
 }

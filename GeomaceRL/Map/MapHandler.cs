@@ -3,6 +3,7 @@ using GeomaceRL.UI;
 using Optional;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GeomaceRL.Map
 {
@@ -155,17 +156,37 @@ namespace GeomaceRL.Map
 
             actor.Pos = pos;
             newTile.IsOccupied = true;
-            newTile.BlocksLight = false;
+            newTile.BlocksLight = actor.BlocksLight;
             Units.Add(ToIndex(pos), actor);
 
             return true;
         }
 
-        //public Option<LevelId> TryChangeLocation(Actor actor) =>
-        //    Exits.TryGetValue(ToIndex(actor.Loc), out Exit exit)
-        //        ? Option.Some(exit.Destination)
-        //        : Option.None<LevelId>();
+        internal void AddPillar(Actor.Pillar pillar)
+        {
+            if (Field[pillar.Pos].IsWall)
+                return;
 
+            if (!Field[pillar.Pos].IsWalkable)
+            {
+                // TODO: fix displacement
+                Actor.Actor target = Units[ToIndex(pillar.Pos)];
+                target.TakeDamage(Constants.COLLISION_DAMAGE);
+
+                Game.MessagePanel.AddMessage($"The pillar displaces {target.Name}");
+                var nearby = GetPointsInRadius(target.Pos, 1);
+                int index = Game.Rand.Next(nearby.Count());
+                var pos = nearby.ElementAt(index);
+                SetActorPosition(target, pos);
+            }
+
+            Tile tile = Field[pillar.Pos];
+            tile.IsOccupied = true;
+            tile.BlocksLight = true;
+            Units.Add(ToIndex(pillar.Pos), pillar);
+            Game.EventScheduler.AddActor(pillar);
+        }
+        
         // Calculate walkability, based on Actor size and status
         public bool IsWalkable(Actor.Actor actor, in Loc pos)
         {
@@ -252,26 +273,6 @@ namespace GeomaceRL.Map
         //        System.Diagnostics.Debug.Fail($"Could not split {item.Name} on the map.");
         //        return Option.None<Item>();
         //    }
-        //}
-        #endregion
-
-        #region Door Methods
-        //public bool AddDoor(Door door)
-        //{
-        //    if (!Field[door.Loc].IsWalkable)
-        //        return false;
-
-        //    Doors.Add(ToIndex(door.Loc), door);
-        //    Tile tile = Field[door.Loc];
-        //    tile.IsOccupied = true;
-        //    tile.BlocksLight = door.BlocksLight;
-
-        //    return true;
-        //}
-
-        //public bool TryGetDoor(Loc pos, out Door door)
-        //{
-        //    return Doors.TryGetValue(ToIndex(pos), out door);
         //}
         #endregion
 

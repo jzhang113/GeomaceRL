@@ -16,6 +16,7 @@ namespace GeomaceRL.Actor
         public bool ShouldDraw { get; set; }
 
         public Loc Pos { get; set; }
+        public bool BlocksLight { get; protected set; } = false;
 
         public int MaxHealth { get; }
         public int Health { get; set; }

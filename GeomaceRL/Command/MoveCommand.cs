@@ -37,9 +37,15 @@ namespace GeomaceRL.Command
 
             // Check if the destination is already occupied.
             return Game.MapHandler.GetActor(_nextPos).Match(
-                some: target => target == Source
-                    ? Option.Some<ICommand>(new WaitCommand(Source))
-                    : Option.Some(Source.GetBasicAttack(_nextPos)),
+                some: target =>
+                {
+                    if (target == Source)
+                        return Option.Some<ICommand>(new WaitCommand(Source));
+                    else if (target is Pillar)
+                        return Option.Some<ICommand>(new PushCommand(Source, target));
+                    else
+                        return Option.Some(Source.GetBasicAttack(_nextPos));
+                },
                 none: () =>
                 {
                     if (Source is Player)

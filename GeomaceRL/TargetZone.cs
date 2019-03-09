@@ -40,10 +40,9 @@ namespace GeomaceRL
             switch (Shape)
             {
                 case TargetShape.Self:
-                    foreach (Loc point in Game.MapHandler.GetPointsInRadius(current.Pos, Radius))
+                    foreach (Loc point in Game.MapHandler.GetPointsInRadius(current.Pos, Range))
                     {
-                        if (InRange(current.Pos, point))
-                            Targets.Add(point);
+                        Targets.Add(point);
                     }
                     return Targets;
                 case TargetShape.Range:

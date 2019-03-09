@@ -5,6 +5,8 @@ namespace GeomaceRL.Spell
 {
     public interface ISpell
     {
+        string Name { get; }
+
         string Abbrev { get; }
 
         SpellCost Cost { get; }

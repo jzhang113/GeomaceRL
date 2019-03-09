@@ -28,7 +28,8 @@ namespace GeomaceRL.Actor
             {
                 new Firelance(),
                 new Firebolt(),
-                new Jetstream()
+                new Jetstream(),
+                new EarthPillars()
             };
 
             Name = "Player";

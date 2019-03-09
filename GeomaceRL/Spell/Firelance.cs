@@ -6,6 +6,7 @@ namespace GeomaceRL.Spell
 {
     internal class Firelance : ISpell
     {
+        public string Name => "Firelance";
         public string Abbrev => "FL";
         public SpellCost Cost => new SpellCost(Element.Fire, Constants.FIRELANCE_COST);
         public TargetZone Zone => new TargetZone(TargetShape.Beam, Constants.FIRELANCE_RANGE);
@@ -13,7 +14,6 @@ namespace GeomaceRL.Spell
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
         {
             // TODO: self-casted firelance is legal but hits nothing and spends mana
-            Game.MessagePanel.AddMessage($"{source.Name} casts Firelance");
             Game.CurrentAnimations.Add(new LaserAnimation(targets, Element.Fire.Color(), Colors.FireAccent));
             return new AttackCommand(source, Constants.FIRELANCE_DAMAGE, targets);
         }

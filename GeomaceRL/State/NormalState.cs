@@ -66,6 +66,7 @@ namespace GeomaceRL.State
                         Game.StateHandler.PushState(
                             new TargettingState(player, spell.Zone, spellnum, targets =>
                             {
+                                Game.MessagePanel.AddMessage($"{player.Name} casts {spell.Name}");
                                 Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost.MainElem, mainMana);
                                 spell.Cost.AltElem.MatchSome(altElem =>
                                     Game.MapHandler.UpdateAllMana(player.Pos, altElem, altMana));

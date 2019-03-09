@@ -1,4 +1,5 @@
 ﻿using BearLib;
+using GeomaceRL.Actor;
 
 namespace GeomaceRL.UI
 {
@@ -18,7 +19,7 @@ namespace GeomaceRL.UI
             int drawY = 0;
             foreach (Actor.Actor actor in Game.MapHandler.Units.Values)
             {
-                if (Game.MapHandler.Field[actor.Pos].IsVisible)
+                if (Game.MapHandler.Field[actor.Pos].IsVisible && !(actor is Pillar))
                 {
                     Terminal.Layer(layer.Z + 3);
                     Terminal.Color(Colors.Text);
