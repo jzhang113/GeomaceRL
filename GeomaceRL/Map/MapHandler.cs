@@ -169,15 +169,17 @@ namespace GeomaceRL.Map
 
             if (!Field[pillar.Pos].IsWalkable)
             {
-                // TODO: fix displacement
                 Actor.Actor target = Units[ToIndex(pillar.Pos)];
+                if (target is Actor.Pillar)
+                    return;
+
                 target.TakeDamage(Constants.COLLISION_DAMAGE);
 
-                Game.MessagePanel.AddMessage($"The pillar displaces {target.Name}");
-                var nearby = GetPointsInRadius(target.Pos, 1);
-                int index = Game.Rand.Next(nearby.Count());
-                var pos = nearby.ElementAt(index);
-                SetActorPosition(target, pos);
+                Game.MessagePanel.AddMessage($"A pillar displaces {target.Name}");
+                var nearby = GetPointsInRadius(target.Pos, 1).Where(loc =>
+                    loc != target.Pos && Field[loc].IsWalkable).ToList();
+                int index = Game.Rand.Next(nearby.Count);
+                SetActorPosition(target, nearby[index]);
             }
 
             Tile tile = Field[pillar.Pos];
