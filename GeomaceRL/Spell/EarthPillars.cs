@@ -7,7 +7,7 @@ namespace GeomaceRL.Spell
     internal class EarthPillars : ISpell
     {
         public string Name => "Pillars";
-        public string Abbrev => "PR";
+        public string Abbrev => "PS";
 
         public SpellCost Cost => new SpellCost(
             Element.Earth, Constants.PILLARS_COST,

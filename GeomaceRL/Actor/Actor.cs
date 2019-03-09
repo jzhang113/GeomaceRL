@@ -57,7 +57,10 @@ namespace GeomaceRL.Actor
         public Option<ICommand> Act()
         {
             if (IsDead)
+            {
                 TriggerDeath();
+                return Option.None<ICommand>();
+            }
 
             return GetAction();
         }

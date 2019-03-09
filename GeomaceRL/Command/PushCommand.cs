@@ -31,7 +31,7 @@ namespace GeomaceRL.Command
                 Game.CurrentAnimations.Add(new MoveAnimation(_target, curr));
                 Game.CurrentAnimations.Add(new MoveAnimation(_source, prev));
             }
-            else
+            else if (_source is Actor.Player)
             {
                 Game.MessagePanel.AddMessage("There's something in the way");
             }
