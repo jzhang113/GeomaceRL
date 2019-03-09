@@ -29,7 +29,7 @@ namespace GeomaceRL.Command
             {
                 Game.MapHandler.GetActor(point).MatchSome(target => {
                     target.TakeDamage(_power);
-                    Game.MessagePanel.AddMessage($"{Source.Name} attacks {target.Name} for {_power} damage");
+                    Game.MessagePanel.AddMessage($"{Source.Name} hits {target.Name} for {_power} hp");
                 });
             }
 

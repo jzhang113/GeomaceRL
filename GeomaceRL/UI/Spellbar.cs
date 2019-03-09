@@ -20,7 +20,8 @@ namespace GeomaceRL.UI
                 LeftChar = '│'
             });
 
-            const int boxWidth = 5;
+            const int boxWidth = 7;
+            const int halfBox = 3;
             int casting = -1;
             Game.StateHandler.Peek().MatchSome(state =>
             {
@@ -39,15 +40,15 @@ namespace GeomaceRL.UI
 
                     Terminal.Color(casting == x ? Colors.HighlightColor : Colors.Text);
                     layer.Print(
-                        new Rectangle(startX, 0, 4, 1),
+                        new Rectangle(startX, 0, boxWidth - 1, 1),
                         $"{(char)(x + '1')} {spell.Abbrev}",
                         ContentAlignment.TopLeft);
                     layer.Print(
-                        new Rectangle(startX, 1, 2, 1),
+                        new Rectangle(startX, 1, halfBox, 1),
                         spell.Cost.GetMainString(),
                         ContentAlignment.TopLeft);
                     layer.Print(
-                        new Rectangle(startX + 2, 1, 2, 1),
+                        new Rectangle(startX + halfBox, 1, halfBox, 1),
                         spell.Cost.GetAltString(),
                         ContentAlignment.TopLeft);
                 }

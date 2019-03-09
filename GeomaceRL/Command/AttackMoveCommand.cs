@@ -68,7 +68,7 @@ namespace GeomaceRL.Command
                         // collision damage
                         // TODO: scale collision damage by weight and distance travelled
                         const int damage = Constants.COLLISION_DAMAGE;
-                        Game.MessagePanel.AddMessage($"{Source.Name} slams into {target.Name} for {damage} damage");
+                        Game.MessagePanel.AddMessage($"{Source.Name} slams into {target.Name} for {damage} hp");
                         target.TakeDamage(damage);
                         return MakeMoveCommand(newPos);
                     },
@@ -80,8 +80,11 @@ namespace GeomaceRL.Command
         {
             if (Source is Player)
             {
-                Game.MapHandler.Exit.MatchSome(_ =>
-                    Game.MessagePanel.AddMessage("You see an exit here"));
+                Game.MapHandler.Exit.MatchSome(exit =>
+                {
+                    if (exit == Source.Pos)
+                        Game.MessagePanel.AddMessage("You see an exit here");
+                });
             }
 
             Loc prevLoc = Source.Pos;

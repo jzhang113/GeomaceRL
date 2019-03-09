@@ -85,9 +85,14 @@ namespace GeomaceRL.State
                     });
 
                     if (overExit)
+                    {
+                        Game.MessagePanel.AddMessage("You descend the stairs");
                         Game.NextLevel();
+                    }
                     else
+                    {
                         Game.MessagePanel.AddMessage("No stairs here");
+                    }
 
                     return Option.None<ICommand>();
                 //case NormalInput.OpenApply:
