@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GeomaceRL.Spell
 {
-    internal class Jetstream : ISpell
+    internal class Waterstream : ISpell
     {
         public string Name => "Jetstream";
         public string Abbrev => "JS";
