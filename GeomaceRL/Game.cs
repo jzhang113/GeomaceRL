@@ -105,7 +105,7 @@ namespace GeomaceRL
             CurrentAnimations.Clear();
             EventScheduler.Clear();
 
-            var mapgen = new BspMapGenerator(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, _level++);
+            var mapgen = new JaggedMapGenerator(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, _level++);
             MapHandler = mapgen.Generate();
         }
 

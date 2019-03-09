@@ -8,7 +8,7 @@ namespace GeomaceRL.Spell
     {
         public string Abbrev => "FL";
         public (Element, int) Cost => (Element.Fire, Constants.FIRELANCE_COST);
-        public TargetZone Zone => new TargetZone(TargetShape.Directional, Constants.FIRELANCE_RANGE);
+        public TargetZone Zone => new TargetZone(TargetShape.Beam, Constants.FIRELANCE_RANGE);
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
         {

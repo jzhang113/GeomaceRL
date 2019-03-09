@@ -62,7 +62,7 @@ namespace GeomaceRL.Map
 
                 (Element element, int amount) = Game.MapHandler.Mana[X, Y];
                 var color = element.Color();
-                Terminal.Color(Color.FromArgb((int)(color.R * 0.6), (int)(color.G * 0.6), (int)(color.B * 0.8)));
+                Terminal.Color(color.Blend(Color.Black, 0.6));
                 // Terminal.Layer(layer.Z + 1);
                 layer.PrintMana(dispX, dispY, $"{amount}");
                 // Terminal.Layer(layer.Z);

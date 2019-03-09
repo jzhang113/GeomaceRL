@@ -171,24 +171,18 @@ namespace GeomaceRL.State
 
         private void MoveTarget(in Loc direction)
         {
-            (int dx, int dy) = direction;
-            Loc next = new Loc(_cursor.X + dx, _cursor.Y + dy);
-
+            Loc next = _cursor + direction;
             if (Game.MapHandler.Field.IsValid(next) && _inRange.Contains(next))
-            {
                 _cursor = next;
-            }
         }
 
         private void JumpTarget(in Loc direction)
         {
-            (int dx, int dy) = direction;
-            Loc next = new Loc(_cursor.X + dx, _cursor.Y + dy);
-
+            Loc next = _cursor + direction;
             while (Game.MapHandler.Field.IsValid(next) && _inRange.Contains(next))
             {
                 _cursor = next;
-                next = new Loc(next.X + dx, next.Y + dx);
+                next += direction;
             }
         }
 
