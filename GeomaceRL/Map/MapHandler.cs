@@ -75,10 +75,10 @@ namespace GeomaceRL.Map
             }
         }
 
-        internal void UpdateAllMana(in Loc pos, (Element elem, int amount) cost)
+        internal void UpdateAllMana(in Loc pos, Element elem, int amount)
         {
             // take mana from the current square if possible
-            int remaining = UpdateMana(pos, cost.elem, cost.amount);
+            int remaining = UpdateMana(pos, elem, amount);
 
             // take mana from surrounding squares
             foreach (Loc nearby in GetPointsInRadius(pos, 1))
@@ -86,7 +86,7 @@ namespace GeomaceRL.Map
                 if (remaining <= 0)
                     break;
 
-                remaining = UpdateMana(nearby, cost.elem, remaining);
+                remaining = UpdateMana(nearby, elem, remaining);
             }
         }
 

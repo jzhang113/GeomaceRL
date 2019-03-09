@@ -71,7 +71,7 @@ namespace GeomaceRL
                 $"window: size={Constants.SCREEN_WIDTH + 2}x{Constants.SCREEN_HEIGHT + 2}," +
                 $"cellsize=auto, title='GeomanceRL';");
             Terminal.Set("font: square.ttf, size = 24x24;");
-            Terminal.Set("text font: square.ttf, size = 14x14;");
+            Terminal.Set("text font: square.ttf, size = 16x16;");
 
             _level = 1;
             _exiting = false;

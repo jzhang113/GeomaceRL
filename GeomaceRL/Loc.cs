@@ -19,6 +19,8 @@
 
         public static Loc operator +(in Loc a, in Loc b) => new Loc(a.X + b.X, a.Y + b.Y);
 
+        public static Loc operator -(in Loc a, in Loc b) => new Loc(a.X - b.X, a.Y - b.Y);
+
         public void Deconstruct(out int x, out int y)
         {
             x = X;

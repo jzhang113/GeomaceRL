@@ -52,6 +52,8 @@ namespace GeomaceRL.UI
             });
 
             Terminal.Color(Colors.Text);
+            Terminal.Font("message");
+
             // draw messages
             int maxCount = Math.Min(_messages.Count, layer.Height);
             int yPos = layer.Height - 1;
@@ -61,6 +63,8 @@ namespace GeomaceRL.UI
                 layer.Print(yPos, _messages[_messages.Count - i - 1]);
                 yPos--;
             }
+
+            Terminal.Font("");
         }
     }
 }

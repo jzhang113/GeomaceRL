@@ -49,10 +49,14 @@ namespace GeomaceRL.State
 
                 case NormalInput.Cast:
                     int spellnum = key - BearLib.Terminal.TK_1;
-                    var spell = player.SpellList[spellnum];
-                    (Element costElem, int costAmount) = spell.Cost;
+                    if (spellnum >= player.SpellList.Count)
+                        return Option.None<ICommand>();
 
-                    if (player.Mana[costElem] < costAmount)
+                    var spell = player.SpellList[spellnum];
+                    int mainMana = spell.Cost.MainManaUsed();
+                    int altMana = spell.Cost.AltManaUsed();
+
+                    if (mainMana == -1 || altMana == -1)
                     {
                         Game.MessagePanel.AddMessage("Not enough mana");
                         return Option.None<ICommand>();
@@ -62,7 +66,9 @@ namespace GeomaceRL.State
                         Game.StateHandler.PushState(
                             new TargettingState(player, spell.Zone, spellnum, targets =>
                             {
-                                Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost);
+                                Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost.MainElem, mainMana);
+                                spell.Cost.AltElem.MatchSome(altElem =>
+                                    Game.MapHandler.UpdateAllMana(player.Pos, altElem, altMana));
                                 Game.StateHandler.PopState();
                                 return spell.Evoke(player, targets);
                             }));

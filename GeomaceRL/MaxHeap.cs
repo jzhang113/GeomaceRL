@@ -126,8 +126,8 @@ namespace GeomaceRL
 
             while (pos < Count)
             {
-                int left = 2 * pos + 1;
-                int right = 2 * pos + 2;
+                int left = (2 * pos) + 1;
+                int right = (2 * pos) + 2;
                 int swap = pos;
 
                 if (left < Count && CompareItem(_heap[swap], _heap[left]) < 0)

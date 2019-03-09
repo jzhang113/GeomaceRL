@@ -44,6 +44,7 @@ namespace GeomaceRL
         public static Color Door =              Swatch.DbBrightWood;
         public static Color Exit =              Swatch.DbLight;
         public static Color FireAccent =        Color.FromArgb(240, 188, 25);
+        public static Color WaterAccent =       Color.FromArgb(11, 102, 189);
 
         public static Color Blend(this in Color c1, in Color c2, double alpha)
         {

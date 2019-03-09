@@ -44,14 +44,11 @@ namespace GeomaceRL.Command
                 {
                     if (Source is Player)
                     {
-                        // TODO: better handling of move over popups
-                        //Game.MapHelper.GetStack(_nextPos).MatchSome(stack =>
-                        //    Game.MessageHandler.AddMessage(stack.Count == 1
-                        //        ? $"You see {stack.First()} here."
-                        //        : "You see several items here."));
-
-                        //Game.MapHelper.GetExit(_nextPos)
-                        //    .MatchSome(exit => Game.MessageHandler.AddMessage($"You see an exit to {exit.Destination}."));
+                        Game.MapHandler.Exit.MatchSome(exit =>
+                        {
+                            if (exit == Source.Pos)
+                                Game.MessagePanel.AddMessage("You see an exit here");
+                        });
                     }
 
                     Loc prevLoc = Source.Pos;

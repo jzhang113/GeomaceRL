@@ -43,8 +43,12 @@ namespace GeomaceRL.UI
                         $"{(char)(x + '1')} {spell.Abbrev}",
                         ContentAlignment.TopLeft);
                     layer.Print(
-                        new Rectangle(startX, 1, 4, 1),
-                        FormatCost(spell.Cost),
+                        new Rectangle(startX, 1, 2, 1),
+                        spell.Cost.GetMainString(),
+                        ContentAlignment.TopLeft);
+                    layer.Print(
+                        new Rectangle(startX + 2, 1, 2, 1),
+                        spell.Cost.GetAltString(),
                         ContentAlignment.TopLeft);
                 }
                 else
@@ -67,12 +71,6 @@ namespace GeomaceRL.UI
             layer.Put(layer.Width, 0, '│');
             layer.Put(layer.Width, 1, '│');
             layer.Put(layer.Width, 2, '┘');
-        }
-
-        private static string FormatCost((Element elem, int amount) cost)
-        {
-            Terminal.Color(cost.elem.Color());
-            return $"{cost.elem.Abbrev()}{cost.amount}";
         }
     }
 }

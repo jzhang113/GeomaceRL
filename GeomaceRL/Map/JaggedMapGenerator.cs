@@ -160,36 +160,12 @@ namespace GeomaceRL
             return 1;
         }
 
-        private void FloodFill(int x, int y, char[,] map, ref bool[,] seen, int counter,
-            ref int[,] occupied, ICollection<int> openPoints)
-        {
-            if (!PointOnMap(x, y) || seen[x, y])
-            {
-                return;
-            }
-
-            if (map[x, y] == '#')
-            {
-                openPoints.Add(ToIndex(x, y));
-                return;
-            }
-
-            seen[x, y] = true;
-            occupied[x, y] = counter;
-            Map.Field[x, y].IsWall = false;
-
-            FloodFill(x + 1, y, map, ref seen, counter, ref occupied, openPoints);
-            FloodFill(x - 1, y, map, ref seen, counter, ref occupied, openPoints);
-            FloodFill(x, y + 1, map, ref seen, counter, ref occupied, openPoints);
-            FloodFill(x, y - 1, map, ref seen, counter, ref occupied, openPoints);
-        }
-
         private void ClearRoomsBetween(Room r1, Room r2, IList<Room> roomList, int[,] occupied)
         {
-            int x0 = Rand.Next(r1.Left + 1, r1.Right);
-            int y0 = Rand.Next(r1.Top + 1, r1.Bottom);
-            int x1 = Rand.Next(r2.Left + 1, r2.Right);
-            int y1 = Rand.Next(r2.Top + 1, r2.Bottom);
+            int x0 = Rand.Next(Math.Min(r1.Left + 1, r1.Right), r1.Right);
+            int y0 = Rand.Next(Math.Min(r1.Top + 1, r1.Bottom), r1.Bottom);
+            int x1 = Rand.Next(Math.Min(r2.Left + 1, r2.Right), r2.Right);
+            int y1 = Rand.Next(Math.Min(r2.Top + 1, r2.Bottom), r2.Bottom);
 
             foreach (Loc point in Map.GetStraightLinePath(new Loc(x0, y0), new Loc(x1, y1)))
             {
@@ -526,7 +502,7 @@ namespace GeomaceRL
                     double diff = Math.Abs(newAngle - angle);
                     if (diff > Math.PI)
                     {
-                        diff = 2 * Math.PI - diff;
+                        diff = (2 * Math.PI) - diff;
                     }
 
                     // add the new hallway if the angle is >= 60 degrees
@@ -571,7 +547,7 @@ namespace GeomaceRL
 
         private int ToIndex(int x, int y)
         {
-            return x + Width * y;
+            return x + (Width * y);
         }
 
         private readonly struct MapVertex : IComparable<MapVertex>

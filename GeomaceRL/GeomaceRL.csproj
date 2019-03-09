@@ -19,6 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="arial.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="BearLibTerminal.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

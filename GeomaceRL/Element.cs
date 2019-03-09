@@ -30,11 +30,11 @@ namespace GeomaceRL
         {
             switch (element)
             {
-                case Element.Fire: return "f";
-                case Element.Earth: return "e";
-                case Element.Metal: return "m";
-                case Element.Water: return "w";
-                case Element.Wood: return "d";
+                case Element.Fire: return "F";
+                case Element.Earth: return "E";
+                case Element.Metal: return "M";
+                case Element.Water: return "W";
+                case Element.Wood: return "D";
                 default: return " ";
             }
         }

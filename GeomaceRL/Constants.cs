@@ -25,6 +25,7 @@
         // Misc constants
         public const int MESSAGE_HISTORY_COUNT = 100;
         public const int GEN_ATTACK = 10;
+        public const int COLLISION_DAMAGE = 10;
 
         // Base hp constants
         public const int SPRITE_HP = 10;
@@ -38,5 +39,8 @@
         public const int FIRELANCE_COST = 3;
         public const int FIRELANCE_RANGE = 8;
         public const int FIRELANCE_DAMAGE = 10;
+
+        public const int JETSTREAM_COST = 5;
+        public const int JETSTREAM_DAMAGE = 10;
     }
 }
