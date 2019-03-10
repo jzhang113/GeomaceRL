@@ -10,20 +10,20 @@ namespace GeomaceRL.Command
         public Actor.Actor Source { get; }
         public Option<IAnimation> Animation { get; private set; }
 
-        private readonly int _power;
+        private readonly (Element, int) _attack;
         private readonly IEnumerable<Loc> _targets;
         private readonly Loc _dir;
         private readonly int _distance;
 
         public AttackMoveCommand(
             Actor.Actor source,
-            int power,
+            (Element, int) attack,
             IEnumerable<Loc> targets,
             in Loc dir,
             int distance)
         {
             Source = source;
-            _power = power;
+            _attack = attack;
             _targets = targets;
             _dir = dir;
             _distance = distance;
@@ -35,8 +35,8 @@ namespace GeomaceRL.Command
             {
                 Game.MapHandler.GetActor(point).MatchSome(target =>
                 {
-                    target.TakeDamage(_power, Source.Pos);
-                    Game.MessagePanel.AddMessage($"{Source.Name} attacks {target.Name} for {_power} damage");
+                    int damage = target.TakeDamage(_attack, Source.Pos);
+                    Game.MessagePanel.AddMessage($"{Source.Name} attacks {target.Name} for {damage} damage");
                 });
             }
 
@@ -67,9 +67,8 @@ namespace GeomaceRL.Command
                     {
                         // collision damage
                         // TODO: scale collision damage by weight and distance travelled
-                        const int damage = Constants.COLLISION_DAMAGE;
+                        int damage = target.TakeDamage((Source.Element, Constants.COLLISION_DAMAGE), Source.Pos);
                         Game.MessagePanel.AddMessage($"{Source.Name} slams into {target.Name} for {damage} hp");
-                        target.TakeDamage(damage, Source.Pos);
                         return MakeMoveCommand(newPos);
                     },
                     none: () => MakeMoveCommand(newPos));

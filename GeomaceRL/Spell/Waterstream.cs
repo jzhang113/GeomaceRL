@@ -21,7 +21,7 @@ namespace GeomaceRL.Spell
             Loc dir = Distance.GetNearestDirection(source.Pos, targets.First());
             int power = Cost.MainManaUsed();
 
-            return new AttackMoveCommand(source, Constants.JETSTREAM_DAMAGE, targets, dir, power);
+            return new AttackMoveCommand(source, (Element.Water, Constants.JETSTREAM_DAMAGE), targets, dir, power);
         }
     }
 }

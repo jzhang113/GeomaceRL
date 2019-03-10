@@ -8,8 +8,9 @@ namespace GeomaceRL.Actor
 {
     internal class Pillar : Actor
     {
-        public Pillar(in Loc pos, in Color color) : base(pos, 1, color, 'o')
+        public Pillar(in Loc pos) : base(pos, 1, Element.Earth, 'o')
         {
+            Color = Colors.Wall;
             Name = "Pillar";
             BlocksLight = true;
         }
@@ -27,9 +28,9 @@ namespace GeomaceRL.Actor
             return Option.None<ICommand>();
         }
 
-        internal override void TakeDamage(int power, in Loc from)
+        internal override int TakeDamage((Element elem, int power) attack, in Loc from)
         {
-            base.TakeDamage(power, from);
+            base.TakeDamage((Element.None, attack.power), from);
             Loc hitDir = Distance.GetNearestDirection(Pos, from);
 
             // get random point in front
@@ -49,6 +50,8 @@ namespace GeomaceRL.Actor
                         Game.MapHandler.GetStraightLinePath(Pos, target)
                             .Where(point => !Game.MapHandler.Field[point].IsWall), Color, 1));
             }
+
+            return attack.power;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace GeomaceRL.Spell
             }
 
             Game.CurrentAnimations.Add(new TrailAnimation(targets, Element.Earth.Color(), 3));
-            return new AttackCommand(source, Constants.EARTHSHATTER_DAMAGE, targets);
+            return new AttackCommand(source, (Element.Earth, Constants.EARTHSHATTER_DAMAGE), targets);
         }
     }
 }

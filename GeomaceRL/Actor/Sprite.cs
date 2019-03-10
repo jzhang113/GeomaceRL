@@ -6,7 +6,7 @@ namespace GeomaceRL.Actor
     public class Sprite : Actor
     {
         public Sprite(in Loc pos, Element element)
-            :base(pos, Constants.SPRITE_HP, element.Color(), 'S')
+            :base(pos, Constants.SPRITE_HP, element, 'S')
         {
             Name = "Sprite";
         }

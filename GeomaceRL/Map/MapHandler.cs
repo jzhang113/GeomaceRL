@@ -173,7 +173,7 @@ namespace GeomaceRL.Map
                 if (target is Actor.Pillar)
                     return;
 
-                target.TakeDamage(Constants.COLLISION_DAMAGE, pillar.Pos);
+                target.TakeDamage((Element.Earth, Constants.COLLISION_DAMAGE), pillar.Pos);
 
                 Game.MessagePanel.AddMessage($"A pillar displaces {target.Name}");
                 var nearby = GetPointsInRadius(target.Pos, 1).Where(loc =>

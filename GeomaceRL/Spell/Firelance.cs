@@ -14,7 +14,7 @@ namespace GeomaceRL.Spell
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
         {
             Game.CurrentAnimations.Add(new LaserAnimation(targets, Element.Fire.Color(), Colors.FireAccent));
-            return new AttackCommand(source, Constants.FIRELANCE_DAMAGE, targets);
+            return new AttackCommand(source, (Element.Fire, Constants.FIRELANCE_DAMAGE), targets);
         }
     }
 }

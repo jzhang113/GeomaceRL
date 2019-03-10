@@ -12,7 +12,7 @@ namespace GeomaceRL.Actor
         public IDictionary<Element, int> Mana { get; }
         public IList<ISpell> SpellList { get; }
 
-        public Player(in Loc pos) : base(pos, Constants.PLAYER_HP, Colors.Player, '@')
+        public Player(in Loc pos) : base(pos, Constants.PLAYER_HP, Element.None, '@')
         {
             //Equipment = new EquipmentHandler();
             Mana = new Dictionary<Element, int>()

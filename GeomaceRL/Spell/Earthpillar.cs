@@ -23,7 +23,7 @@ namespace GeomaceRL.Spell
 
                 if ((elem == Element.Earth || elem == Element.Lightning) && amount > 0)
                 {
-                    Game.MapHandler.AddPillar(new Pillar(loc, Colors.Wall));
+                    Game.MapHandler.AddPillar(new Pillar(loc));
                 }
             }
 

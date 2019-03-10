@@ -11,7 +11,7 @@ namespace GeomaceRL.Actor
     public abstract class Actor : ISchedulable, IDrawable
     {
         public string Name { get; protected set; } = "Monster";
-        public Color Color { get; }
+        public Color Color { get; protected set; }
         public char Symbol { get; }
         public bool ShouldDraw { get; set; }
 
@@ -20,18 +20,20 @@ namespace GeomaceRL.Actor
 
         public int MaxHealth { get; }
         public int Health { get; set; }
+        public Element Element { get; }
 
         public int Speed { get; protected set; } = 1;
 
         public bool IsDead => Health <= 0;
 
-        protected Actor(in Loc pos, int hp, in Color color, char symbol)
+        protected Actor(in Loc pos, int hp, Element element, char symbol)
         {
             Pos = pos;
             MaxHealth = hp;
             Health = hp;
 
-            Color = color;
+            Element = element;
+            Color = element.Color();
             Symbol = symbol;
             ShouldDraw = true;
         }
@@ -49,11 +51,19 @@ namespace GeomaceRL.Actor
             return Option.None<ICommand>();
         }
 
-        internal virtual void TakeDamage(int power, in Loc from)
+        internal virtual int TakeDamage((Element elem, int power) attack, in Loc from)
         {
+            int power = attack.power;
+            if (attack.elem == Element)
+                power /= 2;
+            else if (attack.elem == Element.Opposing())
+                power = power * 3 / 2;
+
             Health -= power;
             if (Health < 0)
                 Health = 0;
+
+            return power;
         }
 
         public Option<ICommand> Act()
@@ -67,9 +77,9 @@ namespace GeomaceRL.Actor
         public virtual Option<ICommand> GetAction() =>
             Option.Some<ICommand>(new WaitCommand(this));
 
-        public ICommand GetBasicAttack(in Loc target) => new AttackCommand(this, Constants.GEN_ATTACK, target);
+        public ICommand GetBasicAttack(in Loc target) => new AttackCommand(this, (Element, Constants.GEN_ATTACK), target);
 
-        public ICommand GetBasicAttack(IEnumerable<Loc> targets) => new AttackCommand(this, Constants.GEN_ATTACK, targets);
+        public ICommand GetBasicAttack(IEnumerable<Loc> targets) => new AttackCommand(this, (Element, Constants.GEN_ATTACK), targets);
 
         public void Draw(LayerInfo layer)
         {

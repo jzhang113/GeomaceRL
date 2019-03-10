@@ -10,18 +10,18 @@ namespace GeomaceRL.Command
         public ISchedulable Source { get; }
         public Option<IAnimation> Animation => Option.None<IAnimation>();
 
-        private readonly int _power;
+        private readonly (Element, int) _attack;
         private readonly IEnumerable<Loc> _targets;
 
-        public AttackCommand(ISchedulable source, int power, IEnumerable<Loc> targets)
+        public AttackCommand(ISchedulable source, (Element, int) attack, IEnumerable<Loc> targets)
         {
             Source = source;
-            _power = power;
+            _attack = attack;
             _targets = targets;
         }
 
-        public AttackCommand(ISchedulable source, int power, in Loc target) :
-            this(source, power, new[] { target })
+        public AttackCommand(ISchedulable source, (Element, int) attack, in Loc target) :
+            this(source, attack, new[] { target })
         { }
 
         public Option<ICommand> Execute()
@@ -31,8 +31,8 @@ namespace GeomaceRL.Command
                 Game.MapHandler.GetActor(point).MatchSome(target =>
                 {
                     Loc attackFrom = Source is Actor.Actor actor ? actor.Pos : target.Pos;
-                    target.TakeDamage(_power, attackFrom);
-                    Game.MessagePanel.AddMessage($"{Source.Name} hits {target.Name} for {_power} hp");
+                    int damage = target.TakeDamage(_attack, attackFrom);
+                    Game.MessagePanel.AddMessage($"{Source.Name} hits {target.Name} for {damage} hp");
                 });
             }
 

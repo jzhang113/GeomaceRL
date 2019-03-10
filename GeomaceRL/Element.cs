@@ -4,14 +4,27 @@ namespace GeomaceRL
 {
     public enum Element
     {
+        None,
         Fire,
         Earth,
         Lightning,
-        Water,
+        Water
     }
 
     public static class ElementExtension
     {
+        public static Element Opposing(this Element element)
+        {
+            switch (element)
+            {
+                case Element.Fire: return Element.Water;
+                case Element.Earth: return Element.Lightning;
+                case Element.Lightning: return Element.Earth;
+                case Element.Water: return Element.Fire;
+                default: return Element.None;
+            }
+        }
+
         public static Color Color(this Element element)
         {
             switch(element)
