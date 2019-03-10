@@ -42,7 +42,11 @@ namespace GeomaceRL
                 case TargetShape.Self:
                     foreach (Loc point in Game.MapHandler.GetPointsInRadius(current.Pos, Range))
                     {
-                        Targets.Add(point);
+                        if (Projectile && point == current.Pos)
+                            continue;
+
+                        if (!Game.MapHandler.Field[point].IsWall)
+                            Targets.Add(point);
                     }
                     return Targets;
                 case TargetShape.Range:

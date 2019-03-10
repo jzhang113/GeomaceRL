@@ -35,7 +35,7 @@ namespace GeomaceRL.Command
             {
                 Game.MapHandler.GetActor(point).MatchSome(target =>
                 {
-                    target.TakeDamage(_power);
+                    target.TakeDamage(_power, Source.Pos);
                     Game.MessagePanel.AddMessage($"{Source.Name} attacks {target.Name} for {_power} damage");
                 });
             }
@@ -69,7 +69,7 @@ namespace GeomaceRL.Command
                         // TODO: scale collision damage by weight and distance travelled
                         const int damage = Constants.COLLISION_DAMAGE;
                         Game.MessagePanel.AddMessage($"{Source.Name} slams into {target.Name} for {damage} hp");
-                        target.TakeDamage(damage);
+                        target.TakeDamage(damage, Source.Pos);
                         return MakeMoveCommand(newPos);
                     },
                     none: () => MakeMoveCommand(newPos));

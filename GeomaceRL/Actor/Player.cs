@@ -28,8 +28,9 @@ namespace GeomaceRL.Actor
             {
                 new Firelance(),
                 new Firebolt(),
-                new Jetstream(),
-                new EarthPillars()
+                new Waterstream(),
+                new Earthpillar(),
+                new Earthshatter()
             };
 
             Name = "Player";
@@ -43,7 +44,12 @@ namespace GeomaceRL.Actor
             return Option.None<ICommand>();
         }
 
-        public override void TriggerDeath() => Game.GameOver();
+        public override Option<ICommand> TriggerDeath()
+        {
+            base.TriggerDeath();
+            Game.GameOver();
+            return Option.None<ICommand>();
+        }
 
         internal void ClearMana()
         {

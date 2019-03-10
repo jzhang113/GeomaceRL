@@ -36,7 +36,7 @@ namespace GeomaceRL.Actor
             ShouldDraw = true;
         }
 
-        public virtual void TriggerDeath()
+        public virtual Option<ICommand> TriggerDeath()
         {
             Game.MapHandler.RemoveActor(this);
 
@@ -45,9 +45,11 @@ namespace GeomaceRL.Actor
                 Game.MessagePanel.AddMessage($"{Name} dies");
                 Game.MapHandler.Refresh();
             }
+
+            return Option.None<ICommand>();
         }
 
-        internal void TakeDamage(int power)
+        internal virtual void TakeDamage(int power, in Loc from)
         {
             Health -= power;
             if (Health < 0)
@@ -57,12 +59,9 @@ namespace GeomaceRL.Actor
         public Option<ICommand> Act()
         {
             if (IsDead)
-            {
-                TriggerDeath();
-                return Option.None<ICommand>();
-            }
-
-            return GetAction();
+                return TriggerDeath();
+            else
+                return GetAction();
         }
 
         public virtual Option<ICommand> GetAction() =>

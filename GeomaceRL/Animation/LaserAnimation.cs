@@ -44,7 +44,7 @@ namespace GeomaceRL.Animation
             int frames = (int)((Game.Ticks - StartTime) / Game.FrameRate);
 
             Terminal.Color(_color);
-            Terminal.Layer(layer.Z + 1);
+            Terminal.Layer(layer.Z + 2);
 
             for (int i = 0; i < _targets.Count; i++)
             {
@@ -67,7 +67,7 @@ namespace GeomaceRL.Animation
                     newColor = _color.Blend(_altColor, Game.VisRand.NextDouble());
 
                 Terminal.Color(newColor);
-                Terminal.Layer(layer.Z + 2);
+                Terminal.Layer(layer.Z + 3);
 
                 for (int i = 0; i < _targets.Count; i++)
                 {

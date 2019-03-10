@@ -21,14 +21,17 @@ namespace GeomaceRL.Command
         }
 
         public AttackCommand(ISchedulable source, int power, in Loc target) :
-            this(source, power, new[] { target }) { }
+            this(source, power, new[] { target })
+        { }
 
         public Option<ICommand> Execute()
         {
             foreach (Loc point in _targets)
             {
-                Game.MapHandler.GetActor(point).MatchSome(target => {
-                    target.TakeDamage(_power);
+                Game.MapHandler.GetActor(point).MatchSome(target =>
+                {
+                    Loc attackFrom = Source is Actor.Actor actor ? actor.Pos : target.Pos;
+                    target.TakeDamage(_power, attackFrom);
                     Game.MessagePanel.AddMessage($"{Source.Name} hits {target.Name} for {_power} hp");
                 });
             }

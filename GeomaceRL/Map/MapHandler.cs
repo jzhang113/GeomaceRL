@@ -173,7 +173,7 @@ namespace GeomaceRL.Map
                 if (target is Actor.Pillar)
                     return;
 
-                target.TakeDamage(Constants.COLLISION_DAMAGE);
+                target.TakeDamage(Constants.COLLISION_DAMAGE, pillar.Pos);
 
                 Game.MessagePanel.AddMessage($"A pillar displaces {target.Name}");
                 var nearby = GetPointsInRadius(target.Pos, 1).Where(loc =>
@@ -188,7 +188,7 @@ namespace GeomaceRL.Map
             Units.Add(ToIndex(pillar.Pos), pillar);
             Game.EventScheduler.AddActor(pillar);
         }
-        
+
         // Calculate walkability, based on Actor size and status
         public bool IsWalkable(Actor.Actor actor, in Loc pos)
         {

@@ -45,5 +45,7 @@
 
         public const int PILLARS_COST = 2;
         public const int PILLARS_RANGE = 2;
+
+        public const int EARTHSHATTER_COST = 4;
     }
 }

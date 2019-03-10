@@ -46,13 +46,16 @@ namespace GeomaceRL.State
             // Filter the targettable range down to only the tiles we have a direct line on.
             foreach (Loc point in _inRange)
             {
-                Loc collision = point;
+                Loc collision = _source.Pos;
                 foreach (Loc current in Game.MapHandler.GetStraightLinePath(_source.Pos, point))
                 {
                     if (Game.MapHandler.Field[current].IsWall)
                     {
-                        collision = current;
                         break;
+                    }
+                    else
+                    {
+                        collision = current;
                     }
                 }
 
