@@ -1,5 +1,6 @@
 ﻿using BearLib;
 using GeomaceRL.Actor;
+using System.Drawing;
 
 namespace GeomaceRL.UI
 {
@@ -22,8 +23,14 @@ namespace GeomaceRL.UI
                 if (Game.MapHandler.Field[actor.Pos].IsVisible && !(actor is Pillar))
                 {
                     Terminal.Layer(layer.Z + 3);
+                    Terminal.Color(actor.Color);
+                    layer.Put(0, drawY, actor.Symbol);
+
                     Terminal.Color(Colors.Text);
-                    layer.Print(drawY, $"{actor.Symbol}:{actor.Health}/{actor.MaxHealth}");
+                    layer.Print(
+                        new Rectangle(1, drawY, layer.Width - 1, 1),
+                        $":{actor.Health}/{actor.MaxHealth}",
+                        ContentAlignment.TopLeft);
 
                     double hpFrac = (double)actor.Health / actor.MaxHealth;
                     double width = hpFrac * (layer.Width - 3);

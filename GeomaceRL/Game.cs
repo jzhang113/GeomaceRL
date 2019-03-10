@@ -23,11 +23,13 @@ namespace GeomaceRL
 
         internal static ICollection<IAnimation> CurrentAnimations { get; private set; }
         private static ICollection<IAnimation> _finishedAnimations;
+        private static IAnimation _current = null;
 
         internal static TimeSpan Ticks;
         internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
 
         private static int _level;
+        private static bool _playing;
         private static bool _exiting;
 
         private static LayerInfo _mapLayer;
@@ -73,31 +75,34 @@ namespace GeomaceRL
             Terminal.Set("font: square.ttf, size = 24x24;");
             Terminal.Set("text font: square.ttf, size = 16x16;");
 
-            _level = 1;
-            _exiting = false;
-
             StateHandler = new StateHandler(new Dictionary<Type, LayerInfo>
             {
-                //[typeof(ApplyState)] = _rightLayer,
-                //[typeof(DropState)] = _rightLayer,
-                //[typeof(EquipState)] = _rightLayer,
-                //[typeof(InventoryState)] = _rightLayer,
-                //[typeof(SubinvState)] = _rightLayer,
-                //[typeof(ItemMenuState)] = _rightLayer,
                 [typeof(NormalState)] = _mapLayer,
                 [typeof(TargettingState)] = _mapLayer,
-                //[typeof(TextInputState)] = _mapLayer,
-                //[typeof(UnequipState)] = _rightLayer
+                [typeof(MenuState)] = _mainLayer
             });
 
             MessagePanel = new MessagePanel(Constants.MESSAGE_HISTORY_COUNT);
-
             Player = new Player(new Loc(0, 0));
             EventScheduler = new EventScheduler();
-            NextLevel();
+
+            _exiting = false;
+            _playing = false;
 
             Terminal.Refresh();
             Run();
+        }
+
+        public static void NewGame()
+        {
+            StateHandler.Reset();
+            MessagePanel.Clear();
+
+            _playing = true;
+            _level = 1;
+            NextLevel();
+            StateHandler.PushState(NormalState.Instance);
+            _mainLayer.Clear();
         }
 
         internal static void NextLevel()
@@ -177,10 +182,13 @@ namespace GeomaceRL
         private static void Render()
         {
             Terminal.Clear();
-            InfoPanel.Draw(_infoLayer);
-            ManaPanel.Draw(_manaLayer);
-            Spellbar.Draw(_spellbarLayer);
-            MessagePanel.Draw(_messageLayer);
+            if (_playing)
+            {
+                InfoPanel.Draw(_infoLayer);
+                ManaPanel.Draw(_manaLayer);
+                Spellbar.Draw(_spellbarLayer);
+                MessagePanel.Draw(_messageLayer);
+            }
             StateHandler.Draw();
 
             foreach (IAnimation animation in CurrentAnimations)

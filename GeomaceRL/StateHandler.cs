@@ -19,13 +19,13 @@ namespace GeomaceRL
         {
             _states = new Stack<IState>();
             _consoles = consoleMapping;
-            _states.Push(NormalState.Instance);
+            _states.Push(MenuState.Instance);
         }
 
         public void Reset()
         {
             _states.Clear();
-            _states.Push(NormalState.Instance);
+            _states.Push(MenuState.Instance);
         }
 
         public Option<ICommand> HandleInput()

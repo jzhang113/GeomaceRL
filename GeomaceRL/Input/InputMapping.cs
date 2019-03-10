@@ -38,13 +38,6 @@ namespace GeomaceRL.Input
                         [Terminal.TK_KP_5] =        NormalInput.Wait,
                         [Terminal.TK_PERIOD] =      NormalInput.Wait,
                         [Terminal.TK_COMMA] =       NormalInput.Get,
-                        [Terminal.TK_A] =           NormalInput.OpenApply,
-                        [Terminal.TK_D] =           NormalInput.OpenDrop,
-                        [Terminal.TK_E] =           NormalInput.OpenEquip,
-                        [Terminal.TK_I] =           NormalInput.OpenInventory,
-                        [Terminal.TK_R] =           NormalInput.OpenUnequip,
-                        [Terminal.TK_T] =           NormalInput.Throw,
-                        [Terminal.TK_O] =           NormalInput.AutoExplore,
                         [Terminal.TK_ESCAPE] =      NormalInput.OpenMenu,
                         [Terminal.TK_1] =           NormalInput.Cast,
                         [Terminal.TK_2] =           NormalInput.Cast,
@@ -52,10 +45,7 @@ namespace GeomaceRL.Input
                         [Terminal.TK_4] =           NormalInput.Cast,
                         [Terminal.TK_5] =           NormalInput.Cast,
                         [Terminal.TK_6] =           NormalInput.Cast,
-                    },
-                    Shift = new Dictionary<int, NormalInput>()
-                    {
-                        [Terminal.TK_PERIOD] =      NormalInput.ChangeLevel
+                        [Terminal.TK_ENTER] =       NormalInput.ChangeLevel,
                     }
                 },
                 TargettingMap = new KeyMap.StateMap<TargettingInput>()

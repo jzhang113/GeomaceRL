@@ -44,7 +44,7 @@ namespace GeomaceRL.Map
             {
                 for (int x = 0; x < Map.Width; x++)
                 {
-                    Element element = (Element)Rand.Next(4) + 1;
+                    Element element = (Element)(Rand.Next(4) + 1);
                     int amount = (int)Rand.NextNormal(3, 2);
                     if (amount < 0)
                         amount = 0;
@@ -206,7 +206,8 @@ namespace GeomaceRL.Map
 
             for (int i = 0; i < 10; i++)
             {
-                var sprite = new Sprite(Map.GetRandomOpenPoint(), Element.Fire);
+                Element element = (Element)(Rand.Next(4) + 1);
+                var sprite = new Sprite(Map.GetRandomOpenPoint(), element);
                 Map.AddActor(sprite);
             }
 

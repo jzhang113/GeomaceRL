@@ -31,10 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="State\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Triangle">
       <HintPath>Triangle.dll</HintPath>
     </Reference>
