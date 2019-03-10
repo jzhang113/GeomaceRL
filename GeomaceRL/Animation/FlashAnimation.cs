@@ -1,6 +1,7 @@
 ﻿using BearLib;
 using GeomaceRL.UI;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace GeomaceRL.Animation
@@ -12,14 +13,12 @@ namespace GeomaceRL.Animation
         public TimeSpan StartTime { get; }
         public TimeSpan EndTime { get; }
 
-        private readonly int _x;
-        private readonly int _y;
+        private readonly IEnumerable<Loc> _pos;
         private readonly Color _color;
 
-        public FlashAnimation(int x, int y, in Color color)
+        public FlashAnimation(IEnumerable<Loc> pos, in Color color)
         {
-            _x = x;
-            _y = y;
+            _pos = pos;
             _color = color;
 
             StartTime = Game.Ticks;
@@ -36,7 +35,9 @@ namespace GeomaceRL.Animation
             Color between = _color.Blend(Colors.Floor, fracPassed);
             Terminal.Color(between);
             Terminal.Layer(layer.Z + 1);
-            layer.Put(_x - Camera.X, _y - Camera.Y, '▓');
+            foreach (Loc pos in _pos) {
+                layer.Put(pos.X - Camera.X, pos.Y - Camera.Y, '▓');
+            }
             Terminal.Layer(layer.Z);
         }
     }

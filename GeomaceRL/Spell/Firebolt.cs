@@ -1,4 +1,5 @@
-﻿using GeomaceRL.Command;
+﻿using GeomaceRL.Animation;
+using GeomaceRL.Command;
 using System.Collections.Generic;
 
 namespace GeomaceRL.Spell
@@ -12,6 +13,7 @@ namespace GeomaceRL.Spell
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
         {
+            Game.CurrentAnimations.Add(new FlashAnimation(targets, Element.Fire.Color()));
             return new AttackCommand(source, Constants.FIREBOLT_DAMAGE, targets);
         }
     }
