@@ -44,8 +44,8 @@ namespace GeomaceRL.Map
             {
                 for (int x = 0; x < Map.Width; x++)
                 {
-                    Element element = (Element)Rand.Next(5);
-                    int amount = (int)Rand.NextNormal(4, 2);
+                    Element element = (Element)Rand.Next(4);
+                    int amount = (int)Rand.NextNormal(3, 2);
                     if (amount < 0)
                         amount = 0;
 

@@ -6,9 +6,8 @@ namespace GeomaceRL
     {
         Fire,
         Earth,
-        Metal,
+        Lightning,
         Water,
-        Wood
     }
 
     public static class ElementExtension
@@ -19,9 +18,8 @@ namespace GeomaceRL
             {
                 case Element.Fire: return Colors.Fire;
                 case Element.Earth: return Colors.Earth;
-                case Element.Metal: return Colors.Metal;
+                case Element.Lightning: return Colors.Lightning;
                 case Element.Water: return Colors.Water;
-                case Element.Wood: return Colors.Wood;
                 default: return Colors.Neutral;
             }
         }
@@ -32,9 +30,8 @@ namespace GeomaceRL
             {
                 case Element.Fire: return "F";
                 case Element.Earth: return "E";
-                case Element.Metal: return "M";
+                case Element.Lightning: return "L";
                 case Element.Water: return "W";
-                case Element.Wood: return "D";
                 default: return " ";
             }
         }

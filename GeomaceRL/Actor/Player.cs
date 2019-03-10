@@ -19,9 +19,8 @@ namespace GeomaceRL.Actor
             {
                 [Element.Fire] = 0,
                 [Element.Earth] = 0,
-                [Element.Metal] = 0,
+                [Element.Lightning] = 0,
                 [Element.Water] = 0,
-                [Element.Wood] = 0
             };
 
             SpellList = new List<ISpell>()
@@ -55,9 +54,8 @@ namespace GeomaceRL.Actor
         {
             Mana[Element.Fire] = 0;
             Mana[Element.Earth] = 0;
-            Mana[Element.Metal] = 0;
+            Mana[Element.Lightning] = 0;
             Mana[Element.Water] = 0;
-            Mana[Element.Wood] = 0;
         }
     }
 }

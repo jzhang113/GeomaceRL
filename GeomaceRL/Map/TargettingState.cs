@@ -43,25 +43,28 @@ namespace GeomaceRL.State
             ICollection<Loc> tempRange = new HashSet<Loc>();
             _inRange = Game.MapHandler.GetPointsInRadius(_source.Pos, zone.Range).ToList();
 
-            // Filter the targettable range down to only the tiles we have a direct line on.
-            foreach (Loc point in _inRange)
+            if (!zone.Pierce)
             {
-                Loc collision = _source.Pos;
-                foreach (Loc current in Game.MapHandler.GetStraightLinePath(_source.Pos, point))
+                // Filter the targettable range down to only the tiles we have a direct line on.
+                foreach (Loc point in _inRange)
                 {
-                    if (Game.MapHandler.Field[current].IsWall)
+                    Loc collision = _source.Pos;
+                    foreach (Loc current in Game.MapHandler.GetStraightLinePath(_source.Pos, point))
                     {
-                        break;
+                        if (Game.MapHandler.Field[current].IsWall)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            collision = current;
+                        }
                     }
-                    else
-                    {
-                        collision = current;
-                    }
-                }
 
-                tempRange.Add(collision);
+                    tempRange.Add(collision);
+                }
+                _inRange = tempRange;
             }
-            _inRange = tempRange;
 
             // Pick out the interesting targets.
             // TODO: select items for item targetting spells

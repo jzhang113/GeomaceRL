@@ -57,10 +57,10 @@ namespace GeomaceRL.UI
             foreach ((Element elem, int amount) in Game.Player.Mana)
             {
                 Terminal.Color(elem.Color());
-                layer.PrintMana(drawX, drawY, $"{elem.Abbrev()}{amount}");
+                layer.PrintMana(drawX, drawY, $"{amount}{elem.Abbrev()}");
 
-                drawX += 3;
-                if (++i == 3)
+                drawX += 6;
+                if (++i == 2)
                 {
                     drawY++;
                     drawX = 0;

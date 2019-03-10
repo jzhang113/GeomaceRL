@@ -33,10 +33,9 @@ namespace GeomaceRL
         public static Color EnemyThreat =       Swatch.Compliment;
 
         // Elements
-        public static Color Wood =              Color.FromArgb(0, 255, 0);
+        public static Color Lightning =           Color.FromArgb(0, 255, 0);
         public static Color Fire =              Color.FromArgb(249, 75, 10);
         public static Color Earth =             Color.FromArgb(255, 255, 0);
-        public static Color Metal =             Swatch.DbMetal;
         public static Color Water =             Color.FromArgb(0, 160, 255);
         public static Color Neutral =           Swatch.DbLight;
 

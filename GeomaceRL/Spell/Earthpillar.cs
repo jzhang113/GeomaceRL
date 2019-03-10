@@ -11,7 +11,7 @@ namespace GeomaceRL.Spell
 
         public SpellCost Cost => new SpellCost(
             Element.Earth, Constants.PILLARS_COST,
-            Element.Metal, Constants.PILLARS_COST);
+            Element.Lightning, Constants.PILLARS_COST);
 
         public TargetZone Zone => new TargetZone(TargetShape.Self, Constants.PILLARS_RANGE);
 
@@ -21,9 +21,9 @@ namespace GeomaceRL.Spell
             {
                 (Element elem, int amount) = Game.MapHandler.Mana[loc.X, loc.Y];
 
-                if ((elem == Element.Earth || elem == Element.Metal) && amount > 0)
+                if ((elem == Element.Earth || elem == Element.Lightning) && amount > 0)
                 {
-                    Game.MapHandler.AddPillar(new Pillar(loc, elem.Color()));
+                    Game.MapHandler.AddPillar(new Pillar(loc, Colors.Wall));
                 }
             }
 
