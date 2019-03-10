@@ -10,18 +10,19 @@ namespace GeomaceRL.Animation
     internal class TrailAnimation : IAnimation
     {
         public int Turn { get; } = EventScheduler.Turn;
-        public TimeSpan Duration { get; } = Game.FrameRate * 1;
+        public TimeSpan Duration { get; }
         public TimeSpan StartTime { get; }
         public TimeSpan EndTime { get; }
 
         private readonly IList<Loc> _path;
         private readonly Color _color;
 
-        public TrailAnimation(IEnumerable<Loc> path, in Color color)
+        public TrailAnimation(IEnumerable<Loc> path, in Color color, int speed)
         {
             _path = path.ToList();
             _color = color;
 
+            Duration = Game.FrameRate * speed;
             StartTime = Game.Ticks;
             EndTime = StartTime + (Duration * _path.Count);
         }
@@ -40,7 +41,7 @@ namespace GeomaceRL.Animation
             Terminal.Color(_color);
             int current = 0;
 
-            for (; current < intPassed; current++)
+            for (; current <= intPassed; current++)
             {
                 (int x, int y) = _path[current];
                 layer.Put(x - Camera.X, y - Camera.Y, '▒');

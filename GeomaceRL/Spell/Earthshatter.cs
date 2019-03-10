@@ -1,4 +1,5 @@
-﻿using GeomaceRL.Command;
+﻿using GeomaceRL.Animation;
+using GeomaceRL.Command;
 using System;
 using System.Collections.Generic;
 
@@ -9,11 +10,17 @@ namespace GeomaceRL.Spell
         public string Name => "Earthshatter";
         public string Abbrev => "ES";
         public SpellCost Cost => new SpellCost(Element.Earth, Constants.EARTHSHATTER_COST);
-        public TargetZone Zone => new TargetZone(TargetShape.Self, 1);
+        public TargetZone Zone => new TargetZone(TargetShape.Ray, 3);
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
         {
-            return new AttackCommand(source, 10, targets);
+            foreach (Loc point in targets)
+            {
+                Game.MapHandler.Field[point].IsWall = true;
+            }
+
+            Game.CurrentAnimations.Add(new TrailAnimation(targets, Element.Earth.Color(), 3));
+            return new AttackCommand(source, Constants.EARTHSHATTER_DAMAGE, targets);
         }
     }
 }

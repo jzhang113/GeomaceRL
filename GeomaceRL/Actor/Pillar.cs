@@ -41,10 +41,13 @@ namespace GeomaceRL.Actor
                 int dist2 = Game.Rand.Next(0, dist / 2);
 
                 Loc target = Pos + (hitDir.X * dist, hitDir.Y * dist) + (newDir.X * dist2, newDir.Y * dist2);
+                if (!Game.MapHandler.Field.IsValid(target))
+                    continue;
+
                 Game.CurrentAnimations.Add(
                     new TrailAnimation(
                         Game.MapHandler.GetStraightLinePath(Pos, target)
-                            .Where(point => !Game.MapHandler.Field[point].IsWall), Color));
+                            .Where(point => !Game.MapHandler.Field[point].IsWall), Color, 1));
             }
         }
     }
