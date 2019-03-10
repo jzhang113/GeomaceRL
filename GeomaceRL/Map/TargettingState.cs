@@ -15,7 +15,7 @@ namespace GeomaceRL.State
 
         private readonly Actor.Actor _source;
         private readonly TargetZone _targetZone;
-        private readonly Func<IEnumerable<Loc>, ICommand> _callback;
+        private readonly Func<IEnumerable<Loc>, Option<ICommand>> _callback;
         private readonly IEnumerable<Loc> _inRange;
         private readonly IList<Actor.Actor> _targettableActors;
 
@@ -30,7 +30,7 @@ namespace GeomaceRL.State
             Actor.Actor source,
             TargetZone zone,
             int spellnum,
-            Func<IEnumerable<Loc>, ICommand> callback)
+            Func<IEnumerable<Loc>, Option<ICommand>> callback)
         {
             _source = source;
             _targetZone = zone;
@@ -168,7 +168,7 @@ namespace GeomaceRL.State
 
             IEnumerable<Loc> targets = DrawTargettedTiles();
             return (InputMapping.GetTargettingInput(key) == TargettingInput.Fire)
-                ? Option.Some(_callback(targets))
+                ? _callback(targets)
                 : Option.None<ICommand>();
         }
 

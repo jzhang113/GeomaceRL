@@ -13,7 +13,6 @@ namespace GeomaceRL.Spell
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
         {
-            // TODO: self-casted firelance is legal but hits nothing and spends mana
             Game.CurrentAnimations.Add(new LaserAnimation(targets, Element.Fire.Color(), Colors.FireAccent));
             return new AttackCommand(source, Constants.FIRELANCE_DAMAGE, targets);
         }

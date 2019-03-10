@@ -10,7 +10,7 @@ namespace GeomaceRL.Animation
     internal class TrailAnimation : IAnimation
     {
         public int Turn { get; } = EventScheduler.Turn;
-        public TimeSpan Duration { get; } = Game.FrameRate * 2;
+        public TimeSpan Duration { get; } = Game.FrameRate * 1;
         public TimeSpan StartTime { get; }
         public TimeSpan EndTime { get; }
 
