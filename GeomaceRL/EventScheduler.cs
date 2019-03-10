@@ -46,7 +46,7 @@ namespace GeomaceRL
                     if (timeTilAct <= 0)
                     {
                         _schedule[entity] = entity.Speed;
-                        if (entity is Player)
+                        if (entity is Player player)
                         {
                             Turn++;
                             done = true;

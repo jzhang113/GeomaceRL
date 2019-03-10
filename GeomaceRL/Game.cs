@@ -23,14 +23,15 @@ namespace GeomaceRL
 
         internal static ICollection<IAnimation> CurrentAnimations { get; private set; }
         private static ICollection<IAnimation> _finishedAnimations;
-        private static IAnimation _current = null;
+        private static readonly IAnimation _current = null;
 
         internal static TimeSpan Ticks;
         internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
 
         private static int _level;
-        private static bool _playing;
         private static bool _exiting;
+        private static bool _playing;
+        internal static bool _dead;
 
         private static LayerInfo _mapLayer;
         private static LayerInfo _infoLayer;
@@ -79,15 +80,15 @@ namespace GeomaceRL
             {
                 [typeof(NormalState)] = _mapLayer,
                 [typeof(TargettingState)] = _mapLayer,
-                [typeof(MenuState)] = _mainLayer
+                [typeof(MenuState)] = _mainLayer,
             });
 
             MessagePanel = new MessagePanel(Constants.MESSAGE_HISTORY_COUNT);
-            Player = new Player(new Loc(0, 0));
             EventScheduler = new EventScheduler();
 
             _exiting = false;
             _playing = false;
+            _dead = true;
 
             Terminal.Refresh();
             Run();
@@ -97,8 +98,11 @@ namespace GeomaceRL
         {
             StateHandler.Reset();
             MessagePanel.Clear();
+            Player = new Player(new Loc(0, 0));
 
             _playing = true;
+            _dead = false;
+
             _level = 1;
             NextLevel();
             StateHandler.PushState(NormalState.Instance);
@@ -116,7 +120,8 @@ namespace GeomaceRL
 
         internal static void GameOver()
         {
-            Console.WriteLine("Game over!");
+            MessagePanel.AddMessage("Game over! Press any key to continue");
+            _dead = true;
         }
 
         internal static void Exit()

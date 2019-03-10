@@ -43,13 +43,6 @@ namespace GeomaceRL.Actor
             return Option.None<ICommand>();
         }
 
-        public override Option<ICommand> TriggerDeath()
-        {
-            base.TriggerDeath();
-            Game.GameOver();
-            return Option.None<ICommand>();
-        }
-
         internal void ClearMana()
         {
             Mana[Element.Fire] = 0;

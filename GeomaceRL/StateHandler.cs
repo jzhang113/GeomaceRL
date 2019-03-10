@@ -30,6 +30,11 @@ namespace GeomaceRL
 
         public Option<ICommand> HandleInput()
         {
+            if (!Game._dead && Game.Player.IsDead)
+            {
+                Game.GameOver();
+            }
+
             if (!Terminal.HasInput())
                 return Option.None<ICommand>();
 
