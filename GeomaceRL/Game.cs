@@ -7,6 +7,7 @@ using GeomaceRL.UI;
 using Pcg;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GeomaceRL
 {
@@ -22,8 +23,6 @@ namespace GeomaceRL
         public static PcgRandom VisRand { get; private set; }
 
         internal static ICollection<IAnimation> CurrentAnimations { get; private set; }
-        private static ICollection<IAnimation> _finishedAnimations;
-        private static readonly IAnimation _current = null;
 
         internal static TimeSpan Ticks;
         internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
@@ -43,7 +42,6 @@ namespace GeomaceRL
         private static void Main(string[] args)
         {
             CurrentAnimations = new List<IAnimation>();
-            _finishedAnimations = new List<IAnimation>();
             Rand = new PcgRandom();
             VisRand = new PcgRandom();
 
@@ -98,6 +96,7 @@ namespace GeomaceRL
         {
             StateHandler.Reset();
             MessagePanel.Clear();
+            CurrentAnimations.Clear();
             Player = new Player(new Loc(0, 0));
 
             _playing = true;
@@ -136,6 +135,7 @@ namespace GeomaceRL
 
             const int updateLimit = 10;
             TimeSpan maxDt = FrameRate * updateLimit;
+            IAnimation current = null;
 
             while (!_exiting)
             {
@@ -163,22 +163,35 @@ namespace GeomaceRL
 
                 double remaining = accum / FrameRate;
 
-                foreach (IAnimation animation in CurrentAnimations)
+                if (current == null)
                 {
-                    if (animation.Update() || EventScheduler.Turn > animation.Turn + 1)
-                    {
-                        _finishedAnimations.Add(animation);
-                    }
+                    current = CurrentAnimations.FirstOrDefault();
                 }
-
-                foreach (IAnimation animation in _finishedAnimations)
+                else if (current.Update(frameTime) || EventScheduler.Turn > current.Turn + 1)
                 {
-                    animation.Cleanup();
-                    CurrentAnimations.Remove(animation);
+                    current.Cleanup();
+                    CurrentAnimations.Remove(current);
+
+                    if (current is MoveAnimation currMove)
+                    {
+                        currMove._source.ShouldDraw = true;
+
+                        foreach (IAnimation animation in CurrentAnimations)
+                        {
+                            if (animation != current
+                                && animation is MoveAnimation nextMove
+                                && nextMove._source == currMove._source)
+                            {
+                                nextMove._source.ShouldDraw = false;
+                                nextMove._multmove = false;
+                            }
+                        }
+                    }
+
+                    current = CurrentAnimations.FirstOrDefault();
                 }
 
                 Render();
-                _finishedAnimations.Clear();
             }
 
             Terminal.Close();

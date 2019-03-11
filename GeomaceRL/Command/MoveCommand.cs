@@ -59,7 +59,9 @@ namespace GeomaceRL.Command
 
                     Loc prevLoc = Source.Pos;
                     Game.MapHandler.SetActorPosition(Source, _nextPos);
-                    Animation = Option.Some<IAnimation>(new MoveAnimation(Source, prevLoc));
+                    Animation = Option.Some<IAnimation>(new MoveAnimation(Source, prevLoc, Source.Moving));
+                    Source.Moving = true;
+
                     return Option.None<ICommand>();
                 });
         }

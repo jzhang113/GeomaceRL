@@ -14,6 +14,7 @@ namespace GeomaceRL.Actor
         public Color Color { get; protected set; }
         public char Symbol { get; }
         public bool ShouldDraw { get; set; }
+        internal bool Moving { get; set; }
 
         public Loc Pos { get; set; }
         public bool BlocksLight { get; protected set; } = false;
@@ -23,7 +24,6 @@ namespace GeomaceRL.Actor
         public Element Element { get; }
 
         public int Speed { get; protected set; } = 1;
-
         public bool IsDead => Health <= 0;
 
         protected Actor(in Loc pos, int hp, Element element, char symbol)

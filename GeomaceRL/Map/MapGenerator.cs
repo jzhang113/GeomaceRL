@@ -204,7 +204,7 @@ namespace GeomaceRL.Map
             Game.Player.Pos = Map.GetRandomOpenPoint();
             Map.AddActor(Game.Player);
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 15; i++)
             {
                 Element element = (Element)(Rand.Next(4) + 1);
                 var sprite = new Sprite(Map.GetRandomOpenPoint(), element);

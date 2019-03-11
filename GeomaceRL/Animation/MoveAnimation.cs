@@ -7,33 +7,36 @@ namespace GeomaceRL.Animation
     internal class MoveAnimation : IAnimation
     {
         public int Turn { get; } = EventScheduler.Turn;
-        public TimeSpan Duration { get; } = Game.FrameRate * 4;
-        public TimeSpan StartTime { get; }
+        public TimeSpan Duration { get; } = Game.FrameRate * 2;
+        public TimeSpan CurrentTime { get; private set; }
         public TimeSpan EndTime { get; }
 
-        private readonly Actor.Actor _source;
+        internal readonly Actor.Actor _source;
         private readonly Loc _prev;
+        internal bool _multmove;
 
         private readonly int _dx;
         private readonly int _dy;
 
-        public MoveAnimation(Actor.Actor source, in Loc prev)
+        public MoveAnimation(Actor.Actor source, in Loc prev, bool multmove = false)
         {
             _source = source;
             _prev = prev;
+            _multmove = multmove;
 
             _dx = source.Pos.X - prev.X;
             _dy = source.Pos.Y - prev.Y;
 
-            StartTime = Game.Ticks;
-            EndTime = StartTime + Duration;
+            CurrentTime = TimeSpan.Zero;
+            EndTime = CurrentTime + Duration;
 
-            source.ShouldDraw = false;
+            _source.ShouldDraw = false;
         }
 
-        public bool Update()
+        public bool Update(TimeSpan dt)
         {
-            if (Game.Ticks >= EndTime)
+            CurrentTime += dt;
+            if (CurrentTime >= EndTime)
             {
                 Cleanup();
                 return true;
@@ -46,22 +49,34 @@ namespace GeomaceRL.Animation
 
         public void Cleanup()
         {
+            _source.Moving = false;
             _source.ShouldDraw = true;
         }
 
         public void Draw(LayerInfo layer)
         {
-            double moveFrac = (Game.Ticks - StartTime) / Duration;
-            int xFrac = (int)(_dx * moveFrac * Terminal.State(Terminal.TK_CELL_WIDTH));
-            int yFrac = (int)(_dy * moveFrac * Terminal.State(Terminal.TK_CELL_HEIGHT));
+            if (CurrentTime == TimeSpan.Zero)
+            {
+                if (!_multmove)
+                {
+                    Terminal.Color(_source.Color);
+                    layer.Put(_prev.X - Camera.X, _prev.Y - Camera.Y, _source.Symbol);
+                }
+            }
+            else
+            {
+                double moveFrac = CurrentTime / Duration;
+                int xFrac = (int)(_dx * moveFrac * Terminal.State(Terminal.TK_CELL_WIDTH));
+                int yFrac = (int)(_dy * moveFrac * Terminal.State(Terminal.TK_CELL_HEIGHT));
 
-            Terminal.Color(_source.Color);
-            Terminal.Layer(layer.Z + 1);
-            Terminal.PutExt(
-                layer.X + _prev.X - Camera.X,
-                layer.Y + _prev.Y - Camera.Y,
-                xFrac, yFrac, _source.Symbol);
-            Terminal.Layer(layer.Z);
+                Terminal.Color(_source.Color);
+                Terminal.Layer(layer.Z + 1);
+                Terminal.PutExt(
+                    layer.X + _prev.X - Camera.X,
+                    layer.Y + _prev.Y - Camera.Y,
+                    xFrac, yFrac, _source.Symbol);
+                Terminal.Layer(layer.Z);
+            }
         }
     }
 }

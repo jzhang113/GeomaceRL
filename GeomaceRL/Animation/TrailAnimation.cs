@@ -11,7 +11,7 @@ namespace GeomaceRL.Animation
     {
         public int Turn { get; } = EventScheduler.Turn;
         public TimeSpan Duration { get; }
-        public TimeSpan StartTime { get; }
+        public TimeSpan CurrentTime { get; private set; }
         public TimeSpan EndTime { get; }
 
         private readonly IList<Loc> _path;
@@ -23,17 +23,21 @@ namespace GeomaceRL.Animation
             _color = color;
 
             Duration = Game.FrameRate * speed;
-            StartTime = Game.Ticks;
-            EndTime = StartTime + (Duration * _path.Count);
+            CurrentTime = TimeSpan.Zero;
+            EndTime = CurrentTime + (Duration * _path.Count);
         }
 
-        public bool Update() => Game.Ticks >= EndTime;
+        public bool Update(TimeSpan dt)
+        {
+            CurrentTime += dt;
+            return CurrentTime >= EndTime;
+        }
 
         public void Cleanup() { }
 
         public void Draw(LayerInfo layer)
         {
-            double timePassed = (Game.Ticks - StartTime) / Duration;
+            double timePassed = CurrentTime / Duration;
             int intPassed = (int)timePassed;
             double fracPassed = timePassed - intPassed;
 

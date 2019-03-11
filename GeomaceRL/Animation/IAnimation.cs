@@ -9,12 +9,12 @@ namespace GeomaceRL.Animation
 
         TimeSpan Duration { get; }
 
-        TimeSpan StartTime { get; }
+        TimeSpan CurrentTime { get; }
 
         TimeSpan EndTime { get; }
 
         // Returns true when an animation is done updating
-        bool Update();
+        bool Update(TimeSpan dt);
 
         // Draw the animation to Layer
         void Draw(LayerInfo layer);
