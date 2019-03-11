@@ -36,9 +36,9 @@ namespace GeomaceRL.State
             layer.Print(2, "GeomanceRL");
 
             int y = 4;
-            layer.Print(y++, "You sense a disturbance somewhere in the distance");
-            layer.Print(y++, "With your trusty staff and spellbook in hand, you set");
-            layer.Print(y++, "out to investigate.");
+            layer.Print(y++, "Several days ago, you sensed a disturbance somewhere");
+            layer.Print(y++, "in the distance. With your trusty staff and spellbook");
+            layer.Print(y++, "in hand, you set out to investigate.");
 
             y++;
             layer.Print(y++, "Controls:");

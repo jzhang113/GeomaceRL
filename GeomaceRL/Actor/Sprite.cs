@@ -1,5 +1,6 @@
 ﻿using GeomaceRL.Command;
 using Optional;
+using System.Linq;
 
 namespace GeomaceRL.Actor
 {
@@ -13,10 +14,13 @@ namespace GeomaceRL.Actor
 
         public override Option<ICommand> GetAction()
         {
-            if (Game.MapHandler.PlayerMap[Pos.X, Pos.Y] < 10)
+            int dist = Game.MapHandler.PlayerMap[Pos.X, Pos.Y];
+            if (dist != -1 && dist < 10)
             {
-                var move = Game.MapHandler.MoveTowardsTarget(Pos, Game.MapHandler.PlayerMap);
-                return Option.Some<ICommand>(new MoveCommand(this, move.Loc));
+                Loc move = AnnAStar.Search(Pos, Game.Player.Pos, 1).FirstOrDefault();
+                return move == default
+                    ? Option.None<ICommand>()
+                    : Option.Some<ICommand>(new MoveCommand(this, move));
             }
             else
             {

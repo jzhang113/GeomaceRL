@@ -55,6 +55,9 @@ namespace GeomaceRL.Animation
 
         public void Draw(LayerInfo layer)
         {
+            if (!Game.MapHandler.Field[_source.Pos].IsVisible)
+                return;
+
             if (CurrentTime == TimeSpan.Zero)
             {
                 if (!_multmove)

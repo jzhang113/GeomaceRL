@@ -37,6 +37,9 @@ namespace GeomaceRL.Animation
 
         public void Draw(LayerInfo layer)
         {
+            if (_path.Count == 0)
+                return;
+
             double timePassed = CurrentTime / Duration;
             int intPassed = (int)timePassed;
             double fracPassed = timePassed - intPassed;

@@ -30,6 +30,7 @@
         // Base hp constants
         public const int SPRITE_HP = 10;
         public const int PLAYER_HP = 100;
+        public const int ELEMENTAL_HP = 20;
 
         // Spell constants
         public const int FIREBOLT_COST = 1;

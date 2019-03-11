@@ -172,7 +172,8 @@ namespace GeomaceRL
                     current.Cleanup();
                     CurrentAnimations.Remove(current);
 
-                    if (current is MoveAnimation currMove)
+                    if (current is MoveAnimation currMove
+                        && MapHandler.Field[currMove._source.Pos].IsVisible)
                     {
                         currMove._source.ShouldDraw = true;
 

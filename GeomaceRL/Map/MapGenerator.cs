@@ -207,7 +207,7 @@ namespace GeomaceRL.Map
             for (int i = 0; i < 15; i++)
             {
                 Element element = (Element)(Rand.Next(4) + 1);
-                var sprite = new Sprite(Map.GetRandomOpenPoint(), element);
+                var sprite = new Elemental(Map.GetRandomOpenPoint(), element);
                 Map.AddActor(sprite);
             }
 

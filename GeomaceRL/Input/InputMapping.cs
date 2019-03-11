@@ -46,6 +46,7 @@ namespace GeomaceRL.Input
                         [Terminal.TK_5] =           NormalInput.Cast,
                         [Terminal.TK_6] =           NormalInput.Cast,
                         [Terminal.TK_ENTER] =       NormalInput.ChangeLevel,
+                        [Terminal.TK_KP_ENTER] =    NormalInput.ChangeLevel,
                     }
                 },
                 TargettingMap = new KeyMap.StateMap<TargettingInput>()

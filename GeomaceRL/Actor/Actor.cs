@@ -57,7 +57,7 @@ namespace GeomaceRL.Actor
             if (attack.elem == Element)
                 power /= 2;
             else if (attack.elem == Element.Opposing())
-                power = power * 3 / 2;
+                power = power * 2;
 
             Health -= power;
             if (Health < 0)
