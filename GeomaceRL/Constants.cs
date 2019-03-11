@@ -34,8 +34,8 @@
         public const int LEECH_HP = 10;
 
         // Spell constants
-        public const int FIREBOLT_COST = 1;
-        public const int FIREBOLT_RANGE = 4;
+        public const int FIREBOLT_COST = 2;
+        public const int FIREBOLT_RANGE = 5;
         public const int FIREBOLT_DAMAGE = 10;
 
         public const int FIRELANCE_COST = 3;

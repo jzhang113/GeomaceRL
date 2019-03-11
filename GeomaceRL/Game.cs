@@ -27,9 +27,9 @@ namespace GeomaceRL
         internal static TimeSpan Ticks;
         internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
 
-        private static int _level;
         private static bool _exiting;
         private static bool _playing;
+        internal static int _level;
         internal static bool _dead;
 
         private static LayerInfo _mapLayer;
@@ -38,6 +38,11 @@ namespace GeomaceRL
         private static LayerInfo _manaLayer;
         private static LayerInfo _spellbarLayer;
         private static LayerInfo _mainLayer;
+
+        internal static readonly (int, int)[] _levelSize = {
+            (30, 30), (30, 30), (45, 45), (60, 60), (60, 60), (10, 10) };
+
+        internal static readonly int[] _enemyCount = { 5, 15, 30, 40, 50, 0 };
 
         private static void Main(string[] args)
         {
@@ -102,7 +107,7 @@ namespace GeomaceRL
             _playing = true;
             _dead = false;
 
-            _level = 1;
+            _level = 0;
             NextLevel();
             StateHandler.PushState(NormalState.Instance);
             _mainLayer.Clear();
@@ -113,8 +118,18 @@ namespace GeomaceRL
             CurrentAnimations.Clear();
             EventScheduler.Clear();
 
-            var mapgen = new JaggedMapGenerator(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, _level++);
+            if (_level >= 5)
+            {
+                MessagePanel.AddMessage("You win!");
+                _dead = true;
+            }
+
+            var size = _levelSize[_level];
+            var mapgen = new JaggedMapGenerator(size.Item1, size.Item2, _level);
             MapHandler = mapgen.Generate();
+
+            _level++;
+            MessagePanel.AddMessage($"You arrive at level {_level}");
         }
 
         internal static void GameOver()

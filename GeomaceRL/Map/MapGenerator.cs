@@ -138,61 +138,6 @@ namespace GeomaceRL.Map
             }
         }
 
-        //protected void PlaceDoors(Room room)
-        //{
-        //    for (int i = room.Left; i < room.Right; i++)
-        //    {
-        //        if (i <= 0 || i >= Width - 1)
-        //            continue;
-
-        //        if (room.Top > 1 && IsDoorLocation(i, room.Top - 1))
-        //        {
-        //            Map.AddDoor(new Door(new Loc(i, room.Top - 1)));
-        //        }
-
-        //        if (room.Bottom < Height - 1 && IsDoorLocation(i, room.Bottom))
-        //        {
-        //            Map.AddDoor(new Door(new Loc(i, room.Bottom)));
-        //        }
-        //    }
-
-        //    for (int j = room.Top; j < room.Bottom; j++)
-        //    {
-        //        if (j <= 0 || j >= Height - 1)
-        //            continue;
-
-        //        if (room.Left > 1 && IsDoorLocation(room.Left - 1, j))
-        //        {
-        //            Map.AddDoor(new Door(new Loc(room.Left - 1, j)));
-        //        }
-
-        //        if (room.Right < Width - 1 && IsDoorLocation(room.Right, j))
-        //        {
-        //            Map.AddDoor(new Door(new Loc(room.Right, j)));
-        //        }
-        //    }
-        //}
-
-        private bool IsDoorLocation(int x, int y)
-        {
-            bool current = Map.Field[x, y].IsWall;
-            bool left = Map.Field[x - 1, y].IsWall;
-            bool right = Map.Field[x + 1, y].IsWall;
-            bool up = Map.Field[x, y - 1].IsWall;
-            bool down = Map.Field[x, y + 1].IsWall;
-
-            if (current)
-                return false;
-
-            if (left && right && !up && !down)
-                return true;
-
-            if (!left && !right && up && down)
-                return true;
-
-            return false;
-        }
-
         // HACK: ad-hoc placement code
         private void PlaceItems()
         {
@@ -204,11 +149,22 @@ namespace GeomaceRL.Map
             Game.Player.Pos = Map.GetRandomOpenPoint();
             Map.AddActor(Game.Player);
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < Game._enemyCount[Game._level]; i++)
             {
                 Element element = (Element)(Rand.Next(4) + 1);
-                var sprite = new Leech(Map.GetRandomOpenPoint(), element);
-                Map.AddActor(sprite);
+                int enemyType = Rand.Next(4);
+                Actor.Actor enemy;
+
+                if (enemyType == 0)
+                    enemy = new Sprite(Map.GetRandomOpenPoint(), element);
+                else if (enemyType == 1)
+                    enemy = new Elemental(Map.GetRandomOpenPoint(), element);
+                else if (enemyType == 2)
+                    enemy = new Bomber(Map.GetRandomOpenPoint(), element);
+                else
+                    enemy = new Leech(Map.GetRandomOpenPoint(), element);
+
+                Map.AddActor(enemy);
             }
 
             Map.Refresh();

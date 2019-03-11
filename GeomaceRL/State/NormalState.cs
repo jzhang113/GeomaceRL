@@ -22,7 +22,7 @@ namespace GeomaceRL.State
         {
             Player player = Game.Player;
 
-            if (player.IsDead)
+            if (Game._dead)
             {
                 Game.StateHandler.Reset();
                 return Option.None<ICommand>();
