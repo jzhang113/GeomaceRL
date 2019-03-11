@@ -53,11 +53,11 @@ namespace GeomaceRL.Actor
         public override Option<ICommand> GetAction()
         {
             int dist = Game.MapHandler.PlayerMap[Pos.X, Pos.Y];
-            if (dist != -1 && dist <= 2)
+            if (dist != -1 && dist <= 2 && Game.MapHandler.Field[Pos].IsVisible)
             {
                 return TriggerDeath();
             }
-            else if (dist != -1 && dist < 10)
+            else if (Game.MapHandler.Field[Pos].IsVisible)
             {
                 Loc move = AnnAStar.Search(Pos, Game.Player.Pos, 1).FirstOrDefault();
                 return move == default
