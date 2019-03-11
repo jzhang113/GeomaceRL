@@ -6,7 +6,7 @@ namespace GeomaceRL.Actor
 {
     internal class Leech : Actor
     {
-        public Leech(in Loc pos, Element element) : base(pos, Constants.LEECH_HP, element, 'L')
+        public Leech(in Loc pos, Element element) : base(pos, Constants.LEECH_HP, element, 'M')
         {
             Name = "Mana eater";
             Speed = 2;
