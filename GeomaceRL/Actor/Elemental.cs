@@ -49,7 +49,8 @@ namespace GeomaceRL.Actor
                 else
                 {
                     // no mana, move to nearest mana
-                    var nearby = Game.MapHandler.GetPointsInRadius(Pos, 1);
+                    var nearby = Game.MapHandler.GetPointsInRadius(Pos, 1).Where(point =>
+                        Game.MapHandler.Field[point].IsWalkable);
                     foreach (Loc point in nearby)
                     {
                         if (Game.MapHandler.Mana[point.X, point.Y].Item1 == Element)

@@ -151,11 +151,18 @@ namespace GeomaceRL
 
                 while (accum >= FrameRate)
                 {
-                    EventScheduler.ExecuteCommand(StateHandler.HandleInput(), () =>
+                    if (current == null)
                     {
-                        MapHandler.Refresh();
-                        EventScheduler.Update();
-                    });
+                        EventScheduler.ExecuteCommand(StateHandler.HandleInput(), () =>
+                        {
+                            MapHandler.Refresh();
+                            EventScheduler.Update();
+                        });
+                    }
+                    else if (Terminal.HasInput())
+                    {
+                        Terminal.Read();
+                    }
 
                     Ticks += FrameRate;
                     accum -= FrameRate;
