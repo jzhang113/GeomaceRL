@@ -81,7 +81,7 @@ namespace GeomaceRL.State
                                 spell.Cost.AltElem.MatchSome(altElem =>
                                     Game.MapHandler.UpdateAllMana(player.Pos, altElem, altMana));
                                 Game.StateHandler.PopState();
-                                return Option.Some(spell.Evoke(player, targets));
+                                return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
                             }));
                         return Option.None<ICommand>();
                     }

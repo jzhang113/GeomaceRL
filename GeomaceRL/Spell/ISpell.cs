@@ -13,6 +13,6 @@ namespace GeomaceRL.Spell
 
         TargetZone Zone { get; }
 
-        ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets);
+        ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used);
     }
 }

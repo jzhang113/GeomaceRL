@@ -42,7 +42,7 @@ namespace GeomaceRL
         internal static readonly (int, int)[] _levelSize = {
             (30, 30), (30, 30), (45, 45), (60, 60), (60, 60), (10, 10) };
 
-        internal static readonly int[] _enemyCount = { 5, 15, 30, 40, 50, 0 };
+        internal static readonly int[] _enemyCount = { 5, 15, 25, 35, 45, 0 };
 
         private static void Main(string[] args)
         {
@@ -120,16 +120,19 @@ namespace GeomaceRL
 
             if (_level >= 5)
             {
+                MessagePanel.AddMessage("This appears to be the end of the dungeon");
                 MessagePanel.AddMessage("You win!");
                 _dead = true;
+            }
+            else
+            {
+                MessagePanel.AddMessage($"You arrive at level {_level+1}");
             }
 
             var size = _levelSize[_level];
             var mapgen = new JaggedMapGenerator(size.Item1, size.Item2, _level);
             MapHandler = mapgen.Generate();
-
             _level++;
-            MessagePanel.AddMessage($"You arrive at level {_level}");
         }
 
         internal static void GameOver()

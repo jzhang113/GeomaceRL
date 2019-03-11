@@ -12,7 +12,7 @@ namespace GeomaceRL.Spell
         public SpellCost Cost => new SpellCost(Element.Earth, Constants.EARTHSHATTER_COST);
         public TargetZone Zone => new TargetZone(TargetShape.Pierce, 3);
 
-        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
+        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
         {
             foreach (Loc point in targets)
             {

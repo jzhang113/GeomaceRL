@@ -11,7 +11,7 @@ namespace GeomaceRL.Spell
         public SpellCost Cost => new SpellCost(Element.Fire, Constants.FIREBOLT_COST);
         public TargetZone Zone => new TargetZone(TargetShape.Range, Constants.FIREBOLT_RANGE, 1);
 
-        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
+        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
         {
             Game.CurrentAnimations.Add(new FlashAnimation(targets, Element.Fire.Color()));
             return new AttackCommand(source, (Element.Fire, Constants.FIREBOLT_DAMAGE), targets);

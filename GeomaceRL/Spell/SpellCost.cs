@@ -85,7 +85,7 @@ namespace GeomaceRL.Spell
             if (range.Item1 == range.Item2)
                 return range.Item1.ToString();
             else
-                return "V";
+                return $"{range.Item1}-{range.Item2}";
         }
     }
 }

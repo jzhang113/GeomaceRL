@@ -50,5 +50,9 @@
 
         public const int EARTHSHATTER_COST = 4;
         public const int EARTHSHATTER_DAMAGE = 20;
+
+        public const int TELEPORT_MIN = 3;
+        public const int TELEPORT_COST = 6;
+        public const int TELEPORT_RANGE = 6;
     }
 }

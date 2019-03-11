@@ -44,7 +44,7 @@ namespace GeomaceRL.UI
                         $"{(char)(x + '1')} {spell.Abbrev}",
                         ContentAlignment.TopLeft);
                     layer.Print(
-                        new Rectangle(startX, 1, halfBox, 1),
+                        new Rectangle(startX, 1, halfBox + 1, 1),
                         spell.Cost.GetMainString(),
                         ContentAlignment.TopLeft);
                     layer.Print(

@@ -15,7 +15,7 @@ namespace GeomaceRL.Spell
 
         public TargetZone Zone => new TargetZone(TargetShape.Self, Constants.PILLARS_RANGE);
 
-        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
+        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
         {
             foreach (Loc loc in targets)
             {

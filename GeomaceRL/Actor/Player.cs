@@ -29,7 +29,8 @@ namespace GeomaceRL.Actor
                 new Firebolt(),
                 new Waterstream(),
                 new Earthpillar(),
-                new Earthshatter()
+                new Earthshatter(),
+                new LightningTeleport()
             };
 
             Name = "Player";

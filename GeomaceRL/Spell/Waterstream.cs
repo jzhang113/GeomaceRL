@@ -1,4 +1,5 @@
-﻿using GeomaceRL.Animation;
+﻿using GeomaceRL.Actor;
+using GeomaceRL.Animation;
 using GeomaceRL.Command;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,13 @@ namespace GeomaceRL.Spell
         public SpellCost Cost => new SpellCost(Element.Water, (1, Constants.JETSTREAM_COST));
         public TargetZone Zone => new TargetZone(TargetShape.Beam, 2 * Cost.MainManaUsed());
 
-        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets)
+        public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
         {
             Game.CurrentAnimations.Add(
                 new LaserAnimation(targets, Element.Water.Color(), Colors.WaterAccent));
 
             Loc dir = Distance.GetNearestDirection(source.Pos, targets.First());
-            int power = Cost.MainManaUsed();
+            int power = used.Item1;
 
             return new AttackMoveCommand(source, (Element.Water, Constants.JETSTREAM_DAMAGE), targets, dir, power);
         }
