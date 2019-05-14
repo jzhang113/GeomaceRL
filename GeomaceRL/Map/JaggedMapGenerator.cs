@@ -104,7 +104,7 @@ namespace GeomaceRL
                     polygon.Add(new Vertex(room.Center.X, room.Center.Y));
                 }
                 IMesh delaunay = polygon.Triangulate();
-
+                
                 // Reduce the number of edges and clear out rooms along the remaining edges.
                 ICollection<int>[] adj = BuildAdjacencyList(delaunay.Edges, RoomList.Count);
                 List<Edge> edges = TrimEdges(adj, RoomList).ToList();
@@ -112,7 +112,7 @@ namespace GeomaceRL
                 // Restore some edges, so exploring is a bit more interesting
                 RestoreEdges(edges, delaunay.Edges.ToList(), adj, _END_TYPE);
                 Adjacency = BuildAdjacencyList(edges, RoomList.Count);
-
+                
                 foreach (Edge edge in edges)
                 {
                     ClearRoomsBetween(RoomList[edge.P0], RoomList[edge.P1], allRooms, occupied);
@@ -155,7 +155,8 @@ namespace GeomaceRL
             }
 
             // Can't do anything if the first room doesn't get placed
-            System.Diagnostics.Debug.Assert(TrackRoom(first, roomList, 1, ref occupied));
+            bool success = TrackRoom(first, roomList, 1, ref occupied);
+            System.Diagnostics.Debug.Assert(success);
             AddOpenPoints(first, openPoints, occupied);
             return 1;
         }
