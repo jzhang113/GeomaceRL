@@ -21,7 +21,7 @@ namespace GeomaceRL.Command
         {
             // Cancel out of bound moves.
             if (!Game.MapHandler.Field.IsValid(_nextPos))
-                return Option.Some<ICommand>(new WaitCommand(Source));
+                return Option.None<ICommand>();
 
             // Don't walk into walls, unless the Actor is currently phasing or we are already
             // inside a wall (to prevent getting stuck).
@@ -30,9 +30,9 @@ namespace GeomaceRL.Command
                 // Don't penalize the player for walking into walls, but monsters should wait if 
                 // they will walk into a wall.
                 if (Source is Player)
-                    return Option.None<ICommand>();
-                else
-                    return Option.Some<ICommand>(new WaitCommand(Source));
+                    Game.PrevCancelled = true;
+
+                return Option.None<ICommand>();
             }
 
             // Check if the destination is already occupied.
@@ -40,7 +40,7 @@ namespace GeomaceRL.Command
                 some: target =>
                 {
                     if (target == Source)
-                        return Option.Some<ICommand>(new WaitCommand(Source));
+                        return Option.None<ICommand>();
                     else if (target is Pillar)
                         return Option.Some<ICommand>(new PushCommand(Source, target));
                     else
@@ -59,8 +59,8 @@ namespace GeomaceRL.Command
 
                     Loc prevLoc = Source.Pos;
                     Game.MapHandler.SetActorPosition(Source, _nextPos);
-                    Animation = Option.Some<IAnimation>(new MoveAnimation(Source, prevLoc, Source.Moving));
-                    Source.Moving = true;
+                    // Animation = Option.Some<IAnimation>(new MoveAnimation(Source, prevLoc, Source.Moving));
+                    // Source.Moving = true;
 
                     return Option.None<ICommand>();
                 });
