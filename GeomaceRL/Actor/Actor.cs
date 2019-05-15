@@ -74,8 +74,7 @@ namespace GeomaceRL.Actor
                 return GetAction();
         }
 
-        public virtual Option<ICommand> GetAction() =>
-            Option.Some<ICommand>(new WaitCommand(this));
+        public virtual Option<ICommand> GetAction() => Option.Some<ICommand>(new WaitCommand(this));
 
         public ICommand GetBasicAttack(in Loc target) => new AttackCommand(this, (Element, Constants.GEN_ATTACK), target);
 

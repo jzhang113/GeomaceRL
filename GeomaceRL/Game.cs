@@ -27,6 +27,9 @@ namespace GeomaceRL
         internal static TimeSpan Ticks;
         internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
 
+        // HACK: how to communicate cancelled moved to the main loop?
+        internal static bool PrevCancelled = false;
+
         private static bool _exiting;
         private static bool _playing;
         internal static int _level;
@@ -173,8 +176,15 @@ namespace GeomaceRL
                     {
                         EventScheduler.ExecuteCommand(StateHandler.HandleInput(), () =>
                         {
-                            MapHandler.Refresh();
-                            EventScheduler.Update();
+                            if (!PrevCancelled)
+                            {
+                                MapHandler.Refresh();
+                                EventScheduler.Update();
+                            }
+                            else
+                            {
+                                PrevCancelled = false;
+                            }
                         });
                     }
                     else if (Terminal.HasInput())

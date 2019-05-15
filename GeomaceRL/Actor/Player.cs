@@ -25,12 +25,10 @@ namespace GeomaceRL.Actor
 
             SpellList = new List<ISpell>()
             {
-                new Firelance(),
-                new Firebolt(),
-                new Waterstream(),
-                new Earthpillar(),
-                new Earthshatter(),
-                new LightningTeleport()
+                SpellHandler.RandomSpell(),
+                SpellHandler.RandomSpell(),
+                SpellHandler.RandomSpell(),
+                SpellHandler.RandomSpell()
             };
 
             Name = "Player";
