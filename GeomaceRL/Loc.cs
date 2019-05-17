@@ -27,6 +27,8 @@
             y = Y;
         }
 
+        public override string ToString() => $"({X}, {Y})";
+
         #region equality
         public override bool Equals(object obj)
         {

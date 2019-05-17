@@ -48,21 +48,36 @@ namespace GeomaceRL.Command
                 },
                 none: () =>
                 {
+                    var action = Option.None<ICommand>();
+
                     if (Source is Player)
                     {
-                        Game.MapHandler.Exit.MatchSome(exit =>
+                        // autodescend
+                        Game.MapHandler.Exit.MatchSome(exitPos =>
                         {
-                            if (exit == Source.Pos)
-                                Game.MessagePanel.AddMessage("You see an exit here");
+                            if (exitPos == _nextPos)
+                            {
+                                Game.MessagePanel.AddMessage("You descend the stairs");
+                                Game.NextLevel();
+                                Game.PrevCancelled = true; // don't activate enemies on the next floor
+                            }
                         });
+
+                        // autopickup
+                        action = Game.MapHandler.GetItem(_nextPos)
+                            .FlatMap(item => Option.Some<ICommand>(new PickupCommand(Source, item)));
                     }
 
                     Loc prevLoc = Source.Pos;
                     Game.MapHandler.SetActorPosition(Source, _nextPos);
-                    // Animation = Option.Some<IAnimation>(new MoveAnimation(Source, prevLoc, Source.Moving));
-                    // Source.Moving = true;
 
-                    return Option.None<ICommand>();
+                    if (!(Source is Player))
+                    {
+                        Animation = Option.Some<IAnimation>(new MoveAnimation(Source, prevLoc, Source.Moving));
+                        Source.Moving = true;
+                    }
+
+                    return action;
                 });
         }
     }

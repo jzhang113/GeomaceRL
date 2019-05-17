@@ -30,8 +30,8 @@ namespace GeomaceRL.State
 
             switch (InputMapping.GetNormalInput(key))
             {
-                //case NormalInput.None:
-                //    return null;
+                case NormalInput.None:
+                    return Option.None<ICommand>();
 
                 #region Movement Keys
                 case NormalInput.MoveW:
@@ -59,7 +59,7 @@ namespace GeomaceRL.State
                     if (spellnum >= player.SpellList.Count)
                         return Option.None<ICommand>();
 
-                    var spell = player.SpellList[spellnum];
+                    Spell.ISpell spell = player.SpellList[spellnum];
                     int mainMana = spell.Cost.MainManaUsed();
                     int altMana = spell.Cost.AltManaUsed();
 
@@ -85,45 +85,9 @@ namespace GeomaceRL.State
                             }));
                         return Option.None<ICommand>();
                     }
-
-                case NormalInput.ChangeLevel:
-                    bool overExit = false;
-
-                    Game.MapHandler.Exit.MatchSome(exit =>
-                    {
-                        if (player.Pos == exit)
-                            overExit = true;
-                    });
-
-                    if (overExit)
-                    {
-                        Game.MessagePanel.AddMessage("You descend the stairs");
-                        Game.NextLevel();
-                    }
-                    else
-                    {
-                        Game.MessagePanel.AddMessage("No stairs here");
-                    }
-
-                    return Option.None<ICommand>();
-                //case NormalInput.OpenApply:
-                //    Game.StateHandler.PushState(ApplyState.Instance);
-                //    return Option.None<ICommand>();
-                //case NormalInput.OpenDrop:
-                //    Game.StateHandler.PushState(DropState.Instance);
-                //    return Option.None<ICommand>();
-                //case NormalInput.OpenEquip:
-                //    Game.StateHandler.PushState(EquipState.Instance);
-                //    return Option.None<ICommand>();
-                //case NormalInput.OpenInventory:
-                //    Game.StateHandler.PushState(InventoryState.Instance);
-                //    return Option.None<ICommand>();
-                //case NormalInput.OpenUnequip:
-                //    Game.StateHandler.PushState(UnequipState.Instance);
-                //    return Option.None<ICommand>();
-                //case NormalInput.AutoExplore:
-                //    Game.StateHandler.PushState(AutoexploreState.Instance);
-                //    return Option.None<ICommand>();
+                case NormalInput.Get:
+                    return Game.MapHandler.GetItem(player.Pos)
+                        .FlatMap(item => Option.Some<ICommand>(new PickupCommand(player, item)));
                 case NormalInput.OpenMenu:
                     Game.Exit();
                     return Option.None<ICommand>();
@@ -132,9 +96,6 @@ namespace GeomaceRL.State
             return Option.None<ICommand>();
         }
 
-        public void Draw(LayerInfo layer)
-        {
-            Game.MapHandler.Draw(layer);
-        }
+        public void Draw(LayerInfo layer) => Game.MapHandler.Draw(layer);
     }
 }

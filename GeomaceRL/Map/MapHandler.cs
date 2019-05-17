@@ -1,4 +1,5 @@
 ﻿using BearLib;
+using GeomaceRL.Items;
 using GeomaceRL.UI;
 using Optional;
 using System;
@@ -20,10 +21,9 @@ namespace GeomaceRL.Map
 
         // internal transient helper structures
         internal int[,] PlayerMap { get; }
-        internal int[,] AutoexploreMap { get; }
 
         internal IDictionary<int, Actor.Actor> Units { get; }
-        //private IDictionary<int, InventoryHandler> Items { get; set; }
+        private IDictionary<int, Item> Items { get; }
         //private IDictionary<int, Door> Doors { get; set; }
         //private IDictionary<int, Exit> Exits { get; set; }
         //private IDictionary<int, Fire> Fires { get; set; }
@@ -42,10 +42,9 @@ namespace GeomaceRL.Map
             Clearance = new int[width, height];
             Mana = new (Element, int)[width, height];
             PlayerMap = new int[width, height];
-            AutoexploreMap = new int[width, height];
 
             Units = new Dictionary<int, Actor.Actor>();
-            //Items = new Dictionary<int, InventoryHandler>();
+            Items = new Dictionary<int, Item>();
             //Doors = new Dictionary<int, Door>();
             //Exits = new Dictionary<int, Exit>();
             //Fires = new Dictionary<int, Fire>();
@@ -212,70 +211,50 @@ namespace GeomaceRL.Map
         #endregion
 
         #region Item Methods
-        //public void AddItem(Item item)
-        //{
-        //    int index = ToIndex(item.Loc);
-        //    if (Items.TryGetValue(index, out InventoryHandler stack))
-        //    {
-        //        stack.Add(item);
-        //    }
-        //    else
-        //    {
-        //        Items.Add(index, new InventoryHandler
-        //        {
-        //            item
-        //        });
-        //    }
-        //}
+        public void AddItem(Item item)
+        {
+            int index = ToIndex(item.Pos);
+            if (Items.ContainsKey(index))
+            {
+                // one item per tile, excess spill to nearby, up to radius 3
+                const int maxSpillRadius = 3;
+                bool done = false;
 
-        //public Option<Item> GetItem(Loc pos)
-        //{
-        //    bool found = Items.TryGetValue(ToIndex(pos), out InventoryHandler stack);
-        //    return (found && stack.Count > 0) ? Option.Some(stack.First()) : Option.None<Item>();
-        //}
+                for (int r = 1; r <= maxSpillRadius; r++)
+                {
+                    if (done) break;
 
-        //public Option<InventoryHandler> GetStack(Loc pos)
-        //{
-        //    bool found = Items.TryGetValue(ToIndex(pos), out InventoryHandler stack);
-        //    return (found && stack.Count > 0) ? Option.Some(stack) : Option.None<InventoryHandler>();
-        //}
+                    GetPointsInRadiusBorder(item.Pos, r)
+                        .Where(check => Items.ContainsKey(ToIndex(check)))
+                        .Random(Game.Rand)
+                        .MatchSome(open =>
+                        {
+                            Items.Add(ToIndex(open), item);
+                            done = true;
+                        });
+                }
+            }
+            else
+            {
+                Items.Add(index, item);
+            }
+        }
 
-        //// Clean up the items list by removing empty stacks.
-        //internal bool RemoveStackIfEmpty(Loc pos)
-        //{
-        //    int index = ToIndex(pos);
-        //    if (!Items.TryGetValue(index, out InventoryHandler stack))
-        //        return false;
+        public Option<Item> GetItem(in Loc pos)
+        {
+            bool found = Items.TryGetValue(ToIndex(pos), out Item item);
+            return found ? Option.Some(item) : Option.None<Item>();
+        }
 
-        //    if (!stack.IsEmpty())
-        //        return false;
+        public bool RemoveItem(Item item)
+        {
+            int index = ToIndex(item.Pos);
+            if (!Items.ContainsKey(index))
+                return false;
 
-        //    Items.Remove(index);
-        //    return true;
-        //}
-
-        // Take items off of the map.
-        //public Option<Item> SplitItem(Item item)
-        //{
-        //    int index = ToIndex(item.Loc);
-        //    if (Items.TryGetValue(index, out InventoryHandler stack))
-        //    {
-        //        System.Diagnostics.Debug.Assert(
-        //            stack.Contains(item),
-        //            $"Map does not contain {item.Name}.");
-
-        //        Item split = stack.Split(item, item.Count);
-        //        if (stack.IsEmpty())
-        //            Items.Remove(index);
-
-        //        return Option.Some(split);
-        //    }
-        //    else
-        //    {
-        //        System.Diagnostics.Debug.Fail($"Could not split {item.Name} on the map.");
-        //        return Option.None<Item>();
-        //    }
-        //}
+            Items.Remove(index);
+            return true;
+        }
         #endregion
 
         //public bool SetFire(Loc pos)
@@ -400,7 +379,7 @@ namespace GeomaceRL.Map
             int yCurr = source.Y;
             int yEnd = target.Y;
 
-            while (xCurr != xEnd|| yCurr != yEnd)
+            while (xCurr != xEnd || yCurr != yEnd)
             {
                 int e2 = 2 * err;
                 if (e2 > -dy)
@@ -431,6 +410,27 @@ namespace GeomaceRL.Map
             }
         }
 
+        public IEnumerable<Loc> GetPointsInRadiusBorder(Loc origin, int radius)
+        {
+            for (int i = origin.X - radius + 1; i < origin.X + radius; i++)
+            {
+                if (Field.IsValid(i, origin.Y - radius))
+                    yield return new Loc(i, origin.Y - radius);
+
+                if (Field.IsValid(i, origin.Y + radius))
+                    yield return new Loc(i, origin.Y + radius);
+            }
+
+            for (int j = origin.Y - radius; j <= origin.Y + radius; j++)
+            {
+                if (Field.IsValid(origin.X - radius, j))
+                    yield return new Loc(origin.X - radius, j);
+
+                if (Field.IsValid(origin.X + radius, j))
+                    yield return new Loc(origin.X + radius, j);
+            }
+        }
+
         public IEnumerable<Loc> GetPointsInRect(Loc origin, int width, int height)
         {
             for (int i = origin.X; i < origin.X + width; i++)
@@ -443,24 +443,24 @@ namespace GeomaceRL.Map
             }
         }
 
-        public IEnumerable<Loc> GetPointsInRectBorder(int x, int y, int width, int height)
+        public IEnumerable<Loc> GetPointsInRectBorder(Loc origin, int width, int height)
         {
-            for (int i = x + 1; i < x + width; i++)
+            for (int i = origin.X + 1; i < origin.X + width; i++)
             {
-                if (Field.IsValid(i, y))
-                    yield return new Loc(i, y);
+                if (Field.IsValid(i, origin.Y))
+                    yield return new Loc(i, origin.Y);
 
-                if (Field.IsValid(i, y + height))
-                    yield return new Loc(i, y + height);
+                if (Field.IsValid(i, origin.Y + height))
+                    yield return new Loc(i, origin.Y + height);
             }
 
-            for (int j = y; j <= y + height; j++)
+            for (int j = origin.Y; j <= origin.Y + height; j++)
             {
-                if (Field.IsValid(x, j))
-                    yield return new Loc(x, j);
+                if (Field.IsValid(origin.X, j))
+                    yield return new Loc(origin.X, j);
 
-                if (Field.IsValid(x + width, j))
-                    yield return new Loc(x + width, j);
+                if (Field.IsValid(origin.X + width, j))
+                    yield return new Loc(origin.X + width, j);
             }
         }
 
@@ -530,7 +530,7 @@ namespace GeomaceRL.Map
         {
             foreach (Loc dir in Direction.DirectionList)
             {
-                Queue<AngleRange> visibleRange = new Queue<AngleRange>();
+                var visibleRange = new Queue<AngleRange>();
                 visibleRange.Enqueue(new AngleRange(1, 0, 1, 1));
 
                 while (visibleRange.Count > 0)
@@ -734,11 +734,11 @@ namespace GeomaceRL.Map
             //    door.DrawingComponent.Draw(layer, Field[door.Loc]);
             //}
 
-            //foreach (InventoryHandler stack in Items.Values)
-            //{
-            //    Item topItem = stack.First();
-            //    topItem.DrawingComponent.Draw(layer, Field[topItem.Loc]);
-            //}
+            foreach (Item item in Items.Values)
+            {
+                if (Camera.OnScreen(item.Pos) && Field[item.Pos].IsVisible)
+                    item.Draw(layer);
+            }
 
             //foreach (Fire fire in Fires.Values)
             //{

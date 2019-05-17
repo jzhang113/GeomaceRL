@@ -1,4 +1,5 @@
 ﻿using GeomaceRL.Actor;
+using GeomaceRL.Items;
 using Optional;
 using Pcg;
 using System;
@@ -44,7 +45,7 @@ namespace GeomaceRL.Map
             {
                 for (int x = 0; x < Map.Width; x++)
                 {
-                    Element element = (Element)(Rand.Next(4) + 1);
+                    var element = (Element)(Rand.Next(4) + 1);
                     int amount = (int)Rand.NextNormal(3, 2);
                     if (amount < 0)
                         amount = 0;
@@ -141,6 +142,11 @@ namespace GeomaceRL.Map
         // HACK: ad-hoc placement code
         private void PlaceItems()
         {
+            int count = Rand.Next(1, 3);
+            for (int i = 0; i < count; i++) {
+                var spell = new SpellScroll(Map.GetRandomOpenPoint(), new Spell.Heal());
+                Map.AddItem(spell);
+            }
         }
 
         // HACK: ad-hoc placement code
@@ -151,7 +157,7 @@ namespace GeomaceRL.Map
 
             for (int i = 0; i < Game._enemyCount[Game._level]; i++)
             {
-                Element element = (Element)(Rand.Next(4) + 1);
+                var element = (Element)(Rand.Next(4) + 1);
                 int enemyType = Rand.Next(4);
                 Actor.Actor enemy;
 
