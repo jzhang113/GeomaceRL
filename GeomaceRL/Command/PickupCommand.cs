@@ -1,5 +1,4 @@
-﻿using GeomaceRL.Actor;
-using GeomaceRL.Animation;
+﻿using GeomaceRL.Animation;
 using GeomaceRL.Items;
 using Optional;
 
@@ -24,10 +23,7 @@ namespace GeomaceRL.Command
 
             if (_item is SpellScroll scroll)
             {
-                if (_source is Player player)
-                {
-                    player.SpellList.Add(scroll.Spell);
-                }
+                scroll.LearnSpell(_source);
             }
 
             Game.MapHandler.RemoveItem(_item);

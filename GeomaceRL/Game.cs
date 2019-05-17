@@ -107,6 +107,7 @@ namespace GeomaceRL
             CurrentAnimations.Clear();
             Player = new Player(new Loc(0, 0));
 
+            Colors.RandomizeMappings();
             _playing = true;
             _dead = false;
 
@@ -132,7 +133,7 @@ namespace GeomaceRL
                 MessagePanel.AddMessage($"You arrive at level {_level+1}");
             }
 
-            var size = _levelSize[_level];
+            (int, int) size = _levelSize[_level];
             var mapgen = new JaggedMapGenerator(size.Item1, size.Item2, _level);
             MapHandler = mapgen.Generate();
             _level++;
@@ -152,7 +153,7 @@ namespace GeomaceRL
         private static void Run()
         {
             DateTime currentTime = DateTime.UtcNow;
-            TimeSpan accum = new TimeSpan();
+            var accum = new TimeSpan();
 
             const int updateLimit = 10;
             TimeSpan maxDt = FrameRate * updateLimit;
