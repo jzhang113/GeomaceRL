@@ -9,6 +9,8 @@ namespace GeomaceRL.Spell
 
         string Abbrev { get; }
 
+        bool Instant { get; }
+
         SpellCost Cost { get; }
 
         TargetZone Zone { get; }

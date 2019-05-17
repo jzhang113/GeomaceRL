@@ -1,7 +1,6 @@
 ﻿using GeomaceRL.Animation;
 using GeomaceRL.Command;
 using Optional;
-using System.Drawing;
 using System.Linq;
 
 namespace GeomaceRL.Actor

@@ -423,7 +423,7 @@ namespace GeomaceRL
                     }
 
                     var (neighborX, neighborY) = rooms[neighborID].Center;
-                    double newWeight = Distance.EuclideanDistanceSquared(min.X, min.Y,
+                    double newWeight = Distance.EuclideanSquared(min.X, min.Y,
                         neighborX, neighborY);
 
                     if (weight[neighborID] > newWeight)

@@ -60,31 +60,7 @@ namespace GeomaceRL.State
                         return Option.None<ICommand>();
 
                     Spell.ISpell spell = player.SpellList[spellnum];
-                    int mainMana = spell.Cost.MainManaUsed();
-                    int altMana = spell.Cost.AltManaUsed();
-
-                    if (mainMana == -1 || altMana == -1)
-                    {
-                        Game.MessagePanel.AddMessage("Not enough mana");
-                        return Option.None<ICommand>();
-                    }
-                    else
-                    {
-                        Game.StateHandler.PushState(
-                            new TargettingState(player, spell.Zone, spellnum, targets =>
-                            {
-                                if (!targets.Any())
-                                    return Option.None<ICommand>();
-
-                                Game.MessagePanel.AddMessage($"{player.Name} casts {spell.Name}");
-                                Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost.MainElem, mainMana);
-                                spell.Cost.AltElem.MatchSome(altElem =>
-                                    Game.MapHandler.UpdateAllMana(player.Pos, altElem, altMana));
-                                Game.StateHandler.PopState();
-                                return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
-                            }));
-                        return Option.None<ICommand>();
-                    }
+                    return CastSpell(player, spellnum, spell);
                 case NormalInput.Get:
                     return Game.MapHandler.GetItem(player.Pos)
                         .FlatMap(item => Option.Some<ICommand>(new PickupCommand(player, item)));
@@ -94,6 +70,58 @@ namespace GeomaceRL.State
             }
 
             return Option.None<ICommand>();
+        }
+
+        private static Option<ICommand> CastSpell(Player player, int spellnum, Spell.ISpell spell)
+        {
+            int mainMana = spell.Cost.MainManaUsed();
+            int altMana = spell.Cost.AltManaUsed();
+
+            if (mainMana == -1 || altMana == -1)
+            {
+                Game.MessagePanel.AddMessage("Not enough mana");
+                return Option.None<ICommand>();
+            }
+            else
+            {
+                if (spell.Instant)
+                {
+                    // TODO: multi-hitting instants
+                    return spell.Zone.GetAllValidTargets(player.Pos)
+                        .Random(Game.Rand)
+                        .FlatMap(cursor =>
+                        {
+                            var targets = spell.Zone.GetTilesInRange(player.Pos, cursor);
+                            PaySpellCost(player, spell, mainMana, altMana);
+
+                            return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
+                        });
+                }
+                else
+                {
+                    Game.StateHandler.PushState(
+                        new TargettingState(player, spell.Zone, spellnum, targets =>
+                        {
+                            if (!targets.Any())
+                                return Option.None<ICommand>();
+
+                            PaySpellCost(player, spell, mainMana, altMana);
+                            Game.StateHandler.PopState();
+
+                            return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
+                        }));
+
+                    return Option.None<ICommand>();
+                }
+            }
+        }
+
+        private static void PaySpellCost(Player player, Spell.ISpell spell, int mainCost, int altCost)
+        {
+            Game.MessagePanel.AddMessage($"{player.Name} casts {spell.Name}");
+            Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost.MainElem, mainCost);
+            spell.Cost.AltElem.MatchSome(altElem =>
+                Game.MapHandler.UpdateAllMana(player.Pos, altElem, altCost));
         }
 
         public void Draw(LayerInfo layer) => Game.MapHandler.Draw(layer);

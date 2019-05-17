@@ -22,8 +22,6 @@ namespace GeomaceRL.Input
         MoveSW,
         MoveSE,
         OpenMenu,
-        AutoExplore,
-        ChangeLevel,
         Get,
         Throw,
         Wait,

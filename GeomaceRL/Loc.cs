@@ -35,13 +35,13 @@
             if (!(obj is Loc))
                 return false;
 
-            Loc location = (Loc)obj;
+            var location = (Loc)obj;
             return X == location.X && Y == location.Y;
         }
 
         public override int GetHashCode()
         {
-            var hashCode = 1861411795;
+            int hashCode = 1861411795;
             hashCode = (hashCode * -1521134295) + X.GetHashCode();
             hashCode = (hashCode * -1521134295) + Y.GetHashCode();
             return hashCode;

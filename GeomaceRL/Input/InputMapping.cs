@@ -44,9 +44,7 @@ namespace GeomaceRL.Input
                         [Terminal.TK_3] =           NormalInput.Cast,
                         [Terminal.TK_4] =           NormalInput.Cast,
                         [Terminal.TK_5] =           NormalInput.Cast,
-                        [Terminal.TK_6] =           NormalInput.Cast,
-                        [Terminal.TK_ENTER] =       NormalInput.ChangeLevel,
-                        [Terminal.TK_KP_ENTER] =    NormalInput.ChangeLevel,
+                        [Terminal.TK_6] =           NormalInput.Cast
                     },
                     Shift = new Dictionary<int, NormalInput>()
                 },

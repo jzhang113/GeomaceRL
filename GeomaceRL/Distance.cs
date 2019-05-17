@@ -27,7 +27,7 @@ namespace GeomaceRL
                 sy = Math.Sign(dy);
             }
 
-            switch (sx + (3 * sy) + 5)
+            switch (sx + 3 * sy + 5)
             {
                 case 1: return Direction.NW;
                 case 2: return Direction.N;
@@ -41,18 +41,23 @@ namespace GeomaceRL
                 default: throw new ArgumentOutOfRangeException();
             }
         }
-
-        public static double EuclideanDistance(int x1, int y1, int x2, int y2)
+        public static double Euclidean(int x1, int y1, int x2, int y2)
         {
-            return Math.Sqrt(EuclideanDistanceSquared(x1, y1, x2, y2));
+            return Math.Sqrt(EuclideanSquared(x1, y1, x2, y2));
         }
 
-        public static int EuclideanDistanceSquared(int x1, int y1, int x2, int y2)
+        public static int EuclideanSquared(int x1, int y1, int x2, int y2)
         {
             int dx = x1 - x2;
             int dy = y1 - y2;
+            return dx * dx + dy * dy;
+        }
 
-            return (dx * dx) + (dy * dy);
+        public static int Chebyshev(in Loc pos1, in Loc pos2)
+        {
+            int dx = Math.Abs(pos1.X - pos2.X);
+            int dy = Math.Abs(pos1.Y - pos2.Y);
+            return Math.Max(dx, dy);
         }
     }
 }

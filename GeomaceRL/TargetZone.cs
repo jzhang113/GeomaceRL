@@ -38,16 +38,46 @@ namespace GeomaceRL
             Pierce = shape == TargetShape.Pierce;
         }
 
-        public IEnumerable<Loc> GetTilesInRange(Actor.Actor current, in Loc target)
+        public IEnumerable<Loc> GetAllValidTargets(in Loc origin)
+        {
+            ICollection<Loc> valid = new HashSet<Loc>();
+
+            // Filter the targettable range down to only the tiles we have a direct line on.
+            foreach (Loc point in Game.MapHandler.GetPointsInRadius(origin, Range))
+            {
+                Loc collision = origin;
+                foreach (Loc current in Game.MapHandler.GetStraightLinePath(origin, point))
+                {
+                    Map.Tile tile = Game.MapHandler.Field[current];
+                    if (tile.IsWall)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        collision = current;
+
+                        if (tile.IsOccupied && !Pierce)
+                            break;
+                    }
+                }
+
+                valid.Add(collision);
+            }
+
+            return valid;
+        }
+
+        public IEnumerable<Loc> GetTilesInRange(in Loc source, in Loc target)
         {
             Targets.Clear();
 
             switch (Shape)
             {
                 case TargetShape.Self:
-                    foreach (Loc point in Game.MapHandler.GetPointsInRadius(current.Pos, Range))
+                    foreach (Loc point in Game.MapHandler.GetPointsInRadius(source, Radius))
                     {
-                        if (Projectile && point == current.Pos)
+                        if (Projectile && point == source)
                         {
                             continue;
                         }
@@ -59,15 +89,15 @@ namespace GeomaceRL
                     }
                     return Targets;
                 case TargetShape.Range:
-                    return GetRangeTiles(current.Pos, target);
+                    return GetRangeTiles(source, target);
                 case TargetShape.Ray:
-                    return GetRayTiles(current.Pos, target);
+                    return GetRayTiles(source, target);
                 case TargetShape.Pierce:
-                    return GetPierceTiles(current.Pos, target);
+                    return GetPierceTiles(source, target);
                 case TargetShape.Directional:
-                    return GetDirectionalTiles(current.Pos, target);
+                    return GetDirectionalTiles(source, target);
                 case TargetShape.Beam:
-                    return GetBeamTiles(current.Pos, target);
+                    return GetBeamTiles(source, target);
                 default:
                     throw new ArgumentException("unknown skill shape");
             }

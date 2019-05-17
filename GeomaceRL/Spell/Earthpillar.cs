@@ -8,6 +8,7 @@ namespace GeomaceRL.Spell
     {
         public string Name => "Pillars";
         public string Abbrev => "PS";
+        public bool Instant => false;
 
         public SpellCost Cost => new SpellCost(
             Element.Earth, Constants.PILLARS_COST,

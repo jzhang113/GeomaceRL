@@ -11,7 +11,7 @@ namespace GeomaceRL
 
         static SpellHandler()
         {
-            var spellType = typeof(ISpell);
+            Type spellType = typeof(ISpell);
             AllSpells = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => spellType.IsAssignableFrom(p) && p.IsClass)

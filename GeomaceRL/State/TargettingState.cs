@@ -39,32 +39,7 @@ namespace GeomaceRL.State
             _targettableActors = new List<Actor.Actor>();
             _targetted = new List<Loc>();
             _path = new List<Loc>();
-
-            ICollection<Loc> tempRange = new HashSet<Loc>();
-            _inRange = Game.MapHandler.GetPointsInRadius(_source.Pos, zone.Range).ToList();
-
-            if (!zone.Pierce)
-            {
-                // Filter the targettable range down to only the tiles we have a direct line on.
-                foreach (Loc point in _inRange)
-                {
-                    Loc collision = _source.Pos;
-                    foreach (Loc current in Game.MapHandler.GetStraightLinePath(_source.Pos, point))
-                    {
-                        if (Game.MapHandler.Field[current].IsWall)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            collision = current;
-                        }
-                    }
-
-                    tempRange.Add(collision);
-                }
-                _inRange = tempRange;
-            }
+            _inRange = zone.GetAllValidTargets(_source.Pos);
 
             // Pick out the interesting targets.
             // TODO: select items for item targetting spells
@@ -194,7 +169,7 @@ namespace GeomaceRL.State
 
         private IEnumerable<Loc> DrawTargettedTiles()
         {
-            IEnumerable<Loc> targets = _targetZone.GetTilesInRange(_source, _cursor);
+            IEnumerable<Loc> targets = _targetZone.GetTilesInRange(_source.Pos, _cursor);
             _targetted.Clear();
             _path.Clear();
 

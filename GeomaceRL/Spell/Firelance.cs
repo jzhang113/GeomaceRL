@@ -8,6 +8,8 @@ namespace GeomaceRL.Spell
     {
         public string Name => "Firelance";
         public string Abbrev => "FL";
+        public bool Instant => false;
+
         public SpellCost Cost => new SpellCost(Element.Fire, Constants.FIRELANCE_COST);
         public TargetZone Zone => new TargetZone(TargetShape.Beam, Constants.FIRELANCE_RANGE);
 

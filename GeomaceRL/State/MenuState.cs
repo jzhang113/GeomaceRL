@@ -44,10 +44,10 @@ namespace GeomaceRL.State
             layer.Print(y++, "Controls:");
             layer.Print(y++, "Vi-keys, arrow keys, or number pad to move");
             layer.Print(y++, "1-6 to cast known spells");
-            layer.Print(y++, "Enter to go down stairs");
-            layer.Print(y++, "Esc to quit to this menu");
+            layer.Print(y++, "While casting, press [[Enter]] to confirm or [[Esc]] to cancer");
+            layer.Print(y++, "[[Esc]] to quit to this menu");
 
-            layer.Print(++y, "Press Enter to start");
+            layer.Print(++y, "Press [[Enter]] to start");
         }
     }
 }
