@@ -54,24 +54,23 @@ namespace GeomaceRL.Command
                 }
             }
 
-            if (!collided)
-            {
-                return MakeMoveCommand(nextPos);
-            }
-            else
+            if (collided)
             {
                 // check if we hit an enemy
                 Loc newPos = nextPos - _dir;
-                return Game.MapHandler.GetActor(nextPos).Match(
-                    some: target =>
-                    {
-                        // collision damage
-                        // TODO: scale collision damage by weight and distance travelled
-                        int damage = target.TakeDamage((Source.Element, Constants.COLLISION_DAMAGE), Source.Pos);
-                        Game.MessagePanel.AddMessage($"{Source.Name} slams into {target.Name} for {damage} hp");
-                        return MakeMoveCommand(newPos);
-                    },
-                    none: () => MakeMoveCommand(newPos));
+                Game.MapHandler.GetActor(nextPos).MatchSome(target =>
+                {
+                    // collision damage
+                    // TODO: scale collision damage by weight and distance travelled
+                    int damage = target.TakeDamage((Source.Element, Constants.COLLISION_DAMAGE), Source.Pos);
+                    Game.MessagePanel.AddMessage($"{Source.Name} slams into {target.Name} for {damage} hp");
+                });
+
+                return MakeMoveCommand(newPos);
+            }
+            else
+            {
+                return MakeMoveCommand(nextPos);
             }
         }
 

@@ -17,6 +17,8 @@ namespace GeomaceRL.Items
             if (actor is Player player)
             {
                 player.SpellList.Add(Spell);
+
+                // TODO: if player already knows a non consumable spell, upgrade?
             }
         }
     }

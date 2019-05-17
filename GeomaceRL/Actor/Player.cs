@@ -7,14 +7,11 @@ namespace GeomaceRL.Actor
 {
     public class Player : Actor
     {
-        //public EquipmentHandler Equipment { get; }
-
         public IDictionary<Element, int> Mana { get; }
         public IList<ISpell> SpellList { get; }
 
         public Player(in Loc pos) : base(pos, Constants.PLAYER_HP, Element.None, '@')
         {
-            //Equipment = new EquipmentHandler();
             Mana = new Dictionary<Element, int>()
             {
                 [Element.Fire] = 0,
@@ -23,6 +20,7 @@ namespace GeomaceRL.Actor
                 [Element.Water] = 0,
             };
 
+            // TODO: Ensure that starting spells are different
             SpellList = new List<ISpell>()
             {
                 SpellHandler.RandomSpell(),
@@ -35,8 +33,7 @@ namespace GeomaceRL.Actor
             Speed = 2;
         }
 
-        // Wait for the input system to set NextCommand. Since Commands don't repeat, clear
-        // NextCommand once it has been sent.
+        // Commands processed in main loop
         public override Option<ICommand> GetAction()
         {
             return Option.None<ICommand>();

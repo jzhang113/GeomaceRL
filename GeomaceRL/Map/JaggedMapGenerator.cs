@@ -98,7 +98,7 @@ namespace GeomaceRL
             }
             else
             {
-                Polygon polygon = new Polygon();
+                var polygon = new Polygon();
                 foreach (Room room in RoomList)
                 {
                     polygon.Add(new Vertex(room.Center.X, room.Center.Y));
@@ -107,7 +107,7 @@ namespace GeomaceRL
                 
                 // Reduce the number of edges and clear out rooms along the remaining edges.
                 ICollection<int>[] adj = BuildAdjacencyList(delaunay.Edges, RoomList.Count);
-                List<Edge> edges = TrimEdges(adj, RoomList).ToList();
+                var edges = TrimEdges(adj, RoomList).ToList();
 
                 // Restore some edges, so exploring is a bit more interesting
                 RestoreEdges(edges, delaunay.Edges.ToList(), adj, _END_TYPE);
@@ -128,7 +128,7 @@ namespace GeomaceRL
             ICollection<int> openPoints, ref int[,] occupied)
         {
             // Default initialization, first room is like all other rooms
-            Room first = new Room(
+            var first = new Room(
                 Rand.Next(Width - _ROOM_SIZE), Rand.Next(Height - _ROOM_SIZE),
                 (int)Rand.NextGamma(_ALPHA, _BETA),
                 (int)Rand.NextGamma(_ALPHA, _BETA));
@@ -193,7 +193,6 @@ namespace GeomaceRL
 
         // Clean up the map by removing stray walls.
         // TODO: fill in 1-tile holes without cutting the map
-        // TODO: identify and mark islands
         private void PostProcess()
         {
             // Sweep from top to bottom.
@@ -395,9 +394,9 @@ namespace GeomaceRL
         private IEnumerable<Edge> TrimEdges(ICollection<int>[] adjacency, IList<Room> rooms)
         {
             // Comparator for MapVertex is defined to give negated, so this is actually a minheap
-            MaxHeap<MapVertex> pq = new MaxHeap<MapVertex>(rooms.Count);
+            var pq = new MaxHeap<MapVertex>(rooms.Count);
 
-            var (firstX, firstY) = rooms[0].Center;
+            (int firstX, int firstY) = rooms[0].Center;
             pq.Add(new MapVertex(0, firstX, firstY, 0));
 
             bool[] inMst = new bool[rooms.Count];
@@ -422,7 +421,7 @@ namespace GeomaceRL
                         continue;
                     }
 
-                    var (neighborX, neighborY) = rooms[neighborID].Center;
+                    (int neighborX, int neighborY) = rooms[neighborID].Center;
                     double newWeight = Distance.EuclideanSquared(min.X, min.Y,
                         neighborX, neighborY);
 
@@ -531,7 +530,7 @@ namespace GeomaceRL
 
         private static ICollection<int>[] BuildAdjacencyList(IEnumerable<Edge> edges, int size)
         {
-            ICollection<int>[] adjacency = new ICollection<int>[size];
+            var adjacency = new ICollection<int>[size];
             for (int i = 0; i < size; i++)
             {
                 adjacency[i] = new List<int>();

@@ -18,6 +18,10 @@ namespace GeomaceRL.Spell
             source.Health = source.MaxHealth;
             Game.CurrentAnimations.Add(new FlashAnimation(targets, Colors.Lightning));
 
+            // TODO: better implementation of consumable spells
+            if (source is Actor.Player player)
+                player.SpellList.Remove(this);
+
             return new WaitCommand(source);
         }
     }

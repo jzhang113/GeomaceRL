@@ -82,37 +82,38 @@ namespace GeomaceRL.State
                 Game.MessagePanel.AddMessage("Not enough mana");
                 return Option.None<ICommand>();
             }
+
+            if (spell.Instant)
+            {
+                if (spell is Spell.Heal)
+                    Game.Player.SpellList.Remove(spell);
+
+                // TODO: multi-hitting instants
+                return spell.Zone.GetAllValidTargets(player.Pos)
+                    .Random(Game.Rand)
+                    .FlatMap(cursor =>
+                    {
+                        System.Collections.Generic.IEnumerable<Loc> targets = spell.Zone.GetTilesInRange(player.Pos, cursor);
+                        PaySpellCost(player, spell, mainMana, altMana);
+
+                        return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
+                    });
+            }
             else
             {
-                if (spell.Instant)
-                {
-                    // TODO: multi-hitting instants
-                    return spell.Zone.GetAllValidTargets(player.Pos)
-                        .Random(Game.Rand)
-                        .FlatMap(cursor =>
-                        {
-                            var targets = spell.Zone.GetTilesInRange(player.Pos, cursor);
-                            PaySpellCost(player, spell, mainMana, altMana);
+                Game.StateHandler.PushState(
+                    new TargettingState(player, spell.Zone, spellnum, targets =>
+                    {
+                        if (!targets.Any())
+                            return Option.None<ICommand>();
 
-                            return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
-                        });
-                }
-                else
-                {
-                    Game.StateHandler.PushState(
-                        new TargettingState(player, spell.Zone, spellnum, targets =>
-                        {
-                            if (!targets.Any())
-                                return Option.None<ICommand>();
+                        PaySpellCost(player, spell, mainMana, altMana);
+                        Game.StateHandler.PopState();
 
-                            PaySpellCost(player, spell, mainMana, altMana);
-                            Game.StateHandler.PopState();
+                        return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
+                    }));
 
-                            return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
-                        }));
-
-                    return Option.None<ICommand>();
-                }
+                return Option.None<ICommand>();
             }
         }
 

@@ -144,9 +144,11 @@ namespace GeomaceRL.Map
         {
             int count = Rand.Next(1, 3);
             for (int i = 0; i < count; i++) {
-                var spell = new SpellScroll(Map.GetRandomOpenPoint(), new Spell.Heal());
+                var spell = new SpellScroll(Map.GetRandomOpenPoint(), SpellHandler.RandomSpell());
                 Map.AddItem(spell);
             }
+
+            // TODO: ensure heal spells get generated when prev level was full cleared
         }
 
         // HACK: ad-hoc placement code
