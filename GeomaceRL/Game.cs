@@ -136,6 +136,7 @@ namespace GeomaceRL
             (int, int) size = _levelSize[_level];
             var mapgen = new JaggedMapGenerator(size.Item1, size.Item2, _level);
             MapHandler = mapgen.Generate();
+            MapHandler.Refresh();
             _level++;
         }
 

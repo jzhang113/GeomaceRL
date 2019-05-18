@@ -49,13 +49,15 @@ namespace GeomaceRL.Command
                 none: () =>
                 {
                     var action = Option.None<ICommand>();
+                    Loc prevLoc = Source.Pos;
+                    Game.MapHandler.SetActorPosition(Source, _nextPos);
 
                     if (Source is Player)
                     {
                         // autodescend
                         Game.MapHandler.Exit.MatchSome(exitPos =>
                         {
-                            if (exitPos == _nextPos)
+                            if (exitPos == Source.Pos)
                             {
                                 Game.MessagePanel.AddMessage("You descend the stairs");
                                 Game.NextLevel();
@@ -64,14 +66,10 @@ namespace GeomaceRL.Command
                         });
 
                         // autopickup
-                        action = Game.MapHandler.GetItem(_nextPos)
+                        action = Game.MapHandler.GetItem(Source.Pos)
                             .FlatMap(item => Option.Some<ICommand>(new PickupCommand(Source, item)));
                     }
-
-                    Loc prevLoc = Source.Pos;
-                    Game.MapHandler.SetActorPosition(Source, _nextPos);
-
-                    if (!(Source is Player))
+                    else
                     {
                         Animation = Option.Some<IAnimation>(new MoveAnimation(Source, prevLoc, Source.Moving));
                         Source.Moving = true;
