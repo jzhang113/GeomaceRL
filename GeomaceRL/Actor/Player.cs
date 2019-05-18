@@ -25,7 +25,6 @@ namespace GeomaceRL.Actor
             {
                 SpellHandler.RandomSpell(),
                 SpellHandler.RandomSpell(),
-                SpellHandler.RandomSpell(),
                 SpellHandler.RandomSpell()
             };
 

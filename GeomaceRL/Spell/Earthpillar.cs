@@ -8,13 +8,13 @@ namespace GeomaceRL.Spell
     {
         public string Name => "Pillars";
         public string Abbrev => "PS";
-        public bool Instant => false;
+        public bool Instant => true;
 
         public SpellCost Cost => new SpellCost(
             Element.Earth, Constants.PILLARS_COST,
             Element.Lightning, Constants.PILLARS_COST);
 
-        public TargetZone Zone => new TargetZone(TargetShape.Self, Constants.PILLARS_RANGE);
+        public TargetZone Zone => new TargetZone(TargetShape.Self, 0, Constants.PILLARS_RANGE);
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
         {

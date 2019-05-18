@@ -144,7 +144,7 @@ namespace GeomaceRL.Map
         {
             int count = Rand.Next(1, 3);
             for (int i = 0; i < count; i++) {
-                var spell = new SpellScroll(Map.GetRandomOpenPoint(), SpellHandler.RandomSpell());
+                var spell = new SpellScroll(Map.GetRandomOpenPoint(), new Spell.Heal());
                 Map.AddItem(spell);
             }
 

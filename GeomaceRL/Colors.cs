@@ -72,7 +72,11 @@ namespace GeomaceRL
         public static void RandomizeMappings()
         {
             Mapping.Clear();
-            Mapping.Add(typeof(Spell.Heal), RandomColor());
+
+            foreach (var type in SpellHandler.AllSpells)
+            {
+                Mapping.Add(type, RandomColor());
+            }
         }
 
         private static Color RandomColor()

@@ -7,7 +7,7 @@ namespace GeomaceRL
 {
     internal static class SpellHandler
     {
-        private static List<Type> AllSpells;
+        public static List<Type> AllSpells { get; }
 
         static SpellHandler()
         {

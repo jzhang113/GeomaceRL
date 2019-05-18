@@ -119,10 +119,8 @@ namespace GeomaceRL
                     Trail.Add(point);
                     collision = point;
 
-                    if (!Game.MapHandler.Field[point.X, point.Y].IsWalkable)
-                    {
+                    if (!Projectile && !Game.MapHandler.Field[point.X, point.Y].IsWalkable)
                         break;
-                    }
                 }
             }
 
