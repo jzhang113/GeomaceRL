@@ -10,7 +10,7 @@ namespace GeomaceRL.Spell
         public string Abbrev => "FL";
         public bool Instant => false;
 
-        public SpellCost Cost => new SpellCost(Element.Fire, Constants.FIRELANCE_COST);
+        public SpellCost Cost => new SpellCost(Element.Fire, (Constants.FIRELANCE_MIN_COST, Constants.FIRELANCE_MAX_COST));
         public TargetZone Zone => new TargetZone(TargetShape.Beam, Constants.FIRELANCE_RANGE);
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)

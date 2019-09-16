@@ -34,26 +34,34 @@
         public const int LEECH_HP = 10;
 
         // Spell constants
-        public const int FIREBOLT_COST = 2;
+        public const int FIREBOLT_MIN_COST = 2;
+        public const int FIREBOLT_MAX_COST = 2;
         public const int FIREBOLT_RANGE = 5;
         public const int FIREBOLT_DAMAGE = 10;
 
-        public const int FIRELANCE_COST = 3;
+        public const int FIRELANCE_MIN_COST = 1;
+        public const int FIRELANCE_MAX_COST = 1;
         public const int FIRELANCE_RANGE = 8;
         public const int FIRELANCE_DAMAGE = 10;
 
-        public const int JETSTREAM_COST = 5;
+        public const int JETSTREAM_MIN_COST = 1;
+        public const int JETSTREAM_MAX_COST = 4;
         public const int JETSTREAM_DAMAGE = 10;
 
-        public const int PILLARS_COST = 2;
-        public const int PILLARS_RANGE = 2;
+        public const int PILLARS_MIN_COST = 1;
+        public const int PILLARS_MAX_COST = 9;
+        public const int PILLARS_RANGE = 1;
 
-        public const int EARTHSHATTER_COST = 4;
+        public const int EARTHSHATTER_MIN_COST = 2;
+        public const int EARTHSHATTER_MAX_COST = 2;
         public const int EARTHSHATTER_DAMAGE = 20;
         public const int EARTHSHATTER_RANGE = 3;
 
-        public const int TELEPORT_MIN = 2;
-        public const int TELEPORT_COST = 4;
+        public const int TELEPORT_MIN = 3;
+        public const int TELEPORT_COST = 3;
         public const int TELEPORT_RANGE = 6;
+
+        public const int HEAL_MIN_COST = 2;
+        public const int HEAL_MAX_COST = 2;
     }
 }

@@ -11,8 +11,8 @@ namespace GeomaceRL.Spell
         public bool Instant => true;
 
         public SpellCost Cost => new SpellCost(
-            Element.Earth, Constants.PILLARS_COST,
-            Element.Lightning, Constants.PILLARS_COST);
+            Element.Earth, (Constants.PILLARS_MIN_COST, Constants.PILLARS_MAX_COST),
+            Element.Lightning, (Constants.PILLARS_MIN_COST, Constants.PILLARS_MAX_COST));
 
         public TargetZone Zone => new TargetZone(TargetShape.Self, 0, Constants.PILLARS_RANGE);
 
@@ -20,9 +20,16 @@ namespace GeomaceRL.Spell
         {
             foreach (Loc loc in targets)
             {
-                (Element elem, int amount) = Game.MapHandler.Mana[loc.X, loc.Y];
+                Element elem = Game.MapHandler.Mana[loc.X, loc.Y];
 
-                if ((elem == Element.Earth || elem == Element.Lightning) && amount > 0)
+                // NOTE: We actually want to create a pillar wherever a mana was expended
+                // However, since we aren't actually tracking this information, and the
+                // Evoke is processed immediately after the mana has been paid, we just cheat
+                // create a pillar on Elementless tiles.
+                // This behavior can be exploited to gain up to seven free pillars. While
+                // this is not a huge advantage currently, this behavior should also be
+                // revisted if additional synergies with pillars are added.
+                if (elem == Element.None)
                 {
                     Game.MapHandler.AddPillar(new Pillar(loc));
                 }

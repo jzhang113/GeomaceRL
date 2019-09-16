@@ -18,6 +18,7 @@ namespace GeomaceRL.Actor
                 [Element.Earth] = 0,
                 [Element.Lightning] = 0,
                 [Element.Water] = 0,
+                [Element.None] = 0
             };
 
             // TODO: Ensure that starting spells are different

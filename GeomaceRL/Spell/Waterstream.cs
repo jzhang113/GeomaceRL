@@ -11,7 +11,7 @@ namespace GeomaceRL.Spell
         public string Abbrev => "JS";
         public bool Instant => false;
 
-        public SpellCost Cost => new SpellCost(Element.Water, (1, Constants.JETSTREAM_COST));
+        public SpellCost Cost => new SpellCost(Element.Water, (Constants.JETSTREAM_MIN_COST, Constants.JETSTREAM_MAX_COST));
         public TargetZone Zone => new TargetZone(TargetShape.Beam, 2 * Cost.MainManaUsed());
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)

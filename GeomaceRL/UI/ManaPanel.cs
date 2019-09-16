@@ -26,31 +26,7 @@ namespace GeomaceRL.UI
             int drawX = (int)startX;
             int offset = (int)((startX - drawX) * Terminal.State(Terminal.TK_CELL_WIDTH));
             int drawY = top;
-            Terminal.Font("text");
 
-            foreach ((int x, int y) in Game.MapHandler.GetPointsInRadius(Game.Player.Pos, 1))
-            {
-                (Element elem, int amount) = Game.MapHandler.Mana[x, y];
-
-                if (!Game.MapHandler.Field[x, y].IsWall)
-                {
-                    Terminal.Color(elem.Color());
-                    Terminal.PutExt(layer.X + drawX, layer.Y + drawY, offset, 0, amount + '0');
-                }
-                else
-                {
-                    Terminal.Color(Colors.Wall);
-                    Terminal.PutExt(layer.X + drawX, layer.Y + drawY, offset, 0, '#');
-                }
-
-                if (++drawY >= top + 3)
-                {
-                    drawX++;
-                    drawY = top;
-                }
-            }
-
-            Terminal.Font("");
             drawY += 4;
             drawX = 0;
             int i = 0;

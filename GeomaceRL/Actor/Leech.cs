@@ -19,18 +19,14 @@ namespace GeomaceRL.Actor
             if (dist == -1 || dist > 7)
                 return Option.None<ICommand>();
 
-            // steal mana or move randomly
-            (Element elem, int amount) = Game.MapHandler.Mana[Pos.X, Pos.Y];
-            if (elem != Element && amount > 0)
+            // snack on mana of their own element
+            Element elem = Game.MapHandler.Mana[Pos.X, Pos.Y];
+            if (elem == Element)
             {
-                int newAmount = amount - 3;
-                if (newAmount < 0)
-                    newAmount = 0;
-
                 if (Game.MapHandler.Field[Pos].IsVisible)
-                    Game.MessagePanel.AddMessage($"Mana eater consumes {amount - newAmount} mana");
+                    Game.MessagePanel.AddMessage($"Mana eater consumes a {elem} mana");
 
-                Game.MapHandler.Mana[Pos.X, Pos.Y] = (elem, newAmount);
+                Game.MapHandler.Mana[Pos.X, Pos.Y] = Element.None;
                 return Option.Some<ICommand>(new WaitCommand(this));
             }
             else

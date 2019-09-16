@@ -49,24 +49,27 @@ namespace GeomaceRL.Map
         {
             int dispX = X - Camera.X;
             int dispY = Y - Camera.Y;
+
+            // Multipliers for the alpha of colors of background colors indicating mana
+            const double backgroundAlphaMult = 0.6;
+            const double unseenAlphaMult = 0.8;
+
+            Element element = Game.MapHandler.Mana[X, Y];
+            if (element != Element.None)
+            {
+                Color color = element.Color();
+                Terminal.Color(color.Blend(Color.Black, backgroundAlphaMult));
+
+                if (!IsVisible)
+                    Terminal.Color(color.Blend(Color.Black, unseenAlphaMult));
+
+                Terminal.Layer(layer.Z - 1);
+                layer.Put(dispX, dispY, '█');
+                Terminal.Layer(layer.Z);
+            }
+
             Terminal.Color(Color);
-
-            if (IsWall)
-            {
-                layer.Put(dispX, dispY, '#');
-            }
-            else
-            {
-                // Terminal.Color(Colors.Floor);
-                layer.Put(dispX, dispY, '.');
-
-                (Element element, int amount) = Game.MapHandler.Mana[X, Y];
-                var color = element.Color();
-                Terminal.Color(color.Blend(Color.Black, 0.6));
-                // Terminal.Layer(layer.Z + 1);
-                layer.PrintMana(dispX, dispY, $"{amount}");
-                // Terminal.Layer(layer.Z);
-            }
+            layer.Put(dispX, dispY, IsWall ? '#' : '.');
         }
     }
 }

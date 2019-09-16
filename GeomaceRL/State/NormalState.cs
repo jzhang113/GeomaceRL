@@ -4,6 +4,7 @@ using GeomaceRL.Input;
 using GeomaceRL.UI;
 using Optional;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GeomaceRL.State
@@ -93,7 +94,7 @@ namespace GeomaceRL.State
                     .Random(Game.Rand)
                     .FlatMap(cursor =>
                     {
-                        System.Collections.Generic.IEnumerable<Loc> targets = spell.Zone.GetTilesInRange(player.Pos, cursor);
+                        IEnumerable<Loc> targets = spell.Zone.GetTilesInRange(player.Pos, cursor);
                         PaySpellCost(player, spell, mainMana, altMana);
 
                         return Option.Some(spell.Evoke(player, targets, (mainMana, altMana)));
@@ -121,8 +122,7 @@ namespace GeomaceRL.State
         {
             Game.MessagePanel.AddMessage($"{player.Name} casts {spell.Name}");
             Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost.MainElem, mainCost);
-            spell.Cost.AltElem.MatchSome(altElem =>
-                Game.MapHandler.UpdateAllMana(player.Pos, altElem, altCost));
+            Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost.AltElem, altCost);
         }
 
         public void Draw(LayerInfo layer) => Game.MapHandler.Draw(layer);

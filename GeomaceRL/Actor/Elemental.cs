@@ -28,7 +28,7 @@ namespace GeomaceRL.Actor
             else if (dist <= 5)
             {
                 // in range, has mana
-                if (Game.MapHandler.Mana[Pos.X, Pos.Y].Item1 == Element)
+                if (Game.MapHandler.Mana[Pos.X, Pos.Y] == Element)
                 {
                     // check LOS exists
                     if (Game.MapHandler.Field[Pos].IsVisible)
@@ -53,7 +53,7 @@ namespace GeomaceRL.Actor
                         Game.MapHandler.Field[point].IsWalkable);
                     foreach (Loc point in nearby)
                     {
-                        if (Game.MapHandler.Mana[point.X, point.Y].Item1 == Element)
+                        if (Game.MapHandler.Mana[point.X, point.Y] == Element)
                             return Option.Some<ICommand>(new MoveCommand(this, point));
                     }
 

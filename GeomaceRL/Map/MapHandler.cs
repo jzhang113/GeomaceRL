@@ -17,7 +17,7 @@ namespace GeomaceRL.Map
 
         internal Field Field { get; }
         internal int[,] Clearance { get; }
-        internal (Element, int)[,] Mana { get; }
+        internal Element[,] Mana { get; }
 
         // internal transient helper structures
         internal int[,] PlayerMap { get; }
@@ -40,7 +40,7 @@ namespace GeomaceRL.Map
 
             Field = new Field(width, height);
             Clearance = new int[width, height];
-            Mana = new (Element, int)[width, height];
+            Mana = new Element[width, height];
             PlayerMap = new int[width, height];
 
             Units = new Dictionary<int, Actor.Actor>();
@@ -63,20 +63,22 @@ namespace GeomaceRL.Map
         #region Mana Calculations
         private void CalcManaTotals()
         {
-            Game.Player.ClearMana();
-            foreach ((int x, int y) in GetPointsInRadius(Game.Player.Pos, 1))
-            {
-                (Element elem, int amount) = Mana[x, y];
+            // How many tiles away can the player obtain mana from?
+            const int playerManaRadius = 1;
 
-                if (!Field[x, y].IsWall)
-                {
-                    Game.Player.Mana[elem] += amount;
-                }
+            Game.Player.ClearMana();
+            foreach ((int x, int y) in GetPointsInRadius(Game.Player.Pos, playerManaRadius))
+            {
+                Element elem = Mana[x, y];
+                Game.Player.Mana[elem] += 1;
             }
         }
 
         internal void UpdateAllMana(in Loc pos, Element elem, int amount)
         {
+            if (elem == Element.None)
+                return;
+
             // take mana from the current square if possible
             int remaining = UpdateMana(pos, elem, amount);
 
@@ -92,24 +94,16 @@ namespace GeomaceRL.Map
 
         private int UpdateMana(Loc pos, Element costElem, int costAmount)
         {
-            (Element currElem, int currAmount) = Mana[pos.X, pos.Y];
+            Element currElem = Mana[pos.X, pos.Y];
             if (currElem == costElem)
             {
-                if (currAmount >= costAmount)
-                {
-                    currAmount -= costAmount;
-                    costAmount = 0;
-                }
-                else
-                {
-                    currAmount = 0;
-                    costAmount -= currAmount;
-                }
-
-                Mana[pos.X, pos.Y] = (currElem, currAmount);
+                Mana[pos.X, pos.Y] = Element.None;
+                return costAmount - 1;
             }
-
-            return costAmount;
+            else
+            {
+                return costAmount;
+            }
         }
         #endregion
 
@@ -703,20 +697,7 @@ namespace GeomaceRL.Map
                     if (!tile.IsExplored)
                         continue;
 
-                    if (tile.IsVisible)
-                    {
-                        tile.Draw(layer);
-                    }
-                    else if (tile.IsWall)
-                    {
-                        Terminal.Color(Colors.WallBackground);
-                        layer.Put(dx, dy, '#');
-                    }
-                    else
-                    {
-                        Terminal.Color(Colors.FloorBackground);
-                        layer.Put(dx, dy, '.');
-                    }
+                    tile.Draw(layer);
                 }
             }
 

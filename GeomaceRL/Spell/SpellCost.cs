@@ -1,83 +1,56 @@
 ﻿using BearLib;
-using Optional;
 using System;
 
 namespace GeomaceRL.Spell
 {
     public class SpellCost
     {
-        private struct ElemCost
+        public Element MainElem { get; }
+        public Element AltElem { get; }
+        public (int, int) MainCost { get; }
+        public (int, int) AltCost { get; }
+
+        public SpellCost(Element main, (int, int) mainRange)
         {
-            public Element Element { get; }
-            public (int Min, int Max) Cost { get; }
-
-            public ElemCost(Element element, (int, int) cost)
-            {
-                Element = element;
-                Cost = cost;
-            }
-        }
-
-        public Element MainElem => _main.Element;
-        public Option<Element> AltElem => _alt.Map(elem => elem.Element);
-
-        private readonly ElemCost _main;
-        private readonly Option<ElemCost> _alt;
-
-        public SpellCost(Element elem, int amount)
-        {
-            _main = new ElemCost(elem, (amount, amount));
-            _alt = Option.None<ElemCost>();
-        }
-
-        public SpellCost(Element elem, (int, int) range)
-        {
-            _main = new ElemCost(elem, range);
-            _alt = Option.None<ElemCost>();
-        }
-
-        public SpellCost(Element main, int mainAmount, Element alt, int altAmount)
-        {
-            _main = new ElemCost(main, (mainAmount, mainAmount));
-            _alt = Option.Some(new ElemCost(alt, (altAmount, altAmount)));
+            MainElem = main;
+            MainCost = mainRange;
+            AltElem = Element.None;
+            AltCost = (0, 0);
         }
 
         public SpellCost(Element main, (int, int) mainRange, Element alt, (int, int) altRange)
         {
-            _main = new ElemCost(main, mainRange);
-            _alt = Option.Some(new ElemCost(alt, altRange));
+            MainElem = main;
+            MainCost = mainRange;
+            AltElem = alt;
+            AltCost = altRange;
         }
 
-        public int MainManaUsed() => ManaUsed(_main);
+        public int MainManaUsed() => ManaUsed(MainElem, MainCost);
 
-        public int AltManaUsed()
+        public int AltManaUsed() => ManaUsed(AltElem, AltCost);
+
+        public string GetMainString() => GetElemString(MainElem, MainCost);
+
+        public string GetAltString() => GetElemString(AltElem, AltCost);
+
+        private int ManaUsed(Element elem, (int Min, int Max) cost)
         {
-            return _alt.Match(
-                some: ManaUsed,
-                none: () => 0);
-        }
-
-        public string GetMainString() => GetElemString(_main);
-
-        public string GetAltString()
-        {
-            return _alt.Match(
-                some: GetElemString,
-                none: () => "");
-        }
-
-        private int ManaUsed(ElemCost elem)
-        {
-            if (Game.Player.Mana[elem.Element] < elem.Cost.Min)
+            if (elem == Element.None)
+                return -1;
+            else if (Game.Player.Mana[elem] < cost.Min)
                 return -1;
             else
-                return Math.Min(Game.Player.Mana[elem.Element], elem.Cost.Max);
+                return Math.Min(Game.Player.Mana[elem], cost.Max);
         }
 
-        private string GetElemString(ElemCost elem)
+        private string GetElemString(Element elem, (int, int) cost)
         {
-            Terminal.Color(elem.Element.Color());
-            return FormatRange(elem.Cost) + elem.Element.Abbrev();
+            Terminal.Color(elem.Color());
+            if (elem == Element.None)
+                return "";
+            else
+                return FormatRange(cost) + elem.Abbrev();
         }
 
         private static string FormatRange((int, int) range)

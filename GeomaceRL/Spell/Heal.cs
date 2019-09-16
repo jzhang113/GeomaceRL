@@ -10,7 +10,9 @@ namespace GeomaceRL.Spell
         public string Abbrev => "H";
         public bool Instant => true;
 
-        public SpellCost Cost => new SpellCost(Element.Water, 2, Element.Lightning, 2);
+        public SpellCost Cost => new SpellCost(
+            Element.Water, (Constants.HEAL_MIN_COST, Constants.HEAL_MAX_COST),
+            Element.Lightning, (Constants.HEAL_MIN_COST, Constants.HEAL_MAX_COST));
         public TargetZone Zone => new TargetZone(TargetShape.Self, 0, 1);
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)

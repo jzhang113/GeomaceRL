@@ -25,24 +25,7 @@ namespace GeomaceRL.Actor
             var nearby = Game.MapHandler.GetPointsInRadius(Pos, 2);
             foreach (Loc point in nearby)
             {
-                int newMana = (int)Game.Rand.NextNormal(2, 2);
-                if (newMana < 0)
-                    newMana = 0;
-
-                (Element elem, int amount) = Game.MapHandler.Mana[point.X, point.Y];
-
-                if (elem == Element)
-                {
-                    newMana += amount;
-                    if (newMana > 9)
-                        newMana = 9;
-                }
-                else if (newMana >= amount)
-                {
-                    elem = Element;
-                }
-
-                Game.MapHandler.Mana[point.X, point.Y] = (elem, newMana);
+                Game.MapHandler.Mana[point.X, point.Y] = Element;
             }
 
             Game.CurrentAnimations.Add(new FlashAnimation(nearby, Element.Color()));
