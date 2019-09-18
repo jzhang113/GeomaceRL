@@ -73,6 +73,8 @@ namespace GeomaceRL.State
             return Option.None<ICommand>();
         }
 
+        public Option<ICommand> HandleMouseMove(int x, int y) => Option.None<ICommand>();
+
         private static Option<ICommand> CastSpell(Player player, int spellnum, Spell.ISpell spell)
         {
             int mainMana = spell.Cost.MainManaUsed();

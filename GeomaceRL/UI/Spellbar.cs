@@ -72,6 +72,21 @@ namespace GeomaceRL.UI
             layer.Put(layer.Width, 0, '│');
             layer.Put(layer.Width, 1, '│');
             layer.Put(layer.Width, 2, '┘');
+
+            // Display more spell info when player mouses over the spellbar
+            int mouseX = Terminal.State(Terminal.TK_MOUSE_X);
+            int mouseY = Terminal.State(Terminal.TK_MOUSE_Y);
+
+            if (!layer.PointInside(mouseX, mouseY))
+                return;
+
+            int adjX = mouseX - layer.X;
+            int currentBox = adjX / boxWidth;
+
+            if (currentBox >= Game.Player.SpellList.Count)
+                return;
+
+            layer.Print(new Rectangle(adjX, -1, 10, 1), Game.Player.SpellList[currentBox].Name, ContentAlignment.TopCenter);
         }
     }
 }

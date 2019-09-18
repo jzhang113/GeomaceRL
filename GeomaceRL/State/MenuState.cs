@@ -30,6 +30,8 @@ namespace GeomaceRL.State
             }
         }
 
+        public Option<ICommand> HandleMouseMove(int x, int y) => Option.None<ICommand>();
+
         public void Draw(LayerInfo layer)
         {
             Terminal.Clear();

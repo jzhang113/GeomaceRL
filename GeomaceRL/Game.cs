@@ -81,6 +81,7 @@ namespace GeomaceRL
                 $"cellsize=auto, title='GeomanceRL';");
             Terminal.Set("font: square.ttf, size = 24x24;");
             Terminal.Set("text font: square.ttf, size = 16x16;");
+            Terminal.Set("input.filter = [keyboard, mouse]");
 
             StateHandler = new StateHandler(new Dictionary<Type, LayerInfo>
             {

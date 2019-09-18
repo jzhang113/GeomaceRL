@@ -56,7 +56,14 @@ namespace GeomaceRL
                 return Option.None<ICommand>();
             }
 
-            return currentState.HandleKeyInput(key);
+            if (key == Terminal.TK_MOUSE_MOVE)
+            {
+                return currentState.HandleMouseMove(Terminal.State(Terminal.TK_MOUSE_X), Terminal.State(Terminal.TK_MOUSE_Y));
+            }
+            else
+            {
+                return currentState.HandleKeyInput(key);
+            }
         }
 
         public void PopState() => _states.Pop();

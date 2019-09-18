@@ -75,6 +75,8 @@ namespace GeomaceRL.State
             {
                 case TargettingInput.None:
                     return Option.None<ICommand>();
+
+                #region Jump movement
                 case TargettingInput.JumpW:
                     JumpTarget(Direction.W);
                     break;
@@ -99,6 +101,9 @@ namespace GeomaceRL.State
                 case TargettingInput.JumpSE:
                     JumpTarget(Direction.SE);
                     break;
+                #endregion
+
+                #region Step movement
                 case TargettingInput.MoveW:
                     MoveTarget(Direction.W);
                     break;
@@ -127,6 +132,8 @@ namespace GeomaceRL.State
                     MoveTarget(Direction.S);
                     MoveTarget(Direction.E);
                     break;
+                #endregion
+
                 case TargettingInput.NextActor:
                     if (_targettableActors.Count > 0)
                     {
@@ -149,6 +156,8 @@ namespace GeomaceRL.State
                 ? _callback(targets)
                 : Option.None<ICommand>();
         }
+
+        public Option<ICommand> HandleMouseMove(int x, int y) => Option.None<ICommand>();
 
         private void MoveTarget(in Loc direction)
         {
