@@ -37,7 +37,7 @@ namespace GeomaceRL.Spell
         private int ManaUsed(Element elem, (int Min, int Max) cost)
         {
             if (elem == Element.None)
-                return -1;
+                return 0;
             else if (Game.Player.Mana[elem] < cost.Min)
                 return -1;
             else

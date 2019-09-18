@@ -15,8 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ilmerge" Version="3.0.21" />
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
     <PackageReference Include="Optional" Version="4.0.0" />
     <PackageReference Include="PcgRandom" Version="1.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
