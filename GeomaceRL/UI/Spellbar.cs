@@ -7,6 +7,9 @@ namespace GeomaceRL.UI
 {
     internal static class Spellbar
     {
+        private const char _manaChar = 'o';
+        private const char _extraChar = '.';
+
         public static void Draw(LayerInfo layer)
         {
             // draw borders, right border will be fixed at the end
@@ -21,8 +24,8 @@ namespace GeomaceRL.UI
             });
 
             const int boxWidth = 7;
-            const int halfBox = 3;
             int casting = -1;
+
             Game.StateHandler.Peek().MatchSome(state =>
             {
                 if (state is TargettingState targetting)
@@ -37,20 +40,17 @@ namespace GeomaceRL.UI
                 if (x < Game.Player.SpellList.Count)
                 {
                     ISpell spell = Game.Player.SpellList[x];
+                    (int minMainCost, int maxMainCost) = spell.Cost.MainCost;
+                    int minAltCost = spell.Cost.AltCost.Item1;
 
                     Terminal.Color(casting == x ? Colors.HighlightColor : Colors.Text);
                     layer.Print(
                         new Rectangle(startX, 0, boxWidth - 1, 1),
                         $"{(char)(x + '1')} {spell.Abbrev}",
                         ContentAlignment.TopLeft);
-                    layer.Print(
-                        new Rectangle(startX, 1, halfBox + 1, 1),
-                        spell.Cost.GetMainString(),
-                        ContentAlignment.TopLeft);
-                    layer.Print(
-                        new Rectangle(startX + halfBox, 1, halfBox, 1),
-                        spell.Cost.GetAltString(),
-                        ContentAlignment.TopLeft);
+
+                    DisplayManaCost(layer, startX, 1, spell.Cost.MainElem.Color(), spell.Cost.MainCost, spell.Cost.MainManaUsed());
+                    DisplayManaCost(layer, startX, 2, spell.Cost.AltElem.Color(), spell.Cost.AltCost, spell.Cost.AltManaUsed());
                 }
                 else
                 {
@@ -61,32 +61,39 @@ namespace GeomaceRL.UI
                 }
 
                 Terminal.Color(Colors.BorderColor);
+                for (int y = 0; y < layer.Height; y++) layer.Put(endX, y, '║');
                 layer.Put(endX, -1, '╥');
-                layer.Put(endX, 0, '║');
-                layer.Put(endX, 1, '║');
-                layer.Put(endX, 2, '╨');
+                layer.Put(endX, layer.Height, '╨');
             }
 
             // fix right border
+            for (int y = 0; y < layer.Height; y++)
+                layer.Put(layer.Width, y, '│');
             layer.Put(layer.Width, -1, '┤');
-            layer.Put(layer.Width, 0, '│');
-            layer.Put(layer.Width, 1, '│');
-            layer.Put(layer.Width, 2, '┘');
+            layer.Put(layer.Width, layer.Height, '┘');
+        }
 
-            // Display more spell info when player mouses over the spellbar
-            int mouseX = Terminal.State(Terminal.TK_MOUSE_X);
-            int mouseY = Terminal.State(Terminal.TK_MOUSE_Y);
+        private static void DisplayManaCost(LayerInfo layer, int startX, int startY, Color color, (int Min, int Max) cost, int used)
+        {
+            const double alpha = 0.7;
 
-            if (!layer.PointInside(mouseX, mouseY))
-                return;
+            // minimum casting cost
+            Terminal.Color(color.Blend(Colors.Background, alpha));
+            for (int dx = 0; dx < cost.Min; dx++)
+                layer.Put(startX + dx, startY, _manaChar);
 
-            int adjX = mouseX - layer.X;
-            int currentBox = adjX / boxWidth;
+            if (cost.Max > cost.Min)
+            {
+                // variable casting cost
+                Terminal.Color(color.Blend(Colors.Background, alpha));
+                for (int dx = cost.Min; dx < cost.Max; dx++)
+                    layer.Put(startX + dx, startY, _extraChar);
+            }
 
-            if (currentBox >= Game.Player.SpellList.Count)
-                return;
-
-            layer.Print(new Rectangle(adjX, -1, 10, 1), Game.Player.SpellList[currentBox].Name, ContentAlignment.TopCenter);
+            // actual current cost
+            Terminal.Color(color);
+            for (int dx = 0; dx < used; dx++)
+                layer.Put(startX + dx, startY, _manaChar);
         }
     }
 }

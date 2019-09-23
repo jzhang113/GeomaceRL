@@ -1,5 +1,4 @@
-﻿using BearLib;
-using System;
+﻿using System;
 
 namespace GeomaceRL.Spell
 {
@@ -30,35 +29,14 @@ namespace GeomaceRL.Spell
 
         public int AltManaUsed() => ManaUsed(AltElem, AltCost);
 
-        public string GetMainString() => GetElemString(MainElem, MainCost);
-
-        public string GetAltString() => GetElemString(AltElem, AltCost);
-
         private int ManaUsed(Element elem, (int Min, int Max) cost)
         {
             if (elem == Element.None)
                 return 0;
             else if (Game.Player.Mana[elem] < cost.Min)
-                return -1;
+                return Game.Player.Mana[elem];
             else
                 return Math.Min(Game.Player.Mana[elem], cost.Max);
-        }
-
-        private string GetElemString(Element elem, (int, int) cost)
-        {
-            Terminal.Color(elem.Color());
-            if (elem == Element.None)
-                return "";
-            else
-                return FormatRange(cost) + elem.Abbrev();
-        }
-
-        private static string FormatRange((int, int) range)
-        {
-            if (range.Item1 == range.Item2)
-                return range.Item1.ToString();
-            else
-                return $"{range.Item1}-{range.Item2}";
         }
     }
 }

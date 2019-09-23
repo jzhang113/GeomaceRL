@@ -58,10 +58,10 @@ namespace GeomaceRL.Map
             if (element != Element.None)
             {
                 Color color = element.Color();
-                Terminal.Color(color.Blend(Color.Black, backgroundAlphaMult));
+                Terminal.Color(color.Blend(Colors.Background, backgroundAlphaMult));
 
                 if (!IsVisible)
-                    Terminal.Color(color.Blend(Color.Black, unseenAlphaMult));
+                    Terminal.Color(color.Blend(Colors.Background, unseenAlphaMult));
 
                 Terminal.Layer(layer.Z - 1);
                 layer.Put(dispX, dispY, '█');

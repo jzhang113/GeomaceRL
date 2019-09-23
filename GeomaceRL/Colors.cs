@@ -23,6 +23,8 @@ namespace GeomaceRL
 
         public static Color Text = Swatch.DbLight;
         public static Color DimText = Swatch.SecondaryDarkest;
+        public static Color Background = Color.Black;
+
         public static Color RowHighlight = Swatch.ComplimentDarkest;
         public static Color ButtonBackground = Swatch.Alternate;
         public static Color ButtonBorder = Swatch.Secondary;
@@ -30,9 +32,6 @@ namespace GeomaceRL
 
         public static Color BorderColor = Swatch.Primary;
         public static Color HighlightColor = Swatch.Secondary;
-
-        public static Color PlayerThreat = Swatch.Primary;
-        public static Color EnemyThreat = Swatch.Compliment;
 
         // Elements
         public static Color Lightning = Color.FromArgb(0, 255, 0);

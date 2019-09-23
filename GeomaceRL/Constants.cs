@@ -13,7 +13,7 @@
         public const int MAPVIEW_HEIGHT = 25;
         public const int SIDEBAR_WIDTH = 10;
         public const int MESSAGE_HEIGHT = 5;
-        public const int SPELLBAR_HEIGHT = 2;
+        public const int SPELLBAR_HEIGHT = 3;
 
         public const int SCREEN_WIDTH = MAPVIEW_WIDTH + SIDEBAR_WIDTH + 1;
         public const int SCREEN_HEIGHT = MAPVIEW_HEIGHT + MESSAGE_HEIGHT + SPELLBAR_HEIGHT + 2;
@@ -34,6 +34,7 @@
         public const int LEECH_HP = 1;
 
         // Spell constants
+        // Due to UI limitations, MAX_COST should not be > 6
         public const int FIREBOLT_MIN_COST = 2;
         public const int FIREBOLT_MAX_COST = 2;
         public const int FIREBOLT_RANGE = 5;
@@ -49,7 +50,7 @@
         public const int JETSTREAM_DAMAGE = 1;
 
         public const int PILLARS_MIN_COST = 1;
-        public const int PILLARS_MAX_COST = 9;
+        public const int PILLARS_MAX_COST = 6;
         public const int PILLARS_RANGE = 1;
 
         public const int EARTHSHATTER_MIN_COST = 2;

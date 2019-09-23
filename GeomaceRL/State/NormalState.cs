@@ -79,8 +79,10 @@ namespace GeomaceRL.State
         {
             int mainMana = spell.Cost.MainManaUsed();
             int altMana = spell.Cost.AltManaUsed();
+            int minMainCost = spell.Cost.MainCost.Item1;
+            int minAltCost = spell.Cost.AltCost.Item1;
 
-            if (mainMana == -1 || altMana == -1)
+            if (mainMana < minMainCost || mainMana < minAltCost)
             {
                 Game.MessagePanel.AddMessage("Not enough mana");
                 return Option.None<ICommand>();
