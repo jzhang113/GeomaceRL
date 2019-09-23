@@ -1,6 +1,5 @@
 ﻿using BearLib;
 using GeomaceRL.Actor;
-using System.Drawing;
 
 namespace GeomaceRL.UI
 {
@@ -17,49 +16,28 @@ namespace GeomaceRL.UI
                 LeftChar = '│' // 179
             });
 
+            const char hpSymbol = '*';
             int drawY = 0;
+
             foreach (Actor.Actor actor in Game.MapHandler.Units.Values)
             {
                 if (Game.MapHandler.Field[actor.Pos].IsVisible && !(actor is Pillar))
                 {
-                    Terminal.Layer(layer.Z + 3);
                     Terminal.Color(actor.Color);
                     layer.Put(0, drawY, actor.Symbol);
 
-                    Terminal.Color(Colors.Text);
-                    layer.Print(
-                        new Rectangle(1, drawY, layer.Width - 1, 1),
-                        $":{actor.Health}/{actor.MaxHealth}",
-                        ContentAlignment.TopLeft);
-
-                    double hpFrac = (double)actor.Health / actor.MaxHealth;
-                    double width = hpFrac * (layer.Width - 3);
-                    int intWidth = (int)width;
-                    double fracWidth = width - intWidth;
-
-                    Terminal.Color(Swatch.DbOldBlood);
-                    Terminal.Layer(layer.Z);
-                    for (int i = 2; i < layer.Width - 1; i++)
-                    {
-                        layer.Put(i, drawY, '█');
-                    }
-
                     Terminal.Color(Swatch.DbBlood);
-                    Terminal.Layer(layer.Z + 1);
-                    Terminal.PutExt(
-                        layer.X + intWidth + 1,
-                        layer.Y + drawY,
-                        (int)(fracWidth * Terminal.State(Terminal.TK_CELL_WIDTH)),
-                        0, '█');
-
-                    Terminal.Layer(layer.Z + 2);
-                    for (int i = 0; i < intWidth; i++)
+                    for (int n = 0; n < actor.Health; n++)
                     {
-                        layer.Put(i + 2, drawY, '█');
+                        layer.Put(2 + n, drawY, hpSymbol);
                     }
 
-                    Terminal.Color("black");
-                    layer.Put(1, drawY, '█');
+                    Terminal.Color(Swatch.DbMetal);
+                    for (int n = actor.Health; n < actor.MaxHealth; n++)
+                    {
+                        layer.Put(2 + n, drawY, hpSymbol);
+                    }
+
                     drawY++;
                 }
             }

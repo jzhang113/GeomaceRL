@@ -24,29 +24,29 @@
 
         // Misc constants
         public const int MESSAGE_HISTORY_COUNT = 100;
-        public const int GEN_ATTACK = 10;
-        public const int COLLISION_DAMAGE = 10;
+        public const int GEN_ATTACK = 1;
+        public const int COLLISION_DAMAGE = 1;
 
         // Base hp constants
-        public const int SPRITE_HP = 10;
-        public const int PLAYER_HP = 100;
-        public const int ELEMENTAL_HP = 20;
-        public const int LEECH_HP = 10;
+        public const int SPRITE_HP = 1;
+        public const int PLAYER_HP = 8;
+        public const int ELEMENTAL_HP = 2;
+        public const int LEECH_HP = 1;
 
         // Spell constants
         public const int FIREBOLT_MIN_COST = 2;
         public const int FIREBOLT_MAX_COST = 2;
         public const int FIREBOLT_RANGE = 5;
-        public const int FIREBOLT_DAMAGE = 10;
+        public const int FIREBOLT_DAMAGE = 1;
 
         public const int FIRELANCE_MIN_COST = 1;
         public const int FIRELANCE_MAX_COST = 1;
         public const int FIRELANCE_RANGE = 8;
-        public const int FIRELANCE_DAMAGE = 10;
+        public const int FIRELANCE_DAMAGE = 1;
 
         public const int JETSTREAM_MIN_COST = 1;
         public const int JETSTREAM_MAX_COST = 4;
-        public const int JETSTREAM_DAMAGE = 10;
+        public const int JETSTREAM_DAMAGE = 1;
 
         public const int PILLARS_MIN_COST = 1;
         public const int PILLARS_MAX_COST = 9;
@@ -54,7 +54,7 @@
 
         public const int EARTHSHATTER_MIN_COST = 2;
         public const int EARTHSHATTER_MAX_COST = 2;
-        public const int EARTHSHATTER_DAMAGE = 20;
+        public const int EARTHSHATTER_DAMAGE = 2;
         public const int EARTHSHATTER_RANGE = 3;
 
         public const int TELEPORT_MIN = 3;
