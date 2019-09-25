@@ -35,6 +35,7 @@
 
         // Spell constants
         // Due to UI limitations, MAX_COST should not be > 6
+        // Similarly, if CHARGES are defined, they should not be > 9
         public const int FIREBOLT_MIN_COST = 2;
         public const int FIREBOLT_MAX_COST = 2;
         public const int FIREBOLT_RANGE = 5;
@@ -61,8 +62,10 @@
         public const int TELEPORT_MIN = 3;
         public const int TELEPORT_COST = 3;
         public const int TELEPORT_RANGE = 6;
+        public const int TELEPORT_CHARGES = 3;
 
         public const int HEAL_MIN_COST = 2;
         public const int HEAL_MAX_COST = 2;
+        public const int HEAL_CHARGES = 1;
     }
 }

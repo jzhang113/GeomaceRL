@@ -10,6 +10,8 @@ namespace GeomaceRL.Spell
         public string Abbrev => "H";
         public bool Instant => true;
 
+        public int Charges { get; set; } = Constants.HEAL_CHARGES;
+
         public SpellCost Cost => new SpellCost(
             Element.Water, (Constants.HEAL_MIN_COST, Constants.HEAL_MAX_COST),
             Element.Lightning, (Constants.HEAL_MIN_COST, Constants.HEAL_MAX_COST));
@@ -19,10 +21,6 @@ namespace GeomaceRL.Spell
         {
             source.Health = source.MaxHealth;
             Game.CurrentAnimations.Add(new FlashAnimation(targets, Colors.Lightning));
-
-            // TODO: better implementation of consumable spells
-            if (source is Actor.Player player)
-                player.SpellList.Remove(this);
 
             return new WaitCommand(source);
         }

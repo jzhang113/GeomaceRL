@@ -10,6 +10,8 @@ namespace GeomaceRL.Spell
         public string Abbrev => "PS";
         public bool Instant => true;
 
+        public int Charges { get; set; } = -1;
+
         public SpellCost Cost => new SpellCost(
             Element.Earth, (Constants.PILLARS_MIN_COST, Constants.PILLARS_MAX_COST),
             Element.Lightning, (Constants.PILLARS_MIN_COST, Constants.PILLARS_MAX_COST));

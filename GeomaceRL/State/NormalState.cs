@@ -90,9 +90,6 @@ namespace GeomaceRL.State
 
             if (spell.Instant)
             {
-                if (spell is Spell.Heal)
-                    Game.Player.SpellList.Remove(spell);
-
                 // TODO: multi-hitting instants
                 return spell.Zone.GetAllValidTargets(player.Pos)
                     .Random(Game.Rand)
@@ -125,8 +122,16 @@ namespace GeomaceRL.State
         private static void PaySpellCost(Player player, Spell.ISpell spell, int mainCost, int altCost)
         {
             Game.MessagePanel.AddMessage($"{player.Name} casts {spell.Name}");
+
+            // update mana
             Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost.MainElem, mainCost);
             Game.MapHandler.UpdateAllMana(player.Pos, spell.Cost.AltElem, altCost);
+
+            // remove charges if applicable
+            if (spell.Charges > 1)
+                spell.Charges--;
+            else if (spell.Charges == 1)
+                player.SpellList.Remove(spell);
         }
 
         public void Draw(LayerInfo layer) => Game.MapHandler.Draw(layer);

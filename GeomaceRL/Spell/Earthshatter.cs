@@ -11,6 +11,8 @@ namespace GeomaceRL.Spell
         public string Abbrev => "ES";
         public bool Instant => true;
 
+        public int Charges { get; set; } = -1;
+
         public SpellCost Cost => new SpellCost(Element.Earth, (Constants.EARTHSHATTER_MIN_COST, Constants.EARTHSHATTER_MAX_COST));
         public TargetZone Zone => new TargetZone(TargetShape.Self, 0, Constants.EARTHSHATTER_RANGE);
 

@@ -44,9 +44,13 @@ namespace GeomaceRL.UI
                     int minAltCost = spell.Cost.AltCost.Item1;
 
                     Terminal.Color(casting == x ? Colors.HighlightColor : Colors.Text);
+                    string firstLine = $"{(char)(x + '1')} {spell.Abbrev}";
+                    firstLine += spell.Abbrev.Length == 1 ? "  " : " ";
+                    firstLine += spell.Charges > 0 ? spell.Charges.ToString() : "-";
+
                     layer.Print(
                         new Rectangle(startX, 0, boxWidth - 1, 1),
-                        $"{(char)(x + '1')} {spell.Abbrev}",
+                        firstLine,
                         ContentAlignment.TopLeft);
 
                     DisplayManaCost(layer, startX, 1, spell.Cost.MainElem.Color(), spell.Cost.MainCost, spell.Cost.MainManaUsed());

@@ -9,7 +9,11 @@ namespace GeomaceRL.Spell
 
         string Abbrev { get; }
 
+        // Instant spells are untargetted.
         bool Instant { get; }
+
+        // Number of times this spell may be cast. Spells with -1 charges are infinite.
+        int Charges { get; set; }
 
         SpellCost Cost { get; }
 
