@@ -18,9 +18,9 @@ namespace GeomaceRL.Spell
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
         {
-            Game.CurrentAnimations.Add(new FlashAnimation(targets.Where(pos => Distance.Chebyshev(pos, source.Pos) == 1), Element.Earth.Color()));
-            Game.CurrentAnimations.Add(new FlashAnimation(targets.Where(pos => Distance.Chebyshev(pos, source.Pos) == 2), Element.Earth.Color()));
-            Game.CurrentAnimations.Add(new FlashAnimation(targets.Where(pos => Distance.Chebyshev(pos, source.Pos) == 3), Element.Earth.Color()));
+            Game.Animations.Add(source.Id, new FlashAnimation(targets.Where(pos => Distance.Chebyshev(pos, source.Pos) == 1), Element.Earth.Color()));
+            Game.Animations.Add(source.Id, new FlashAnimation(targets.Where(pos => Distance.Chebyshev(pos, source.Pos) == 2), Element.Earth.Color()));
+            Game.Animations.Add(source.Id, new FlashAnimation(targets.Where(pos => Distance.Chebyshev(pos, source.Pos) == 3), Element.Earth.Color()));
 
             return new AttackCommand(source, (Element.Earth, Constants.EARTHSHATTER_DAMAGE), targets);
         }

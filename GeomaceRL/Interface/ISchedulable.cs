@@ -5,6 +5,7 @@ namespace GeomaceRL.Interface
 {
     public interface ISchedulable
     {
+        int Id { get; }
         string Name { get; }
         int Speed { get; }
 

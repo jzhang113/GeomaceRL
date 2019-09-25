@@ -34,7 +34,7 @@ namespace GeomaceRL.Actor
                     if (Game.MapHandler.Field[Pos].IsVisible)
                     {
                         Game.MapHandler.UpdateAllMana(Pos, Element, 2);
-                        Game.CurrentAnimations.Add(new FlashAnimation(
+                        Game.Animations.Add(Id, new FlashAnimation(
                             new Loc[] { Game.Player.Pos }, Element.Color()));
                         return Option.Some<ICommand>(new AttackCommand(
                            this,

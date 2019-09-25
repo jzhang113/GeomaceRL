@@ -18,7 +18,8 @@ namespace GeomaceRL.Spell
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
         {
-            Game.CurrentAnimations.Add(
+            Game.Animations.Add(
+                source.Id,
                 new LaserAnimation(targets, Element.Water.Color(), Colors.WaterAccent));
 
             Loc dir = Distance.GetNearestDirection(source.Pos, targets.First());

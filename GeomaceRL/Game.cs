@@ -18,11 +18,10 @@ namespace GeomaceRL
         public static EventScheduler EventScheduler { get; private set; }
         public static MessagePanel MessagePanel { get; private set; }
         public static Player Player { get; private set; }
+        public static AnimationHandler Animations { get; private set; }
 
         public static PcgRandom Rand { get; private set; }
         public static PcgRandom VisRand { get; private set; }
-
-        internal static ICollection<IAnimation> CurrentAnimations { get; private set; }
 
         internal static TimeSpan Ticks;
         internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
@@ -49,7 +48,7 @@ namespace GeomaceRL
 
         private static void Main(string[] args)
         {
-            CurrentAnimations = new List<IAnimation>();
+            Animations = new AnimationHandler();
             Rand = new PcgRandom();
             VisRand = new PcgRandom();
 
@@ -105,7 +104,7 @@ namespace GeomaceRL
         {
             StateHandler.Reset();
             MessagePanel.Clear();
-            CurrentAnimations.Clear();
+            Animations.Clear();
             Player = new Player(new Loc(0, 0));
 
             Colors.RandomizeMappings();
@@ -120,7 +119,7 @@ namespace GeomaceRL
 
         internal static void NextLevel()
         {
-            CurrentAnimations.Clear();
+            Animations.Clear();
             EventScheduler.Clear();
 
             if (_level >= 5)
@@ -159,7 +158,6 @@ namespace GeomaceRL
 
             const int updateLimit = 10;
             TimeSpan maxDt = FrameRate * updateLimit;
-            IAnimation current = null;
 
             while (!_exiting)
             {
@@ -175,9 +173,9 @@ namespace GeomaceRL
 
                 while (accum >= FrameRate)
                 {
-                    if (current == null)
+                    if (Animations.IsDone())
                     {
-                        EventScheduler.ExecuteCommand(StateHandler.HandleInput(), () =>
+                        EventScheduler.ExecuteCommand(0, StateHandler.HandleInput(), () =>
                         {
                             if (!PrevCancelled)
                             {
@@ -200,35 +198,7 @@ namespace GeomaceRL
                 }
 
                 double remaining = accum / FrameRate;
-
-                if (current == null)
-                {
-                    current = CurrentAnimations.FirstOrDefault();
-                }
-                else if (current.Update(frameTime) || EventScheduler.Turn > current.Turn + 1)
-                {
-                    current.Cleanup();
-                    CurrentAnimations.Remove(current);
-
-                    if (current is MoveAnimation currMove
-                        && MapHandler.Field[currMove._source.Pos].IsVisible)
-                    {
-                        currMove._source.ShouldDraw = true;
-
-                        foreach (IAnimation animation in CurrentAnimations)
-                        {
-                            if (animation != current
-                                && animation is MoveAnimation nextMove
-                                && nextMove._source == currMove._source)
-                            {
-                                nextMove._source.ShouldDraw = false;
-                                nextMove._multmove = false;
-                            }
-                        }
-                    }
-
-                    current = CurrentAnimations.FirstOrDefault();
-                }
+                Animations.Run(frameTime, remaining);
 
                 Render();
             }
@@ -247,11 +217,7 @@ namespace GeomaceRL
                 MessagePanel.Draw(_messageLayer);
             }
             StateHandler.Draw();
-
-            foreach (IAnimation animation in CurrentAnimations)
-            {
-                animation.Draw(_mapLayer);
-            }
+            Animations.Draw(_mapLayer);
 
             Terminal.Refresh();
         }

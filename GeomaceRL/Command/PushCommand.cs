@@ -28,8 +28,8 @@ namespace GeomaceRL.Command
                 Game.MessagePanel.AddMessage($"{_source.Name} pushes {_target.Name}");
                 Game.MapHandler.SetActorPosition(_target, next);
                 Game.MapHandler.SetActorPosition(_source, curr);
-                Game.CurrentAnimations.Add(new MoveAnimation(_target, curr));
-                Game.CurrentAnimations.Add(new MoveAnimation(_source, prev));
+                Game.Animations.Add(_target.Id, new MoveAnimation(_target, curr));
+                Game.Animations.Add(_source.Id, new MoveAnimation(_source, prev));
             }
             else if (_source is Actor.Player)
             {

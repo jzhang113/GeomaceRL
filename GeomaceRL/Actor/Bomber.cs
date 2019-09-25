@@ -28,7 +28,7 @@ namespace GeomaceRL.Actor
                 Game.MapHandler.Mana[point.X, point.Y] = Element;
             }
 
-            Game.CurrentAnimations.Add(new FlashAnimation(nearby, Element.Color()));
+            Game.Animations.Add(Id, new FlashAnimation(nearby, Element.Color()));
             return Option.Some<ICommand>(new AttackCommand(
                    this, (Element, Constants.GEN_ATTACK * 2), nearby));
         }

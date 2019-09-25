@@ -20,7 +20,7 @@ namespace GeomaceRL.Spell
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
         {
             source.Health = source.MaxHealth;
-            Game.CurrentAnimations.Add(new FlashAnimation(targets, Colors.Lightning));
+            Game.Animations.Add(source.Id, new FlashAnimation(targets, Colors.Lightning));
 
             return new WaitCommand(source);
         }

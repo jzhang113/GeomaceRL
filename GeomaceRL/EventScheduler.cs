@@ -53,7 +53,7 @@ namespace GeomaceRL
                         }
                         else
                         {
-                            ExecuteCommand(entity.Act(), () => { });
+                            ExecuteCommand(entity.Id, entity.Act(), () => { });
                         }
                     }
                     else
@@ -64,7 +64,7 @@ namespace GeomaceRL
             }
         }
 
-        internal static void ExecuteCommand(Option<ICommand> action, Action after)
+        internal static void ExecuteCommand(int sourceId, Option<ICommand> action, Action after)
         {
             action.MatchSome(command =>
             {
@@ -80,7 +80,7 @@ namespace GeomaceRL
                     });
                 }
 
-                animation.MatchSome(anim => Game.CurrentAnimations.Add(anim));
+                animation.MatchSome(anim => Game.Animations.Add(sourceId, anim));
                 after();
             });
         }

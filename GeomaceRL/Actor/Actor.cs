@@ -10,6 +10,9 @@ namespace GeomaceRL.Actor
 {
     public abstract class Actor : ISchedulable, IDrawable
     {
+        private static int GlobalId = 0;
+        public int Id { get; }
+
         public string Name { get; protected set; } = "Monster";
         public Color Color { get; protected set; }
         public char Symbol { get; }
@@ -36,6 +39,8 @@ namespace GeomaceRL.Actor
             Color = element.Color();
             Symbol = symbol;
             ShouldDraw = true;
+
+            Id = GlobalId++;
         }
 
         public virtual Option<ICommand> TriggerDeath()

@@ -44,7 +44,8 @@ namespace GeomaceRL.Actor
                 if (!Game.MapHandler.Field.IsValid(target))
                     continue;
 
-                Game.CurrentAnimations.Add(
+                Game.Animations.Add(
+                    Id,
                     new TrailAnimation(
                         Game.MapHandler.GetStraightLinePath(Pos, target)
                             .Where(point => !Game.MapHandler.Field[point].IsWall), Color, 1));
