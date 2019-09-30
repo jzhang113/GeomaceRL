@@ -10,42 +10,41 @@ namespace GeomaceRL.Actor
 {
     public abstract class Actor : ISchedulable, IDrawable
     {
-        private static int GlobalId = 0;
         public int Id { get; }
 
-        public string Name { get; protected set; } = "Monster";
-        public Color Color { get; protected set; }
+        public string Name { get; }
         public char Symbol { get; }
+        public Color Color { get; protected set; }
         public bool ShouldDraw { get; set; }
         internal bool Moving { get; set; }
 
         public Loc Pos { get; set; }
         public bool BlocksLight { get; protected set; } = false;
+        public int Health { get; set; }
 
         public int MaxHealth { get; }
-        public int Health { get; set; }
+        public int Speed { get; }
         public Element Element { get; }
 
-        public int Speed { get; protected set; } = 1;
         public bool IsDead => Health <= 0;
 
-        protected Actor(in Loc pos, int hp, Element element, char symbol)
+        protected Actor(in Loc pos, Element element)
         {
-            Pos = pos;
-            MaxHealth = hp;
-            Health = hp;
+            (Name, Symbol, MaxHealth, Speed) = Game.ActorData[GetType()];
 
+            Id = Game.GlobalId++;
             Element = element;
             Color = element.Color();
-            Symbol = symbol;
             ShouldDraw = true;
 
-            Id = GlobalId++;
+            Pos = pos;
+            Health = MaxHealth;
         }
 
         public virtual Option<ICommand> TriggerDeath()
         {
             Game.MapHandler.RemoveActor(this);
+            Game.Player.KillCount[GetType()]++;
 
             if (Game.MapHandler.Field[Pos].IsVisible)
             {

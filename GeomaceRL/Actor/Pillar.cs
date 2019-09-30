@@ -7,10 +7,9 @@ namespace GeomaceRL.Actor
 {
     internal class Pillar : Actor
     {
-        public Pillar(in Loc pos) : base(pos, 1, Element.Earth, 'o')
+        public Pillar(in Loc pos) : base(pos, Element.Earth)
         {
             Color = Colors.Wall;
-            Name = "Pillar";
             BlocksLight = true;
         }
 

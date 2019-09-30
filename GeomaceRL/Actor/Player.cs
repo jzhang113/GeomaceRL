@@ -1,7 +1,9 @@
 ﻿using GeomaceRL.Command;
 using GeomaceRL.Spell;
 using Optional;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GeomaceRL.Actor
 {
@@ -10,7 +12,11 @@ namespace GeomaceRL.Actor
         public IDictionary<Element, int> Mana { get; }
         public IList<ISpell> SpellList { get; }
 
-        public Player(in Loc pos) : base(pos, Constants.PLAYER_HP, Element.None, '@')
+        // Play statistics
+        public int SpellsKnown { get; private set; }
+        public IDictionary<Type, int> KillCount { get; }
+
+        public Player(in Loc pos) : base(pos, Element.None)
         {
             Mana = new Dictionary<Element, int>()
             {
@@ -29,13 +35,29 @@ namespace GeomaceRL.Actor
                 SpellHandler.RandomSpell()
             };
 
-            Name = "Player";
-            Speed = 2;
+            SpellsKnown = SpellList.Count;
+
+            Type actorType = typeof(Actor);
+            KillCount = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => actorType.IsAssignableFrom(p) && p.IsClass)
+                .ToDictionary(x => x, _ => 0);
+        }
+
+        public void LearnSpell(ISpell spell)
+        {
+            // TODO: if player already knows a non consumable spell, upgrade?
+            SpellList.Add(spell);
+            SpellsKnown++;
         }
 
         // Commands processed in main loop
-        public override Option<ICommand> GetAction()
+        public override Option<ICommand> GetAction() => Option.None<ICommand>();
+
+        public override Option<ICommand> TriggerDeath()
         {
+            Game.MessagePanel.AddMessage("Game over! Press any key to continue");
+
             return Option.None<ICommand>();
         }
 

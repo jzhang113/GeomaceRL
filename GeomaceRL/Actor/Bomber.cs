@@ -7,14 +7,14 @@ namespace GeomaceRL.Actor
 {
     internal class Bomber : Actor
     {
-        public Bomber(in Loc pos, Element element) : base(pos, 1, element, 'B')
+        public Bomber(in Loc pos, Element element) : base(pos, element)
         {
-            Name = "Bomber";
         }
 
         public override Option<ICommand> TriggerDeath()
         {
             Game.MapHandler.RemoveActor(this);
+            Game.Player.KillCount[GetType()]++;
 
             if (Game.MapHandler.Field[Pos].IsVisible)
             {

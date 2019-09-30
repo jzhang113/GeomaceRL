@@ -27,12 +27,6 @@
         public const int GEN_ATTACK = 1;
         public const int COLLISION_DAMAGE = 1;
 
-        // Base hp constants
-        public const int SPRITE_HP = 1;
-        public const int PLAYER_HP = 8;
-        public const int ELEMENTAL_HP = 2;
-        public const int LEECH_HP = 1;
-
         // Spell constants
         // Due to UI limitations, MAX_COST should not be > 6
         // Similarly, if CHARGES are defined, they should not be > 9

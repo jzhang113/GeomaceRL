@@ -23,12 +23,6 @@ namespace GeomaceRL.State
         {
             Player player = Game.Player;
 
-            if (Game._dead)
-            {
-                Game.StateHandler.Reset();
-                return Option.None<ICommand>();
-            }
-
             switch (InputMapping.GetNormalInput(key))
             {
                 case NormalInput.None:

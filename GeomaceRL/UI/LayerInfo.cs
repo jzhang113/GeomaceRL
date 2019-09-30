@@ -32,7 +32,7 @@ namespace GeomaceRL.UI
                 System.Diagnostics.Debug.WriteLine($"Warning: {x} {y} out of bounds on layer {Name}");
         }
 
-        public void Print(Rectangle layout, string text, ContentAlignment alignment)
+        public void Print(Rectangle layout, string text, ContentAlignment alignment = ContentAlignment.TopLeft)
         {
             layout.Offset(X, Y);
             Terminal.Print(layout, alignment, $"[font=text]{text}");

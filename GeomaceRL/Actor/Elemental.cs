@@ -7,11 +7,8 @@ namespace GeomaceRL.Actor
 {
     internal class Elemental : Actor
     {
-        public Elemental(in Loc pos, Element element)
-            : base(pos, Constants.ELEMENTAL_HP, element, 'E')
+        public Elemental(in Loc pos, Element element) : base(pos, element)
         {
-            Name = "Elemental";
-            Speed = 2;
         }
 
         public override Option<ICommand> GetAction()

@@ -1,13 +1,11 @@
 ﻿using BearLib;
 using GeomaceRL.Actor;
-using GeomaceRL.Animation;
 using GeomaceRL.Map;
 using GeomaceRL.State;
 using GeomaceRL.UI;
 using Pcg;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GeomaceRL
 {
@@ -26,13 +24,15 @@ namespace GeomaceRL
         internal static TimeSpan Ticks;
         internal static TimeSpan FrameRate = new TimeSpan(TimeSpan.TicksPerSecond / 30);
 
+        internal static int GlobalId = 0;
         // HACK: how to communicate cancelled moved to the main loop?
         internal static bool PrevCancelled = false;
 
+        internal static IDictionary<Type, (string Name, char Symbol, int Hp, int Speed)> ActorData { get; private set; }
+
         private static bool _exiting;
         private static bool _playing;
-        internal static int _level;
-        internal static bool _dead;
+        private static int _level;
 
         private static LayerInfo _mapLayer;
         private static LayerInfo _infoLayer;
@@ -48,6 +48,17 @@ namespace GeomaceRL
 
         private static void Main(string[] args)
         {
+            ActorData = new Dictionary<Type, (string, char, int, int)>
+            {
+                [typeof(Actor.Actor)]   = ("Monster", '_', 1, 2),
+                [typeof(Bomber)]        = ("Bomber", 'B', 1, 1),
+                [typeof(Elemental)]     = ("Elemental", 'E', 2, 2),
+                [typeof(Leech)]         = ("Leech", 'L', 1, 2),
+                [typeof(Pillar)]        = ("Pillar", 'O', 1, 2),
+                [typeof(Player)]        = ("Player", '@', 8, 2),
+                [typeof(Sprite)]        = ("Sprite", 'S', 1, 1),
+            };
+
             Animations = new AnimationHandler();
             Rand = new PcgRandom();
             VisRand = new PcgRandom();
@@ -87,6 +98,7 @@ namespace GeomaceRL
                 [typeof(NormalState)] = _mapLayer,
                 [typeof(TargettingState)] = _mapLayer,
                 [typeof(MenuState)] = _mainLayer,
+                [typeof(DeathState)] = _mainLayer,
             });
 
             MessagePanel = new MessagePanel(Constants.MESSAGE_HISTORY_COUNT);
@@ -94,7 +106,6 @@ namespace GeomaceRL
 
             _exiting = false;
             _playing = false;
-            _dead = true;
 
             Terminal.Refresh();
             Run();
@@ -105,11 +116,12 @@ namespace GeomaceRL
             StateHandler.Reset();
             MessagePanel.Clear();
             Animations.Clear();
+            GlobalId = 0;
+
             Player = new Player(new Loc(0, 0));
 
             Colors.RandomizeMappings();
             _playing = true;
-            _dead = false;
 
             _level = 0;
             NextLevel();
@@ -126,11 +138,10 @@ namespace GeomaceRL
             {
                 MessagePanel.AddMessage("This appears to be the end of the dungeon");
                 MessagePanel.AddMessage("You win!");
-                _dead = true;
             }
             else
             {
-                MessagePanel.AddMessage($"You arrive at level {_level+1}");
+                MessagePanel.AddMessage($"You arrive at level {_level + 1}");
             }
 
             (int, int) size = _levelSize[_level];
@@ -140,16 +151,7 @@ namespace GeomaceRL
             _level++;
         }
 
-        internal static void GameOver()
-        {
-            MessagePanel.AddMessage("Game over! Press any key to continue");
-            _dead = true;
-        }
-
-        internal static void Exit()
-        {
-            _exiting = true;
-        }
+        internal static void Exit() => _exiting = true;
 
         private static void Run()
         {
@@ -175,18 +177,7 @@ namespace GeomaceRL
                 {
                     if (Animations.IsDone())
                     {
-                        EventScheduler.ExecuteCommand(0, StateHandler.HandleInput(), () =>
-                        {
-                            if (!PrevCancelled)
-                            {
-                                MapHandler.Refresh();
-                                EventScheduler.Update();
-                            }
-                            else
-                            {
-                                PrevCancelled = false;
-                            }
-                        });
+                        EventScheduler.ExecuteCommand(0, StateHandler.HandleInput(), ResolveTurn);
                     }
                     else if (Terminal.HasInput())
                     {
@@ -206,13 +197,33 @@ namespace GeomaceRL
             Terminal.Close();
         }
 
+        private static void ResolveTurn()
+        {
+            if (!PrevCancelled)
+            {
+                MapHandler.Refresh();
+                EventScheduler.Update();
+
+                if (Player.IsDead)
+                {
+                    Player.TriggerDeath();
+                    StateHandler.Reset();
+                    StateHandler.PushState(DeathState.Instance);
+                }
+            }
+            else
+            {
+                PrevCancelled = false;
+            }
+        }
+
         private static void Render()
         {
             Terminal.Clear();
             if (_playing)
             {
-                InfoPanel.Draw(_infoLayer);
-                ManaPanel.Draw(_manaLayer);
+                ViewPanel.Draw(_infoLayer);
+                InfoPanel.Draw(_manaLayer);
                 Spellbar.Draw(_spellbarLayer);
                 MessagePanel.Draw(_messageLayer);
             }

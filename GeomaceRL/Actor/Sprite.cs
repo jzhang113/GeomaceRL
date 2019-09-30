@@ -6,10 +6,8 @@ namespace GeomaceRL.Actor
 {
     public class Sprite : Actor
     {
-        public Sprite(in Loc pos, Element element)
-            :base(pos, Constants.SPRITE_HP, element, 'S')
+        public Sprite(in Loc pos, Element element) :base(pos, element)
         {
-            Name = "Sprite";
         }
 
         public override Option<ICommand> GetAction()

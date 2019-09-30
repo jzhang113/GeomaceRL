@@ -11,6 +11,8 @@ namespace GeomaceRL.Map
     {
         protected int Width { get; }
         protected int Height { get; }
+        protected int Level { get; }
+
         protected PcgRandom Rand { get; } = Game.Rand;
         protected MapHandler Map { get; }
 
@@ -21,6 +23,8 @@ namespace GeomaceRL.Map
         {
             Width = width;
             Height = height;
+            Level = level;
+
             Map = new MapHandler(width, height, level);
         }
 
@@ -153,7 +157,7 @@ namespace GeomaceRL.Map
             Game.Player.Pos = Map.GetRandomOpenPoint();
             Map.AddActor(Game.Player);
 
-            for (int i = 0; i < Game._enemyCount[Game._level]; i++)
+            for (int i = 0; i < Game._enemyCount[Level]; i++)
             {
                 var element = (Element)(Rand.Next(4) + 1);
                 int enemyType = Rand.Next(4);

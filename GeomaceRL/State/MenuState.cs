@@ -3,6 +3,7 @@ using GeomaceRL.Command;
 using GeomaceRL.UI;
 using Optional;
 using System;
+using System.Drawing;
 
 namespace GeomaceRL.State
 {
@@ -20,9 +21,10 @@ namespace GeomaceRL.State
             switch (key)
             {
                 case Terminal.TK_ENTER:
+                case Terminal.TK_KP_ENTER:
                     Game.NewGame();
                     return Option.None<ICommand>();
-                case Terminal.TK_Q:
+                case Terminal.TK_ESCAPE:
                     Game.Exit();
                     return Option.None<ICommand>();
                 default:
@@ -37,19 +39,21 @@ namespace GeomaceRL.State
             Terminal.Clear();
             layer.Print(2, "GeomanceRL");
 
-            int y = 4;
-            layer.Print(y++, "Several days ago, you sensed a disturbance somewhere");
-            layer.Print(y++, "in the distance. With your trusty staff and spellbook");
-            layer.Print(y++, "in hand, you set out to investigate.");
+            string message = @"
+Several days ago, you sensed a disturbance somewhere
+in the distance. With your trusty staff and spellbook
+in hand, you set out to investigate.
 
-            y++;
-            layer.Print(y++, "Controls:");
-            layer.Print(y++, "Vi-keys, arrow keys, or number pad to move");
-            layer.Print(y++, "1-6 to cast known spells");
-            layer.Print(y++, "While casting, press [[Enter]] to confirm or [[Esc]] to cancer");
-            layer.Print(y++, "[[Esc]] to quit to this menu");
+Controls:
+Vi-keys, arrow keys, or number pad to move
+1-6 to cast known spells
+While casting, press [[Enter]] to confirm or [[Esc]] to cancer
+[[Esc]] to quit to this menu
 
-            layer.Print(++y, "Press [[Enter]] to start");
+Press [[Enter]] to start";
+
+            int startY = 4;
+            layer.Print(new Rectangle(0, startY, layer.Width, layer.Height - startY), message, ContentAlignment.TopLeft);
         }
     }
 }

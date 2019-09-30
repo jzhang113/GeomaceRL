@@ -29,8 +29,8 @@ namespace GeomaceRL
         {
             foreach ((int _, List<IAnimation> queue) in _current)
             {
-                if (queue.Count == 0)
-                    return true;
+                if (queue.Count != 0)
+                    return false;
             }
 
             return true;
