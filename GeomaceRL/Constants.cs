@@ -27,6 +27,8 @@
         public const int GEN_ATTACK = 1;
         public const int COLLISION_DAMAGE = 1;
 
+        public const int MAX_SPELLS = 6;
+
         // Spell constants
         // Due to UI limitations, MAX_COST should not be > 6
         // Similarly, if CHARGES are defined, they should not be > 9

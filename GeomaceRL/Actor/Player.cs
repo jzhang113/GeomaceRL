@@ -1,6 +1,8 @@
-﻿using GeomaceRL.Command;
+﻿using BearLib;
+using GeomaceRL.Command;
 using GeomaceRL.Spell;
 using Optional;
+using Optional.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,11 +46,37 @@ namespace GeomaceRL.Actor
                 .ToDictionary(x => x, _ => 0);
         }
 
-        public void LearnSpell(ISpell spell)
+        public void LearnSpell(ISpell newSpell)
         {
-            // TODO: if player already knows a non consumable spell, upgrade?
-            SpellList.Add(spell);
-            SpellsKnown++;
+            Option<ISpell> existingSpell = SpellList.Where(s => s.Name == newSpell.Name).FirstOrNone();
+            existingSpell.Match(
+                some: spell =>
+                {
+                    if (spell.Charges > 0)
+                    {
+                        // For spells with charges, just gain the charges (up to 9 charges)
+                        spell.Charges = Math.Min(spell.Charges + newSpell.Charges, 9);
+                    }
+                    else
+                    {
+                        // Otherwise, we already know the spell, so do nothing
+                        Game.MessagePanel.AppendMessage(", but you already know this spell");
+                    }
+                },
+                none: () =>
+                {
+                    if (SpellList.Count < Constants.MAX_SPELLS - 1)
+                    {
+                        Game.MessagePanel.AddMessage("You learn a new spell!");
+                        SpellList.Add(newSpell);
+                        SpellsKnown++;
+                    }
+                    else
+                    {
+                        Game.MessagePanel.AddMessage("Do you wish to replace a spell?");
+                        // TODO: spell replacement
+                    }
+                });
         }
 
         // Commands processed in main loop

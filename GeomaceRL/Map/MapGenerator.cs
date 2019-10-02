@@ -142,9 +142,14 @@ namespace GeomaceRL.Map
         // HACK: ad-hoc placement code
         private void PlaceItems()
         {
-            int count = Rand.Next(1, 3);
-            for (int i = 0; i < count; i++) {
-                var spell = new SpellScroll(Map.GetRandomOpenPoint(), new Spell.Heal());
+            var heal = new SpellScroll(Map.GetRandomOpenPoint(), new Spell.Heal());
+            Map.AddItem(heal);
+
+            int count = Rand.Next(2, 5);
+            for (int i = 0; i < count; i++)
+            {
+                // TODO: GetRandomOpenPoint only ensures that a tile is walkable
+                var spell = new SpellScroll(Map.GetRandomOpenPoint(), SpellHandler.RandomSpell());
                 Map.AddItem(spell);
             }
 

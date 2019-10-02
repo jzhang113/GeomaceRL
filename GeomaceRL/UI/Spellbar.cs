@@ -32,7 +32,7 @@ namespace GeomaceRL.UI
                     casting = targetting.CurrentSpell;
             });
 
-            for (int x = 0; x < 6; x++)
+            for (int x = 0; x < Constants.MAX_SPELLS; x++)
             {
                 int startX = boxWidth * x;
                 int endX = boxWidth * (x + 1) - 1;

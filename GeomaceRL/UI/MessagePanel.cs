@@ -31,7 +31,7 @@ namespace GeomaceRL.UI
         public void AppendMessage(string text)
         {
             int prev = _messages.Count - 1;
-            _messages[prev] += " " + text;
+            _messages[prev] += text;
         }
 
         public void Clear()
