@@ -1,6 +1,7 @@
 ﻿using BearLib;
 using GeomaceRL.Command;
 using GeomaceRL.Spell;
+using GeomaceRL.State;
 using Optional;
 using Optional.Collections;
 using System;
@@ -24,7 +25,7 @@ namespace GeomaceRL.Actor
             {
                 [Element.Fire] = 0,
                 [Element.Earth] = 0,
-                [Element.Lightning] = 0,
+                [Element.Air] = 0,
                 [Element.Water] = 0,
                 [Element.None] = 0
             };
@@ -34,7 +35,10 @@ namespace GeomaceRL.Actor
             {
                 SpellHandler.RandomSpell(),
                 SpellHandler.RandomSpell(),
-                SpellHandler.RandomSpell()
+                SpellHandler.RandomSpell(),
+                SpellHandler.RandomSpell(),
+                SpellHandler.RandomSpell(),
+                SpellHandler.RandomSpell(),
             };
 
             SpellsKnown = SpellList.Count;
@@ -60,7 +64,7 @@ namespace GeomaceRL.Actor
                     else
                     {
                         // Otherwise, we already know the spell, so do nothing
-                        Game.MessagePanel.AppendMessage(", but you already know this spell");
+                        Game.MessagePanel.AddMessage("But you already know this spell");
                     }
                 },
                 none: () =>
@@ -73,8 +77,7 @@ namespace GeomaceRL.Actor
                     }
                     else
                     {
-                        Game.MessagePanel.AddMessage("Do you wish to replace a spell?");
-                        // TODO: spell replacement
+                        Game.StateHandler.PushState(new SpellReplaceState(newSpell));
                     }
                 });
         }
@@ -93,7 +96,7 @@ namespace GeomaceRL.Actor
         {
             Mana[Element.Fire] = 0;
             Mana[Element.Earth] = 0;
-            Mana[Element.Lightning] = 0;
+            Mana[Element.Air] = 0;
             Mana[Element.Water] = 0;
         }
     }

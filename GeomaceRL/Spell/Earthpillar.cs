@@ -14,7 +14,7 @@ namespace GeomaceRL.Spell
 
         public SpellCost Cost => new SpellCost(
             Element.Earth, (Constants.PILLARS_MIN_COST, Constants.PILLARS_MAX_COST),
-            Element.Lightning, (Constants.PILLARS_MIN_COST, Constants.PILLARS_MAX_COST));
+            Element.Air, (Constants.PILLARS_MIN_COST, Constants.PILLARS_MAX_COST));
 
         public TargetZone Zone => new TargetZone(TargetShape.Self, 0, Constants.PILLARS_RANGE);
 

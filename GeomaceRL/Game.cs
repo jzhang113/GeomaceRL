@@ -97,6 +97,7 @@ namespace GeomaceRL
             {
                 [typeof(NormalState)] = _mapLayer,
                 [typeof(TargettingState)] = _mapLayer,
+                [typeof(SpellReplaceState)] = _mapLayer,
                 [typeof(MenuState)] = _mainLayer,
                 [typeof(DeathState)] = _mainLayer,
             });

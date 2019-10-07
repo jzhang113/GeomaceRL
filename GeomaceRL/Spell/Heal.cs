@@ -14,7 +14,7 @@ namespace GeomaceRL.Spell
 
         public SpellCost Cost => new SpellCost(
             Element.Water, (Constants.HEAL_MIN_COST, Constants.HEAL_MAX_COST),
-            Element.Lightning, (Constants.HEAL_MIN_COST, Constants.HEAL_MAX_COST));
+            Element.Air, (Constants.HEAL_MIN_COST, Constants.HEAL_MAX_COST));
         public TargetZone Zone => new TargetZone(TargetShape.Self, 0, 1);
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)

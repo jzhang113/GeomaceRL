@@ -12,7 +12,7 @@ namespace GeomaceRL.Spell
 
         public int Charges { get; set; } = Constants.TELEPORT_CHARGES;
 
-        public SpellCost Cost => new SpellCost(Element.Lightning, (Constants.TELEPORT_MIN, Constants.TELEPORT_COST));
+        public SpellCost Cost => new SpellCost(Element.Air, (Constants.TELEPORT_MIN, Constants.TELEPORT_COST));
         public TargetZone Zone => new TargetZone(TargetShape.Range, Constants.TELEPORT_RANGE, 0, false);
 
         public ICommand Evoke(Actor.Actor source, IEnumerable<Loc> targets, (int, int) used)
